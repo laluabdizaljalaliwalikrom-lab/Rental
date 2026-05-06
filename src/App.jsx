@@ -4,6 +4,10 @@ import { Toaster } from '@/components/ui/sonner'
 // Pages
 import Login from '@/pages/auth/Login'
 import Dashboard from '@/pages/admin/Dashboard'
+import Fleet from '@/pages/admin/Fleet'
+import Rentals from '@/pages/admin/Rentals'
+import Users from '@/pages/admin/Users'
+import Settings from '@/pages/admin/Settings'
 
 // Layouts & Guards
 import AdminLayout from '@/layouts/AdminLayout'
@@ -22,9 +26,10 @@ function App() {
           <Route path="/admin" element={<ProtectedRoute />}>
             <Route element={<AdminLayout />}>
               <Route index element={<Dashboard />} />
-              {/* Tempat untuk halaman admin lainnya nanti */}
-              {/* <Route path="fleet" element={<Fleet />} /> */}
-              {/* <Route path="users" element={<Users />} /> */}
+              <Route path="rentals" element={<Rentals />} />
+              <Route path="fleet" element={<Fleet />} />
+              <Route path="users" element={<Users />} />
+              <Route path="settings" element={<Settings />} />
             </Route>
           </Route>
           
@@ -32,6 +37,7 @@ function App() {
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
+
       
       {/* Global Toaster for notifications */}
       <Toaster richColors position="top-right" />

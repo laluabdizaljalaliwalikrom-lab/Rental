@@ -1,7 +1,7 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
-import { LayoutDashboard, Bike, Users, Settings, LogOut } from 'lucide-react'
+import { LayoutDashboard, Bike, Users, Settings, LogOut, CreditCard } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export default function AdminLayout() {
@@ -15,6 +15,7 @@ export default function AdminLayout() {
 
   const navItems = [
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
+    { name: 'Penyewaan', path: '/admin/rentals', icon: CreditCard },
     { name: 'Armada Sepeda', path: '/admin/fleet', icon: Bike },
     { name: 'Pengguna', path: '/admin/users', icon: Users },
     { name: 'Pengaturan', path: '/admin/settings', icon: Settings },

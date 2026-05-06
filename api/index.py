@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.routes import financial
+from api.routes import financial, fleet, rentals
 
 app = FastAPI(title="Rental Sepeda API", description="Backend API untuk Rental Sepeda", version="1.0.0")
 
@@ -15,6 +15,8 @@ app.add_middleware(
 
 # Include Router
 app.include_router(financial.router, prefix="/api/financial", tags=["Financial"])
+app.include_router(fleet.router, prefix="/api/fleet", tags=["Fleet"])
+app.include_router(rentals.router, prefix="/api/rentals", tags=["Rentals"])
 
 @app.get("/api/health")
 def health_check():
