@@ -14,60 +14,27 @@ SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET")
 
 security = HTTPBearer()
 
-import queue
+_supabase_client: Optional[Client] = None
 
-# Enterprise-grade Connection Pool
-POOL_SIZE = 10
-_client_pool = queue.Queue()
-
-# Lazy initialization of pool
-_pool_initialized = False
-
-def _init_pool():
-    global _pool_initialized
-    if _pool_initialized:
-        return
+def get_supabase() -> Client:
+    global _supabase_client
     
     url = os.getenv("SUPABASE_URL")
     key = os.getenv("SUPABASE_KEY")
     
     if not url or not key:
-        print(f"CRITICAL: SUPABASE_URL or SUPABASE_KEY missing!")
-        return
-
-    print(f"Initializing Supabase connection pool (Size: {POOL_SIZE})...")
-    for _ in range(POOL_SIZE):
-        try:
-            _client_pool.put(create_client(url, key))
-        except Exception as e:
-            print(f"Error creating Supabase client: {e}")
-    
-    _pool_initialized = True
-
-def get_supabase() -> Client:
-    if not os.getenv("SUPABASE_URL") or not os.getenv("SUPABASE_KEY"):
         raise HTTPException(
             status_code=500, 
             detail="Konfigurasi backend tidak lengkap (SUPABASE_URL/KEY hilang)."
         )
     
-    _init_pool()
-    try:
-        # Pinjam koneksi dari pool
-        client = _client_pool.get(timeout=5)
-        # print(f"DEBUG: Connection taken from pool. Remaining: {_client_pool.qsize()}")
+    if _supabase_client is None:
         try:
-            yield client
-        finally:
-            # Wajib kembalikan koneksi ke pool!
-            _client_pool.put(client)
-            # print(f"DEBUG: Connection returned to pool. Available: {_client_pool.qsize()}")
-    except queue.Empty:
-        print("ALERT: Connection pool exhausted!")
-        raise HTTPException(status_code=503, detail="Database busy. Please try again in a few seconds.")
-    except Exception as e:
-        print(f"Error in get_supabase: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+            _supabase_client = create_client(url, key)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Gagal menghubungkan ke database: {str(e)}")
+            
+    return _supabase_client
 
 
 
