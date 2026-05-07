@@ -138,12 +138,12 @@ export default function Fleet() {
     <div className="space-y-8 pb-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="rounded-2xl bg-white/10 p-3 text-white shadow-[0_0_20px_rgba(255,255,255,0.1)] border border-white/10">
+          <div className="rounded-2xl bg-primary/10 p-3 text-primary border border-primary/20">
             <Bike size={28} strokeWidth={2.5} />
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-white">Manajemen Armada</h2>
-            <p className="text-sm text-white/40">Kelola unit sepeda, harga sewa, dan pantau status ketersediaan.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground">Manajemen Armada</h2>
+            <p className="text-sm text-muted-foreground">Kelola unit sepeda, harga sewa, dan pantau status ketersediaan.</p>
           </div>
         </div>
         
@@ -182,20 +182,20 @@ export default function Fleet() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {bikes.length > 0 ? (
             bikes.map((bike) => (
-              <Card key={bike.id} className="glass-card overflow-hidden group border-white/5 hover:border-white/20 transition-all duration-500">
-                <div className="aspect-[16/10] w-full bg-white/[0.02] flex items-center justify-center relative overflow-hidden border-b border-white/5">
+              <Card key={bike.id} className="glass-card overflow-hidden group border-border hover:border-primary/20 transition-all duration-500">
+                <div className="aspect-[16/10] w-full bg-muted/20 flex items-center justify-center relative overflow-hidden border-b border-border">
                   {bike.image_url ? (
                     <img src={bike.image_url} alt={bike.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   ) : (
                     <div className="flex flex-col items-center gap-2 opacity-20 group-hover:opacity-40 transition-opacity">
-                      <Bike size={64} strokeWidth={1} />
-                      <span className="text-[10px] uppercase tracking-widest font-bold">No Image</span>
+                      <Bike size={64} strokeWidth={1} className="text-foreground" />
+                      <span className="text-[10px] uppercase tracking-widest font-bold text-foreground">No Image</span>
                     </div>
                   )}
                   <div className="absolute top-4 right-4 flex gap-2">
                     <Badge className={cn(
                       "border-none px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg",
-                      bike.status === 'Available' ? 'bg-green-500/20 text-green-400 shadow-green-500/10' : 'bg-orange-500/20 text-orange-400 shadow-orange-500/10'
+                      bike.status === 'Available' ? 'bg-green-500 text-white' : 'bg-orange-500 text-white'
                     )}>
                       {bike.status}
                     </Badge>
@@ -204,27 +204,27 @@ export default function Fleet() {
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <CardTitle className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors tracking-tight">{bike.name}</CardTitle>
-                      <CardDescription className="text-white/40 font-medium">{bike.brand} &bull; {bike.type}</CardDescription>
+                      <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors tracking-tight">{bike.name}</CardTitle>
+                      <CardDescription className="text-muted-foreground font-medium">{bike.brand} &bull; {bike.type}</CardDescription>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 group-hover:bg-white/[0.05] transition-colors">
-                      <p className="text-white/30 text-[9px] uppercase font-bold tracking-[0.15em] mb-1">Per Jam</p>
-                      <p className="font-bold text-white text-base tracking-tighter">Rp {bike.price_per_hour.toLocaleString()}</p>
+                    <div className="p-3 rounded-2xl bg-muted/40 border border-border group-hover:bg-muted/60 transition-colors">
+                      <p className="text-muted-foreground text-[9px] uppercase font-bold tracking-[0.15em] mb-1">Per Jam</p>
+                      <p className="font-bold text-foreground text-base tracking-tighter">Rp {bike.price_per_hour.toLocaleString()}</p>
                     </div>
-                    <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 group-hover:bg-white/[0.05] transition-colors">
-                      <p className="text-white/30 text-[9px] uppercase font-bold tracking-[0.15em] mb-1">Per Hari</p>
-                      <p className="font-bold text-white text-base tracking-tighter">Rp {bike.price_per_day.toLocaleString()}</p>
+                    <div className="p-3 rounded-2xl bg-muted/40 border border-border group-hover:bg-muted/60 transition-colors">
+                      <p className="text-muted-foreground text-[9px] uppercase font-bold tracking-[0.15em] mb-1">Per Hari</p>
+                      <p className="font-bold text-foreground text-base tracking-tighter">Rp {bike.price_per_day.toLocaleString()}</p>
                     </div>
                   </div>
                   
                   <div className="flex gap-2">
                     <Button 
                       variant="ghost" 
-                      className="flex-1 h-12 rounded-xl bg-white/[0.05] border border-white/10 text-white hover:bg-white/10 font-bold transition-all uppercase tracking-widest text-[9px]" 
+                      className="flex-1 h-12 rounded-xl bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 font-bold transition-all uppercase tracking-widest text-[9px]" 
                       onClick={() => openEdit(bike)}
                     >
                       <Edit size={14} className="mr-2" /> Detail

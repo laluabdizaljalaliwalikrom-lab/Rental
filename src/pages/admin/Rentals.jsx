@@ -167,22 +167,22 @@ export default function Rentals() {
     <div className="space-y-8 pb-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="rounded-2xl bg-white/10 p-3 text-white shadow-[0_0_20px_rgba(255,255,255,0.1)] border border-white/10">
+          <div className="rounded-2xl bg-primary/10 p-3 text-primary border border-primary/20">
             <CreditCard size={28} strokeWidth={2.5} />
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-white">Sistem Penyewaan</h2>
-            <p className="text-sm text-white/40">Kelola operasional penyewaan unit secara real-time dan efisien.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground">Sistem Penyewaan</h2>
+            <p className="text-sm text-muted-foreground">Kelola operasional penyewaan unit secara real-time dan efisien.</p>
           </div>
         </div>
       </div>
 
       <Tabs defaultValue="available" className="w-full">
-        <TabsList className="bg-white/[0.03] border border-white/10 p-1 rounded-2xl h-14 w-fit">
-          <TabsTrigger value="available" className="h-12 px-8 rounded-xl font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-white data-[state=active]:text-black transition-all">
+        <TabsList className="bg-muted border border-border p-1 rounded-2xl h-14 w-fit">
+          <TabsTrigger value="available" className="h-12 px-8 rounded-xl font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">
             <ListFilter size={14} className="mr-2" /> Sewa Sepeda
           </TabsTrigger>
-          <TabsTrigger value="history" className="h-12 px-8 rounded-xl font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-white data-[state=active]:text-black transition-all">
+          <TabsTrigger value="history" className="h-12 px-8 rounded-xl font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">
             <History size={14} className="mr-2" /> Riwayat Rental
           </TabsTrigger>
         </TabsList>
@@ -196,33 +196,33 @@ export default function Rentals() {
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {bikes.filter(b => b.status === 'Available').length > 0 ? (
                 bikes.filter(b => b.status === 'Available').map((bike) => (
-                  <Card key={bike.id} className="glass-card overflow-hidden group border-white/5 hover:border-white/20 transition-all duration-500">
-                    <div className="aspect-[16/10] w-full bg-white/[0.02] flex items-center justify-center relative overflow-hidden border-b border-white/5">
+                  <Card key={bike.id} className="glass-card overflow-hidden group border-border hover:border-primary/20 transition-all duration-500">
+                    <div className="aspect-[16/10] w-full bg-muted/20 flex items-center justify-center relative overflow-hidden border-b border-border">
                       {bike.image_url ? (
                         <img src={bike.image_url} alt={bike.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
                       ) : (
                         <div className="flex flex-col items-center gap-2 opacity-20 group-hover:opacity-40 transition-opacity">
-                          <Bike size={64} strokeWidth={1} />
-                          <span className="text-[10px] uppercase tracking-widest font-bold">No Image</span>
+                          <Bike size={64} strokeWidth={1} className="text-foreground" />
+                          <span className="text-[10px] uppercase tracking-widest font-bold text-foreground">No Image</span>
                         </div>
                       )}
                       <div className="absolute top-4 right-4">
-                        <Badge className="bg-green-500/20 text-green-400 border-none px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Tersedia</Badge>
+                        <Badge className="bg-green-500 text-white border-none px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg">Tersedia</Badge>
                       </div>
                     </div>
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors tracking-tight">{bike.name}</CardTitle>
-                      <CardDescription className="text-white/40 font-medium">{bike.brand} &bull; {bike.type}</CardDescription>
+                      <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors tracking-tight">{bike.name}</CardTitle>
+                      <CardDescription className="text-muted-foreground font-medium">{bike.brand} &bull; {bike.type}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div className="grid grid-cols-2 gap-3 text-sm">
-                        <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 group-hover:bg-white/[0.05] transition-colors text-center">
-                          <p className="text-white/30 text-[9px] uppercase font-bold tracking-[0.15em] mb-1">Per Jam</p>
-                          <p className="font-bold text-white text-base tracking-tighter">Rp {bike.price_per_hour.toLocaleString()}</p>
+                        <div className="p-3 rounded-2xl bg-muted/40 border border-border group-hover:bg-muted/60 transition-colors text-center">
+                          <p className="text-muted-foreground text-[9px] uppercase font-bold tracking-[0.15em] mb-1">Per Jam</p>
+                          <p className="font-bold text-foreground text-base tracking-tighter">Rp {bike.price_per_hour.toLocaleString()}</p>
                         </div>
-                        <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 group-hover:bg-white/[0.05] transition-colors text-center">
-                          <p className="text-white/30 text-[9px] uppercase font-bold tracking-[0.15em] mb-1">Per Hari</p>
-                          <p className="font-bold text-white text-base tracking-tighter">Rp {bike.price_per_day.toLocaleString()}</p>
+                        <div className="p-3 rounded-2xl bg-muted/40 border border-border group-hover:bg-muted/60 transition-colors text-center">
+                          <p className="text-muted-foreground text-[9px] uppercase font-bold tracking-[0.15em] mb-1">Per Hari</p>
+                          <p className="font-bold text-foreground text-base tracking-tighter">Rp {bike.price_per_day.toLocaleString()}</p>
                         </div>
                       </div>
                       <Button className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-[0.2em] text-[10px] shadow-lg shadow-blue-600/20 transition-all" onClick={() => { setSelectedBike(bike); setRentOpen(true); }}>
@@ -301,14 +301,14 @@ export default function Rentals() {
                           )}
                         </div>
                       </div>
-                      <div className="flex flex-row lg:flex-col items-center lg:items-end justify-between lg:justify-center gap-4 pl-14 lg:pl-0 border-t lg:border-t-0 pt-4 lg:pt-0 border-white/5">
+                      <div className="flex flex-row lg:flex-col items-center lg:items-end justify-between lg:justify-center gap-4 pl-14 lg:pl-0 border-t lg:border-t-0 pt-4 lg:pt-0 border-border">
                         <div className="text-right">
-                          <p className="font-black text-2xl text-white tracking-tighter">Rp {r.total_price.toLocaleString()}</p>
-                          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/20">Total Pembayaran</p>
+                          <p className="font-black text-2xl text-foreground tracking-tighter">Rp {r.total_price.toLocaleString()}</p>
+                          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">Total Pembayaran</p>
                         </div>
                         <div className="flex gap-2">
                            {r.status === 'Active' && (
-                             <Button size="sm" className="h-10 px-6 rounded-xl bg-white text-black font-black uppercase tracking-widest text-[10px] shadow-xl hover:bg-white/90 transition-all" onClick={() => handleCompleteRental(r.id)}>
+                             <Button size="sm" className="h-10 px-6 rounded-xl bg-primary text-primary-foreground font-black uppercase tracking-widest text-[10px] shadow-xl hover:opacity-90 transition-all" onClick={() => handleCompleteRental(r.id)}>
                                Selesai
                              </Button>
                            )}

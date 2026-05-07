@@ -100,22 +100,22 @@ export default function Reports() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="rounded-2xl bg-white/10 p-3 text-white shadow-[0_0_20px_rgba(255,255,255,0.1)] border border-white/10">
+          <div className="rounded-2xl bg-primary/10 p-3 text-primary border border-primary/20">
             <BarChart3 size={28} strokeWidth={2.5} />
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-white">Laporan Keuangan</h2>
-            <p className="text-sm text-white/40">Analisis mendalam arus kas dan performa bisnis Anda.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground">Laporan Keuangan</h2>
+            <p className="text-sm text-muted-foreground">Analisis mendalam arus kas dan performa bisnis Anda.</p>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center bg-white/[0.03] border border-white/10 rounded-xl p-1 gap-1">
+          <div className="flex items-center bg-muted border border-border rounded-xl p-1 gap-1">
             {['daily', 'weekly', 'monthly', 'yearly'].map((p) => (
               <button
                 key={p}
                 className={cn(
                   "capitalize text-[10px] h-8 px-4 rounded-lg font-black uppercase tracking-widest transition-all",
-                  period === p ? 'bg-white text-black shadow-lg' : 'text-white/30 hover:text-white/60'
+                  period === p ? 'bg-primary text-primary-foreground shadow-lg' : 'text-muted-foreground hover:text-foreground'
                 )}
                 onClick={() => {
                   setPeriod(p)
@@ -126,7 +126,7 @@ export default function Reports() {
               </button>
             ))}
           </div>
-          <Button variant="ghost" className="h-10 rounded-xl bg-white/[0.05] border border-white/10 text-white hover:bg-white/10 font-bold px-4 transition-all">
+          <Button variant="ghost" className="h-10 rounded-xl bg-muted/50 border border-border text-foreground hover:bg-muted font-bold px-4 transition-all">
             <Download size={16} className="mr-2" />
             Export
           </Button>
@@ -135,13 +135,13 @@ export default function Reports() {
 
       {/* Summary Cards */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="glass-card relative overflow-hidden group border-white/5 hover:border-white/20 transition-all duration-500">
+        <Card className="glass-card relative overflow-hidden group border-border hover:border-primary/20 transition-all duration-500">
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <TrendingUp size={80} strokeWidth={1.5} className="text-white" />
+            <TrendingUp size={80} strokeWidth={1.5} className="text-foreground" />
           </div>
           <CardHeader className="pb-2">
-            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">Total Pendapatan</p>
-            <CardTitle className="text-2xl font-bold text-green-400 tracking-tighter">Rp {data?.summary.total_income.toLocaleString()}</CardTitle>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Total Pendapatan</p>
+            <CardTitle className="text-2xl font-bold text-green-500 tracking-tighter">Rp {data?.summary.total_income.toLocaleString()}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
@@ -152,13 +152,13 @@ export default function Reports() {
           </CardContent>
         </Card>
 
-        <Card className="glass-card relative overflow-hidden group border-white/5 hover:border-white/20 transition-all duration-500">
+        <Card className="glass-card relative overflow-hidden group border-border hover:border-primary/20 transition-all duration-500">
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <TrendingDown size={80} strokeWidth={1.5} className="text-white" />
+            <TrendingDown size={80} strokeWidth={1.5} className="text-foreground" />
           </div>
           <CardHeader className="pb-2">
-            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">Total Pengeluaran</p>
-            <CardTitle className="text-2xl font-bold text-red-400 tracking-tighter">Rp {data?.summary.total_expense.toLocaleString()}</CardTitle>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Total Pengeluaran</p>
+            <CardTitle className="text-2xl font-bold text-red-500 tracking-tighter">Rp {data?.summary.total_expense.toLocaleString()}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
@@ -183,7 +183,7 @@ export default function Reports() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-[10px] font-bold uppercase tracking-widest text-white/20">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50">
               Periode {period}
             </div>
           </CardContent>
@@ -198,7 +198,7 @@ export default function Reports() {
             <CardTitle className="text-2xl font-bold text-purple-400 tracking-tighter">Rp {data?.summary.cash_on_hand.toLocaleString()}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-[10px] font-bold uppercase tracking-widest text-white/20">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50">
               Dana Liquid Tersedia
             </div>
           </CardContent>
@@ -208,18 +208,18 @@ export default function Reports() {
       {/* Charts Grid */}
       <div className="grid gap-6 md:grid-cols-7">
         {/* Main Trend Chart */}
-        <Card className="md:col-span-4 glass-card overflow-hidden border-white/5">
+        <Card className="md:col-span-4 glass-card overflow-hidden border-border">
           <CardHeader className="pb-0">
-            <CardTitle className="text-lg font-bold text-white flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-blue-400" />
+            <CardTitle className="text-lg font-bold text-foreground flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-blue-500" />
               Tren Arus Kas
             </CardTitle>
-            <CardDescription className="text-white/40 font-medium text-xs">Visualisasi pendapatan vs pengeluaran harian.</CardDescription>
+            <CardDescription className="text-muted-foreground font-medium text-xs">Visualisasi pendapatan vs pengeluaran harian.</CardDescription>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="h-[350px] w-full mt-4 min-w-0">
+            <div className="h-[350px] w-full mt-4 min-w-0 min-h-0">
               {data?.trends.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="99%" height="100%">
                   <AreaChart data={data.trends} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
@@ -231,12 +231,12 @@ export default function Reports() {
                         <stop offset="95%" stopColor="#f87171" stopOpacity={0}/>
                       </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border) / 0.3)" />
                     <XAxis 
                       dataKey="date" 
                       axisLine={false} 
                       tickLine={false} 
-                      tick={{fill: 'rgba(255,255,255,0.2)', fontSize: 10, fontWeight: 700}}
+                      tick={{fill: 'hsl(var(--muted-foreground))', fontSize: 10, fontWeight: 700}}
                       tickFormatter={(str) => {
                         const d = new Date(str)
                         return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })
@@ -245,13 +245,13 @@ export default function Reports() {
                     <YAxis 
                       axisLine={false} 
                       tickLine={false} 
-                      tick={{fill: 'rgba(255,255,255,0.2)', fontSize: 10, fontWeight: 700}}
+                      tick={{fill: 'hsl(var(--muted-foreground))', fontSize: 10, fontWeight: 700}}
                       tickFormatter={(val) => `Rp ${val / 1000}k`}
                     />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: 'rgba(15,15,15,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', backdropFilter: 'blur(10px)', boxShadow: '0 10px 25px rgba(0,0,0,0.5)' }}
+                      contentStyle={{ backgroundColor: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: '16px', backdropFilter: 'blur(10px)', boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}
                       itemStyle={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}
-                      labelStyle={{ marginBottom: '8px', color: 'rgba(255,255,255,0.3)', fontSize: '10px', fontWeight: 700 }}
+                      labelStyle={{ marginBottom: '8px', color: 'hsl(var(--muted-foreground))', fontSize: '10px', fontWeight: 700 }}
                     />
                     <Area type="monotone" dataKey="income" name="Pendapatan" stroke="#4ade80" fillOpacity={1} fill="url(#colorIncome)" strokeWidth={3} />
                     <Area type="monotone" dataKey="expense" name="Pengeluaran" stroke="#f87171" fillOpacity={1} fill="url(#colorExpense)" strokeWidth={3} />
@@ -267,18 +267,18 @@ export default function Reports() {
         </Card>
 
         {/* Ratio Chart */}
-        <Card className="md:col-span-3 glass-card overflow-hidden border-white/5">
+        <Card className="md:col-span-3 glass-card overflow-hidden border-border">
           <CardHeader className="pb-0">
-            <CardTitle className="text-lg font-bold text-white flex items-center gap-2">
-              <PieChartIcon className="h-5 w-5 text-purple-400" />
+            <CardTitle className="text-lg font-bold text-foreground flex items-center gap-2">
+              <PieChartIcon className="h-5 w-5 text-purple-500" />
               Rasio Laba Rugi
             </CardTitle>
-            <CardDescription className="text-white/40 font-medium text-xs">Proporsi pendapatan vs pengeluaran.</CardDescription>
+            <CardDescription className="text-muted-foreground font-medium text-xs">Proporsi pendapatan vs pengeluaran.</CardDescription>
           </CardHeader>
           <CardContent className="p-6 flex flex-col items-center">
-            <div className="h-[280px] w-full min-w-0">
+            <div className="h-[280px] w-full min-w-0 min-h-0">
                {data?.summary.total_income > 0 || data?.summary.total_expense > 0 ? (
-                 <ResponsiveContainer width="100%" height="100%">
+                 <ResponsiveContainer width="99%" height="100%">
                    <PieChart>
                      <Pie
                        data={pieData}

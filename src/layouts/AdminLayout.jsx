@@ -27,6 +27,7 @@ import {
   SheetDescription,
 } from '@/components/ui/sheet'
 import { useState } from 'react'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 const NavLinks = ({ items, activePath, onItemClick = () => {} }) => (
   <nav className="grid items-start px-2 text-sm font-medium lg:px-4 gap-1">
@@ -41,16 +42,16 @@ const NavLinks = ({ items, activePath, onItemClick = () => {} }) => (
           className={cn(
             "group flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-300 relative overflow-hidden",
             isActive 
-              ? "bg-white/10 text-white shadow-[0_0_20px_rgba(255,255,255,0.05)] border border-white/10" 
-              : "text-muted-foreground hover:text-white hover:bg-white/5"
+              ? "bg-primary/10 text-primary shadow-[0_0_20px_rgba(var(--primary),0.05)] border border-primary/10" 
+              : "text-muted-foreground hover:text-foreground hover:bg-accent"
           )}
         >
           {isActive && (
-            <div className="absolute left-0 top-0 bottom-0 w-1 bg-white shadow-[0_0_15px_rgba(255,255,255,0.5)]" />
+            <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary shadow-[0_0_15px_rgba(var(--primary),0.5)]" />
           )}
           <Icon className={cn(
             "h-4 w-4 transition-transform duration-300 group-hover:scale-110",
-            isActive ? "text-white" : "text-muted-foreground"
+            isActive ? "text-primary" : "text-muted-foreground"
           )} />
           <span className="flex-1">{item.name}</span>
           {isActive && <ChevronRight className="h-3 w-3 opacity-50" />}
@@ -95,9 +96,9 @@ export default function AdminLayout() {
 
       {/* Desktop Sidebar */}
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 flex-col glass border-r-0 sm:flex m-4 rounded-3xl overflow-hidden shadow-2xl">
-        <div className="flex h-20 items-center px-6 border-b border-white/5">
+        <div className="flex h-20 items-center px-6 border-b border-border/50">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-transform group-hover:rotate-12">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg transition-transform group-hover:rotate-12">
               <Bike size={22} strokeWidth={2.5} />
             </div>
             <div className="flex flex-col">
@@ -115,19 +116,19 @@ export default function AdminLayout() {
         </div>
 
         {/* User Profile in Sidebar */}
-        <div className="p-4 mx-4 mb-4 rounded-2xl bg-white/[0.03] border border-white/5">
+        <div className="p-4 mx-4 mb-4 rounded-2xl bg-muted/30 border border-border">
           <div className="flex items-center gap-3 mb-4">
             <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-lg">
               {profile?.email?.[0].toUpperCase()}
             </div>
             <div className="flex flex-col overflow-hidden">
-              <span className="text-sm font-semibold text-white truncate">{profile?.email?.split('@')[0]}</span>
-              <span className="text-[10px] text-white/40 uppercase tracking-wider">{profile?.role}</span>
+              <span className="text-sm font-semibold text-foreground truncate">{profile?.email?.split('@')[0]}</span>
+              <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{profile?.role}</span>
             </div>
           </div>
           <Button 
             variant="ghost" 
-            className="w-full justify-start gap-3 h-10 text-white/60 hover:text-white hover:bg-white/5 rounded-xl border border-transparent hover:border-white/10 transition-all" 
+            className="w-full justify-start gap-3 h-10 text-muted-foreground hover:text-foreground hover:bg-accent rounded-xl border border-transparent hover:border-border transition-all" 
             onClick={handleLogout}
           >
             <LogOut className="h-4 w-4" />
@@ -143,17 +144,17 @@ export default function AdminLayout() {
           {/* Mobile Menu Trigger */}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="sm:hidden text-white hover:bg-white/10 rounded-xl">
+              <Button variant="ghost" size="icon" className="sm:hidden text-foreground hover:bg-accent rounded-xl">
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="glass border-white/10 p-0 w-80 text-white">
-               <SheetHeader className="p-6 border-b border-white/5 space-y-0">
+            <SheetContent side="left" className="glass border-border p-0 w-80 text-foreground">
+               <SheetHeader className="p-6 border-b border-border/50 space-y-0">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-black shadow-lg">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg">
                       <Bike size={22} strokeWidth={2.5} />
                     </div>
-                    <SheetTitle className="text-lg font-bold text-white">RentalPro</SheetTitle>
+                    <SheetTitle className="text-lg font-bold text-foreground">RentalPro</SheetTitle>
                   </div>
                   <SheetDescription className="sr-only">
                     Menu navigasi utama untuk manajemen rental sepeda.
@@ -171,11 +172,11 @@ export default function AdminLayout() {
 
           {/* Search Bar - Aesthetic Only for now */}
           <div className="hidden sm:flex items-center flex-1 max-w-md relative group">
-            <Search className="absolute left-4 h-4 w-4 text-white/20 group-focus-within:text-white/60 transition-colors" />
+            <Search className="absolute left-4 h-4 w-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
             <input 
               type="text" 
               placeholder="Search data..." 
-              className="w-full bg-white/5 border border-white/10 rounded-2xl py-2.5 pl-12 pr-4 text-sm text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-white/20 focus:bg-white/[0.08] transition-all"
+              className="w-full bg-muted/40 border border-border rounded-2xl py-2.5 pl-12 pr-4 text-sm text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-muted transition-all"
             />
           </div>
 
@@ -183,14 +184,15 @@ export default function AdminLayout() {
 
           {/* Header Actions */}
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" className="text-white/40 hover:text-white hover:bg-white/5 rounded-xl relative">
+            <ThemeToggle />
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground hover:bg-accent rounded-xl relative">
                <Bell className="h-5 w-5" />
                <span className="absolute top-2 right-2 h-2 w-2 bg-blue-500 rounded-full border-2 border-background" />
             </Button>
-            <div className="h-10 w-px bg-white/10 mx-2 hidden sm:block" />
+            <div className="h-10 w-px bg-border mx-2 hidden sm:block" />
             <div className="hidden sm:flex flex-col items-end">
-               <span className="text-sm font-bold text-white">Welcome back</span>
-               <span className="text-[10px] text-white/40 uppercase tracking-widest">Active System</span>
+               <span className="text-sm font-bold text-foreground">Welcome back</span>
+               <span className="text-[10px] text-muted-foreground uppercase tracking-widest">Active System</span>
             </div>
           </div>
         </header>

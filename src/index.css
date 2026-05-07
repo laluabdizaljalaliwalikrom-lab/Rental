@@ -10,6 +10,33 @@
 
 @layer base {
   :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71% 4%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 14% 46%;
+    --accent: 220 14% 92%;
+    --accent-foreground: 224 71% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71% 4%;
+    --border: 220 14% 90%;
+    --input: 220 14% 90%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71% 4%;
+    --primary: 224 71% 4%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 224 71% 4%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --ring: 224 71% 4%;
+    --radius: 0.75rem;
+    
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-shadow: rgba(0, 0, 0, 0.05);
+  }
+
+  .dark {
     --background: 224 71% 4%;
     --foreground: 213 31% 91%;
     --muted: 223 47% 11%;
@@ -29,31 +56,46 @@
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
     --ring: 216 34% 17%;
-    --radius: 0.75rem;
+
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: rgba(0, 0, 0, 0.4);
   }
 }
  
 .glass {
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: var(--glass-bg);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 var(--glass-shadow);
 }
 
 .glass-card {
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: var(--glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
   transition: all 0.3s ease;
 }
 
 .glass-card:hover {
+  background-color: hsla(0, 0%, 100%, 0.05);
+}
+
+.dark .glass-card:hover {
   background-color: rgba(255, 255, 255, 0.04);
 }
 
 .mesh-gradient {
+  background-color: hsl(var(--background));
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(222, 47%, 11%, 0.1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(224, 71%, 7%, 0.05) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(222, 47%, 11%, 0.1) 0, transparent 50%);
+}
+
+.dark .mesh-gradient {
   background-color: hsla(224, 71%, 4%, 1);
   background-image: 
     radial-gradient(at 0% 0%, hsla(222, 47%, 11%, 1) 0, transparent 50%), 

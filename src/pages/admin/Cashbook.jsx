@@ -174,34 +174,34 @@ export default function Cashbook() {
             </div>
           </CardContent>
         </Card>
-        <Card className="glass-card border-white/5 relative overflow-hidden group">
+        <Card className="glass-card border-border relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <TrendingUp size={80} strokeWidth={1.5} className="text-white" />
+            <TrendingUp size={80} strokeWidth={1.5} className="text-foreground" />
           </div>
           <CardContent className="p-6">
             <div className="flex flex-col">
-              <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2">Total Kas Masuk</p>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-2">Total Kas Masuk</p>
               <div className="text-3xl font-black text-green-400 tracking-tighter">Rp {totalDebit.toLocaleString()}</div>
             </div>
           </CardContent>
         </Card>
-        <Card className="glass-card border-white/5 relative overflow-hidden group">
+        <Card className="glass-card border-border relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <TrendingDown size={80} strokeWidth={1.5} className="text-white" />
+            <TrendingDown size={80} strokeWidth={1.5} className="text-foreground" />
           </div>
           <CardContent className="p-6">
             <div className="flex flex-col">
-              <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2">Total Kas Keluar</p>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-2">Total Kas Keluar</p>
               <div className="text-3xl font-black text-red-400 tracking-tighter">Rp {totalCredit.toLocaleString()}</div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="glass-card border-white/5 overflow-hidden">
+      <Card className="glass-card border-border overflow-hidden">
         <CardHeader className="pb-6">
-          <CardTitle className="text-xl font-bold text-white">Riwayat Transaksi Keuangan</CardTitle>
-          <CardDescription className="text-white/40 font-medium mt-1 text-xs">Rekam jejak komprehensif seluruh aktivitas kas masuk dan keluar.</CardDescription>
+          <CardTitle className="text-xl font-bold text-foreground">Riwayat Transaksi Keuangan</CardTitle>
+          <CardDescription className="text-muted-foreground font-medium mt-1 text-xs">Rekam jejak komprehensif seluruh aktivitas kas masuk dan keluar.</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           {loading ? (
@@ -212,20 +212,20 @@ export default function Cashbook() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm text-left">
                 <thead>
-                  <tr className="bg-white/[0.02] border-y border-white/5">
-                    <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30">Waktu Transaksi</th>
-                    <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30">Klasifikasi</th>
-                    <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30">Rincian Deskripsi</th>
-                    <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30">Nominal</th>
-                    {profile?.role === 'admin' && <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30 text-right">Aksi</th>}
+                  <tr className="bg-muted/50 border-y border-border">
+                    <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Waktu Transaksi</th>
+                    <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Klasifikasi</th>
+                    <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Rincian Deskripsi</th>
+                    <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Nominal</th>
+                    {profile?.role === 'admin' && <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Aksi</th>}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
                   {entries.map((entry) => (
-                    <tr key={entry.id} className="group hover:bg-white/[0.03] transition-all">
+                    <tr key={entry.id} className="group hover:bg-muted/20 transition-all border-b border-border last:border-0">
                       <td className="px-6 py-5 whitespace-nowrap">
-                        <div className="flex items-center gap-3 text-white/50 font-medium">
-                          <Calendar size={14} className="text-white/20" />
+                        <div className="flex items-center gap-3 text-muted-foreground font-medium">
+                          <Calendar size={14} className="text-muted-foreground/40" />
                           <span className="text-[11px] font-bold uppercase tracking-wider">{new Date(entry.created_at).toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
                       </td>
@@ -237,10 +237,10 @@ export default function Cashbook() {
                         )}
                       </td>
                       <td className="px-6 py-5">
-                        <div className="font-bold text-white tracking-tight">{entry.description}</div>
+                        <div className="font-bold text-foreground tracking-tight">{entry.description}</div>
                         <div className="mt-1.5 flex items-center gap-2">
-                           {entry.reference_id && <Badge variant="outline" className="text-[8px] h-4 border-white/10 text-white/20 font-black uppercase px-1.5">SISTEM</Badge>}
-                           <div className="text-[10px] text-white/20 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                           {entry.reference_id && <Badge variant="outline" className="text-[8px] h-4 border-primary/20 text-primary font-black uppercase px-1.5">SISTEM</Badge>}
+                           <div className="text-[10px] text-muted-foreground/60 font-bold uppercase tracking-widest flex items-center gap-1.5">
                              <User size={10} className="opacity-50" /> {entry.created_by_name || 'Automated'}
                            </div>
                         </div>

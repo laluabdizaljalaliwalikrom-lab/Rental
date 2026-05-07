@@ -2,6 +2,10 @@ import os
 import sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
+# Load environment variables from .env file for local development
+load_dotenv()
 
 # Ensure the 'api' directory is in the system path for module discovery
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
