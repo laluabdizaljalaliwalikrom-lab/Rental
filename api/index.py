@@ -22,8 +22,13 @@ app.include_router(cashbook.router, prefix="/api/cashbook", tags=["Cashbook"])
 app.include_router(settings.router, prefix="/api/settings", tags=["Settings"])
 app.include_router(investors.router, prefix="/api/investors", tags=["Investors"])
 
-@app.get("/api/health")
-def health_check():
-    return {"status": "ok", "message": "API is running"}
+@app.get("/api/debug")
+def debug_env():
+    import os
+    return {
+        "supabase_url_exists": os.getenv("SUPABASE_URL") is not None,
+        "supabase_key_exists": os.getenv("SUPABASE_KEY") is not None,
+        "python_version": os.sys.version
+    }
 
 # Entrypoint for Vercel (optional, vercel will automatically find `app` in index.py)
