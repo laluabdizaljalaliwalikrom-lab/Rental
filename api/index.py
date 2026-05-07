@@ -1,5 +1,8 @@
 import os
 import sys
+import traceback
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 # Tambahkan folder 'api' ke sys.path secara paksa
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -22,22 +25,33 @@ app.add_middleware(
 @app.get("/api/health")
 def health():
     return {
-        "status": "minimalist_ok",
+        "status": "online",
         "python": sys.version,
-        "path": sys.path
+        "modules_status": modules_status
     }
 
-# Kita matikan sementara semua router untuk mencari penyebab crash
-# try:
-#     import financial, fleet, rentals, profiles, cashbook, settings, investors
-#     app.include_router(profiles.router, prefix="/api/profiles", tags=["Profiles"])
-#     app.include_router(financial.router, prefix="/api/financial", tags=["Financial"])
-#     app.include_router(fleet.router, prefix="/api/fleet", tags=["Fleet"])
-#     app.include_router(rentals.router, prefix="/api/rentals", tags=["Rentals"])
-#     app.include_router(cashbook.router, prefix="/api/cashbook", tags=["Cashbook"])
-#     app.include_router(settings.router, prefix="/api/settings", tags=["Settings"])
-#     app.include_router(investors.router, prefix="/api/investors", tags=["Investors"])
-# except Exception as e:
-#     @app.get("/api/error")
-#     def error():
-#         return {"error": str(e)}
+modules_status = {}
+
+def safe_import_router(module_name, router_obj_name, prefix, tags):
+    try:
+        # Import dynamic
+        mod = __import__(f"routes.{module_name}", fromlist=[router_obj_name])
+        router = getattr(mod, router_obj_name)
+        app.include_router(router, prefix=prefix, tags=tags)
+        modules_status[module_name] = "OK"
+    except Exception as e:
+        modules_status[module_name] = f"ERROR: {str(e)}"
+        print(f"FAILED TO LOAD {module_name}: {traceback.format_exc()}")
+
+# Coba muat semua router satu per satu
+safe_import_router("profiles", "router", "/api/profiles", ["Profiles"])
+safe_import_router("financial", "router", "/api/financial", ["Financial"])
+safe_import_router("fleet", "router", "/api/fleet", ["Fleet"])
+safe_import_router("rentals", "router", "/api/rentals", ["Rentals"])
+safe_import_router("cashbook", "router", "/api/cashbook", ["Cashbook"])
+safe_import_router("settings", "router", "/api/settings", ["Settings"])
+safe_import_router("investors", "router", "/api/investors", ["Investors"])
+
+@app.get("/api/error-details")
+def get_error_details():
+    return modules_status
