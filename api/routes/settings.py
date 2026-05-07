@@ -57,7 +57,7 @@ def update_settings(
 
 # --- Landing Page Settings ---
 
-@router.get("/landing")
+@router.get("/landing", response_model=LandingSettings)
 def get_landing_settings(
     db: Client = Depends(get_supabase)
 ):

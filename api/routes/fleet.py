@@ -36,7 +36,7 @@ class Fleet(FleetBase):
     id: str
     created_at: datetime
 
-@router.get("/")
+@router.get("/", response_model=List[Fleet])
 def get_fleet(
     db: Client = Depends(get_supabase)
 ):
