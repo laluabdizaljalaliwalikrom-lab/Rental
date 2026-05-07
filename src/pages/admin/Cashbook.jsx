@@ -285,13 +285,13 @@ export default function Cashbook() {
       {/* Edit Entry Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent className="sm:max-w-[425px] glass border-white/10 text-white p-0 overflow-hidden">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle className="text-2xl font-bold">Edit Transaksi Kas</DialogTitle>
+            <DialogDescription className="text-white/40">
+              Perbarui rincian nominal atau deskripsi transaksi terpilih.
+            </DialogDescription>
+          </DialogHeader>
           <form onSubmit={handleEdit}>
-            <DialogHeader className="p-6 pb-0">
-              <DialogTitle className="text-2xl font-bold">Edit Transaksi Kas</DialogTitle>
-              <DialogDescription className="text-white/40">
-                Perbarui rincian nominal atau deskripsi transaksi terpilih.
-              </DialogDescription>
-            </DialogHeader>
             <div className="px-6 py-6 grid gap-6">
               <div className="grid gap-2">
                 <Label className="text-[10px] uppercase font-bold tracking-widest text-white/40">Jenis Klasifikasi</Label>
@@ -358,13 +358,13 @@ export default function Cashbook() {
       {/* Add Entry Dialog */}
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
         <DialogContent className="sm:max-w-[425px] glass border-white/10 text-white p-0 overflow-hidden">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle className="text-2xl font-bold">Catat Transaksi Manual</DialogTitle>
+            <DialogDescription className="text-white/40">
+              Lakukan pencatatan manual untuk pemasukan atau pengeluaran operasional.
+            </DialogDescription>
+          </DialogHeader>
           <form onSubmit={handleAdd}>
-            <DialogHeader className="p-6 pb-0">
-              <DialogTitle className="text-2xl font-bold">Catat Transaksi Manual</DialogTitle>
-              <DialogDescription className="text-white/40">
-                Lakukan pencatatan manual untuk pemasukan atau pengeluaran operasional.
-              </DialogDescription>
-            </DialogHeader>
             <div className="px-6 py-6 grid gap-6">
               <div className="grid gap-2">
                 <Label className="text-[10px] uppercase font-bold tracking-widest text-white/40">Jenis Klasifikasi</Label>

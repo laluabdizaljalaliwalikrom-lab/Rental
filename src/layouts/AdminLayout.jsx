@@ -21,7 +21,10 @@ import { cn } from '@/lib/utils'
 import { 
   Sheet, 
   SheetContent, 
-  SheetTrigger 
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
 } from '@/components/ui/sheet'
 import { useState } from 'react'
 
@@ -145,12 +148,17 @@ export default function AdminLayout() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="glass border-white/10 p-0 w-80 text-white">
-               <div className="flex h-20 items-center px-6 border-b border-white/5">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-black">
-                    <Bike size={22} strokeWidth={2.5} />
+               <SheetHeader className="p-6 border-b border-white/5 space-y-0">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-black shadow-lg">
+                      <Bike size={22} strokeWidth={2.5} />
+                    </div>
+                    <SheetTitle className="text-lg font-bold text-white">RentalPro</SheetTitle>
                   </div>
-                  <span className="ml-3 text-lg font-bold">RentalPro</span>
-               </div>
+                  <SheetDescription className="sr-only">
+                    Menu navigasi utama untuk manajemen rental sepeda.
+                  </SheetDescription>
+               </SheetHeader>
                <div className="py-6">
                   <NavLinks 
                     items={visibleNavItems} 

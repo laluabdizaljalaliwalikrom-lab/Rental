@@ -155,11 +155,11 @@ export default function Fleet() {
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px] glass border-white/10 text-white p-0 overflow-hidden">
+            <DialogHeader className="p-6 pb-0">
+              <DialogTitle className="text-2xl font-bold">Tambah Sepeda Baru</DialogTitle>
+              <DialogDescription className="text-white/40">Masukkan detail armada sepeda baru di bawah ini.</DialogDescription>
+            </DialogHeader>
             <form onSubmit={handleAddBike}>
-              <DialogHeader className="p-6 pb-0">
-                <DialogTitle className="text-2xl font-bold">Tambah Sepeda Baru</DialogTitle>
-                <DialogDescription className="text-white/40">Masukkan detail armada sepeda baru di bawah ini.</DialogDescription>
-              </DialogHeader>
               <div className="px-6 py-4">
                 <BikeForm formData={formData} setFormData={setFormData} />
               </div>
@@ -260,11 +260,11 @@ export default function Fleet() {
       {/* Edit Dialog */}
       <Dialog open={editOpen} onOpenChange={(val) => { setEditOpen(val); if(!val) resetForm(); }}>
         <DialogContent className="sm:max-w-[425px] glass border-white/10 text-white p-0 overflow-hidden">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle className="text-2xl font-bold">Edit Data Sepeda</DialogTitle>
+            <DialogDescription className="text-white/40">Perbarui informasi armada sepeda <span className="text-white font-bold">{selectedBike?.name}</span>.</DialogDescription>
+          </DialogHeader>
           <form onSubmit={handleUpdateBike}>
-            <DialogHeader className="p-6 pb-0">
-              <DialogTitle className="text-2xl font-bold">Edit Data Sepeda</DialogTitle>
-              <DialogDescription className="text-white/40">Perbarui informasi armada sepeda <span className="text-white font-bold">{selectedBike?.name}</span>.</DialogDescription>
-            </DialogHeader>
             <div className="px-6 py-4">
               <BikeForm formData={formData} setFormData={setFormData} />
             </div>

@@ -241,13 +241,13 @@ export default function Users() {
       {/* Edit Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit Pengguna</DialogTitle>
+            <DialogDescription>
+              Ubah nama lengkap atau hak akses (role) untuk <strong>{selectedUser?.email}</strong>.
+            </DialogDescription>
+          </DialogHeader>
           <form onSubmit={handleUpdate}>
-            <DialogHeader>
-              <DialogTitle>Edit Pengguna</DialogTitle>
-              <DialogDescription>
-                Ubah nama lengkap atau hak akses (role) untuk <strong>{selectedUser?.email}</strong>.
-              </DialogDescription>
-            </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="fullname">Nama Lengkap</Label>
@@ -309,13 +309,13 @@ export default function Users() {
       {/* Add User Dialog */}
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
         <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Tambah Pengguna Baru</DialogTitle>
+            <DialogDescription>
+              Buat akun baru. Password akan diset secara manual di sini.
+            </DialogDescription>
+          </DialogHeader>
           <form onSubmit={handleAdd}>
-            <DialogHeader>
-              <DialogTitle>Tambah Pengguna Baru</DialogTitle>
-              <DialogDescription>
-                Buat akun baru. Password akan diset secara manual di sini.
-              </DialogDescription>
-            </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="add-email">Alamat Email</Label>

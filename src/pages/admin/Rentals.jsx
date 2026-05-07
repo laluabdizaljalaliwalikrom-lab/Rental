@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Bike, Loader2, Calendar, Clock, CreditCard, History, ListFilter, Trash2, User, Phone } from 'lucide-react'
+import { Bike, Loader2, Calendar, Clock, CreditCard, History, ListFilter, Trash2, Phone, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -339,13 +339,13 @@ export default function Rentals() {
       {/* Rent Dialog */}
       <Dialog open={rentOpen} onOpenChange={setRentOpen}>
         <DialogContent className="sm:max-w-[550px] max-h-[90vh] glass border-white/10 text-white p-0 overflow-hidden flex flex-col">
+          <DialogHeader className="p-8 pb-4 flex-shrink-0">
+            <DialogTitle className="text-3xl font-black tracking-tighter">Konfigurasi Rental</DialogTitle>
+            <DialogDescription className="text-white/40 font-medium">
+              Selesaikan rincian data penyewa untuk unit <span className="text-blue-400 font-bold">{selectedBike?.name}</span>.
+            </DialogDescription>
+          </DialogHeader>
           <form onSubmit={handleRentBike} className="flex flex-col min-h-0 flex-1">
-            <DialogHeader className="p-8 pb-4 flex-shrink-0">
-              <DialogTitle className="text-3xl font-black tracking-tighter">Konfigurasi Rental</DialogTitle>
-              <DialogDescription className="text-white/40 font-medium">
-                Selesaikan rincian data penyewa untuk unit <span className="text-blue-400 font-bold">{selectedBike?.name}</span>.
-              </DialogDescription>
-            </DialogHeader>
             <div className="px-8 py-4 overflow-y-auto flex-1 custom-scrollbar space-y-8">
               <div className="space-y-6">
                 <div className="grid gap-2">

@@ -269,15 +269,15 @@ export default function Investors() {
       {/* Add/Edit Dialog */}
       <Dialog open={isAddOpen || isEditOpen} onOpenChange={(val) => { setIsAddOpen(val); setIsEditOpen(val); }}>
         <DialogContent className="sm:max-w-[425px] glass border-white/10 text-white p-0 overflow-hidden">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle className="text-2xl font-bold">
+              {isEditOpen ? 'Edit Investor' : 'Tambah Investor Baru'}
+            </DialogTitle>
+            <DialogDescription className="text-white/40">
+              Masukkan detail informasi mitra investor Anda di bawah ini.
+            </DialogDescription>
+          </DialogHeader>
           <form onSubmit={handleSubmit}>
-            <DialogHeader className="p-6 pb-0">
-              <DialogTitle className="text-2xl font-bold">
-                {isEditOpen ? 'Edit Investor' : 'Tambah Investor Baru'}
-              </DialogTitle>
-              <DialogDescription className="text-white/40">
-                Masukkan detail informasi mitra investor Anda di bawah ini.
-              </DialogDescription>
-            </DialogHeader>
             <div className="px-6 py-6 grid gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="name" className="text-[10px] uppercase font-bold tracking-widest text-white/40">Nama Lengkap *</Label>

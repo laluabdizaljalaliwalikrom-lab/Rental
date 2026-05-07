@@ -217,7 +217,7 @@ export default function Reports() {
             <CardDescription className="text-white/40 font-medium text-xs">Visualisasi pendapatan vs pengeluaran harian.</CardDescription>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="h-[350px] w-full mt-4">
+            <div className="h-[350px] w-full mt-4 min-w-0">
               {data?.trends.length > 0 ? (
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={data.trends} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
@@ -276,7 +276,7 @@ export default function Reports() {
             <CardDescription className="text-white/40 font-medium text-xs">Proporsi pendapatan vs pengeluaran.</CardDescription>
           </CardHeader>
           <CardContent className="p-6 flex flex-col items-center">
-            <div className="h-[280px] w-full">
+            <div className="h-[280px] w-full min-w-0">
                {data?.summary.total_income > 0 || data?.summary.total_expense > 0 ? (
                  <ResponsiveContainer width="100%" height="100%">
                    <PieChart>

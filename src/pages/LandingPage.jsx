@@ -530,17 +530,17 @@ export default function LandingPage() {
       {/* Booking Dialog */}
       <Dialog open={isBookingOpen} onOpenChange={setIsBookingOpen}>
         <DialogContent className="sm:max-w-[480px] max-h-[90vh] bg-white border-none rounded-[32px] p-0 flex flex-col shadow-2xl focus:outline-none overflow-hidden">
+          <DialogHeader className="p-8 md:p-12 pb-0 text-left">
+            <div className="w-14 h-14 bg-black p-4 rounded-2xl mb-6">
+              <Bike className="text-white" size={24} />
+            </div>
+            <DialogTitle className="text-3xl font-medium tracking-tight text-black leading-none">{t.modal.title}</DialogTitle>
+            <DialogDescription className="text-[#999] font-bold uppercase tracking-[0.2em] text-[9px] pt-3">
+              {t.modal.vehicle}: <span className="text-blue-600">{selectedBike?.name}</span>
+            </DialogDescription>
+          </DialogHeader>
           <div className="flex-1 overflow-y-auto custom-scrollbar">
-            <div className="p-8 md:p-12">
-              <DialogHeader className="text-left mb-10">
-                <div className="w-14 h-14 bg-black p-4 rounded-2xl mb-6">
-                  <Bike className="text-white" size={24} />
-                </div>
-                <DialogTitle className="text-3xl font-medium tracking-tight text-black leading-none">{t.modal.title}</DialogTitle>
-                <DialogDescription className="text-[#999] font-bold uppercase tracking-[0.2em] text-[9px] pt-3">
-                  {t.modal.vehicle}: <span className="text-blue-600">{selectedBike?.name}</span>
-                </DialogDescription>
-              </DialogHeader>
+            <div className="px-8 md:px-12 pb-8 md:pb-12">
 
               {bookingStep === 'form' ? (
                 <div className="space-y-8">
