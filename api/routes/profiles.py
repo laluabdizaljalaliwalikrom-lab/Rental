@@ -10,12 +10,17 @@ router = APIRouter()
 class ProfileUpdate(BaseModel):
     full_name: Optional[str] = None
     role: Optional[str] = None
+    phone: Optional[str] = None
+    avatar_url: Optional[str] = None
+    email: Optional[str] = None
 
 class ProfileResponse(BaseModel):
     id: str
     email: str
     full_name: Optional[str] = None
     role: str
+    phone: Optional[str] = None
+    avatar_url: Optional[str] = None
     created_at: datetime
     updated_at: Optional[datetime] = None
 

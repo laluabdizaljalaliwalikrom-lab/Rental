@@ -2,7 +2,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
-import { LayoutDashboard, Bike, Users, Settings, LogOut, CreditCard, Wallet } from 'lucide-react'
+import { LayoutDashboard, Bike, Users, Settings, LogOut, CreditCard, Wallet, BarChart3, User } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export default function AdminLayout() {
@@ -19,9 +19,12 @@ export default function AdminLayout() {
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard, roles: ['admin', 'staff', 'viewer'] },
     { name: 'Penyewaan', path: '/admin/rentals', icon: CreditCard, roles: ['admin', 'staff', 'viewer'] },
     { name: 'Buku Kas', path: '/admin/cashbook', icon: Wallet, roles: ['admin', 'staff', 'viewer'] },
+    { name: 'Laporan Kas', path: '/admin/reports', icon: BarChart3, roles: ['admin'] },
+    { name: 'Investor', path: '/admin/investors', icon: Users, roles: ['admin'] },
     { name: 'Armada Sepeda', path: '/admin/fleet', icon: Bike, roles: ['admin', 'staff'] },
     { name: 'Pengguna', path: '/admin/users', icon: Users, roles: ['admin'] },
     { name: 'Pengaturan', path: '/admin/settings', icon: Settings, roles: ['admin'] },
+    { name: 'Profil', path: '/admin/profile', icon: User, roles: ['admin', 'staff', 'viewer'] },
   ]
 
   const visibleNavItems = navItems.filter((item) => hasRole(item.roles))

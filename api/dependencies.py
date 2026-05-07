@@ -17,7 +17,7 @@ security = HTTPBearer()
 import queue
 
 # Enterprise-grade Connection Pool
-POOL_SIZE = 5
+POOL_SIZE = 10
 _client_pool = queue.Queue()
 
 # Lazy initialization of pool
@@ -32,10 +32,10 @@ def _init_pool():
     key = os.getenv("SUPABASE_KEY")
     
     if not url or not key:
-        print(f"CRITICAL: SUPABASE_URL or SUPABASE_KEY missing! URL: {url}")
+        print(f"CRITICAL: SUPABASE_URL or SUPABASE_KEY missing!")
         return
 
-    print("Initializing Supabase connection pool...")
+    print(f"Initializing Supabase connection pool (Size: {POOL_SIZE})...")
     for _ in range(POOL_SIZE):
         try:
             _client_pool.put(create_client(url, key))
@@ -48,21 +48,23 @@ def get_supabase() -> Client:
     if not os.getenv("SUPABASE_URL") or not os.getenv("SUPABASE_KEY"):
         raise HTTPException(
             status_code=500, 
-            detail="Konfigurasi backend tidak lengkap (SUPABASE_URL/KEY hilang). Periksa file .env"
+            detail="Konfigurasi backend tidak lengkap (SUPABASE_URL/KEY hilang)."
         )
     
     _init_pool()
     try:
-        # Pinjam koneksi dari pool (maksimal antre 5 detik)
+        # Pinjam koneksi dari pool
         client = _client_pool.get(timeout=5)
+        # print(f"DEBUG: Connection taken from pool. Remaining: {_client_pool.qsize()}")
         try:
             yield client
         finally:
-            # Wajib kembalikan koneksi ke pool setelah request selesai!
+            # Wajib kembalikan koneksi ke pool!
             _client_pool.put(client)
+            # print(f"DEBUG: Connection returned to pool. Available: {_client_pool.qsize()}")
     except queue.Empty:
-        print("Koneksi pool habis!")
-        raise HTTPException(status_code=503, detail="Server sedang sibuk, koneksi database habis.")
+        print("ALERT: Connection pool exhausted!")
+        raise HTTPException(status_code=503, detail="Database busy. Please try again in a few seconds.")
     except Exception as e:
         print(f"Error in get_supabase: {e}")
         raise HTTPException(status_code=500, detail=str(e))

@@ -10,6 +10,10 @@ import Rentals from '@/pages/admin/Rentals'
 import Users from '@/pages/admin/Users'
 import Settings from '@/pages/admin/Settings'
 import Cashbook from '@/pages/admin/Cashbook'
+import Reports from '@/pages/admin/Reports'
+import Investors from '@/pages/admin/Investors'
+import Profile from '@/pages/admin/Profile'
+import LandingPage from '@/pages/LandingPage'
 
 // Layouts & Guards
 import AdminLayout from '@/layouts/AdminLayout'
@@ -21,7 +25,7 @@ function App() {
       <Router>
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
 
           {/* Protected Admin Routes */}
@@ -30,9 +34,12 @@ function App() {
               <Route index element={<Dashboard />} />
               <Route path="rentals" element={<Rentals />} />
               <Route path="cashbook" element={<Cashbook />} />
+              <Route path="reports" element={<ProtectedRoute roles={['admin']}><Reports /></ProtectedRoute>} />
+              <Route path="investors" element={<ProtectedRoute roles={['admin']}><Investors /></ProtectedRoute>} />
               <Route path="fleet" element={<ProtectedRoute roles={['admin', 'staff']}><Fleet /></ProtectedRoute>} />
               <Route path="users" element={<ProtectedRoute roles={['admin']}><Users /></ProtectedRoute>} />
               <Route path="settings" element={<ProtectedRoute roles={['admin']}><Settings /></ProtectedRoute>} />
+              <Route path="profile" element={<Profile />} />
             </Route>
           </Route>
           

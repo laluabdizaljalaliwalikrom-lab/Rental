@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Request
 from pydantic import BaseModel
 from typing import List, Optional
 from api.dependencies import get_supabase, require_role
@@ -69,12 +69,27 @@ async def upload_identity(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/", response_model=Rental)
-def create_rental(
+async def create_rental(
+    request: Request,
     rental: RentalCreate,
-    db: Client = Depends(get_supabase),
-    user: dict = Depends(require_role(["admin", "staff"]))
+    db: Client = Depends(get_supabase)
 ):
+    # Diizinkan publik untuk mendukung online booking dari landing page
     try:
+        # Coba ambil user dari token jika ada (opsional)
+        current_user = None
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            try:
+                token = auth_header.split(" ")[1]
+                user_res = db.auth.get_user(token)
+                if user_res.user:
+                    # Ambil profile untuk mendapatkan nama
+                    profile = db.table("profiles").select("*").eq("id", user_res.user.id).execute()
+                    current_user = profile.data[0] if profile.data else {"id": user_res.user.id, "full_name": user_res.user.email}
+            except:
+                pass
+
         bike_res = db.table("fleet").select("status").eq("id", rental.bike_id).execute()
         if not bike_res.data or bike_res.data[0]['status'] != 'Available':
             raise HTTPException(status_code=400, detail="Sepeda tidak tersedia")
@@ -82,7 +97,7 @@ def create_rental(
         rental_data = rental.model_dump()
         rental_data['status'] = 'Active'
         rental_data['start_time'] = datetime.now(timezone.utc).isoformat()
-        rental_data['processed_by_name'] = user.get('full_name') or user.get('email') or 'Admin'
+        rental_data['processed_by_name'] = current_user['full_name'] if current_user else 'Online Booking'
         
         res = db.table("rentals").insert(rental_data).execute()
         if not res.data:
@@ -90,27 +105,36 @@ def create_rental(
 
         rental_record = res.data[0]
         
+        # Ambil detail armada untuk deskripsi kas
+        bike_name = "Sepeda"
+        bike_info = db.table("fleet").select("name").eq("id", rental.bike_id).execute()
+        if bike_info.data:
+            bike_name = bike_info.data[0]['name']
+
         db.table("fleet").update({"status": "Rented"}).eq("id", rental.bike_id).execute()
 
         # Otomatis catat ke kas masuk (debit)
         try:
-            db.table("cashbook").insert({
+            cashbook_entry = {
                 "type": "debit",
                 "amount": rental.total_price,
-                "description": f"Pendapatan Sewa (Customer: {rental.customer_name})",
+                "description": f"Sewa: {bike_name} - {rental.customer_name} ({'Admin' if current_user else 'Online'})",
                 "reference_id": rental_record['id'],
-                "created_by": user['id'],
-                "created_by_name": user.get('full_name') or user.get('email') or 'Admin',
+                "created_by": current_user['id'] if current_user else None,
+                "created_by_name": current_user.get('full_name') if current_user else 'Online Booking',
                 "created_at": datetime.now(timezone.utc).isoformat()
-            }).execute()
+            }
+            db.table("cashbook").insert(cashbook_entry).execute()
         except Exception as e:
             print("Gagal mencatat kas:", e)
-            # Jangan batalkan rental jika gagal catat kas (optional safety net)
+            traceback.print_exc()
 
         return rental_record
     except HTTPException as he:
         raise he
     except Exception as e:
+        print("Rental Create Error:")
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/stats")

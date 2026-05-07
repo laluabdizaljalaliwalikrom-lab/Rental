@@ -15,6 +15,8 @@ class FleetBase(BaseModel):
     price_per_hour: float = 0.0
     price_per_day: float = 0.0
     image_url: Optional[str] = None
+    investor_name: Optional[str] = "Pusat"
+    investor_id: Optional[str] = None
 
 class FleetCreate(FleetBase):
     pass
@@ -27,6 +29,8 @@ class FleetUpdate(BaseModel):
     price_per_hour: Optional[float] = None
     price_per_day: Optional[float] = None
     image_url: Optional[str] = None
+    investor_name: Optional[str] = None
+    investor_id: Optional[str] = None
 
 class Fleet(FleetBase):
     id: str
@@ -34,11 +38,11 @@ class Fleet(FleetBase):
 
 @router.get("/", response_model=List[Fleet])
 def get_fleet(
-    db: Client = Depends(get_supabase),
-    user: dict = Depends(require_role(["admin", "staff", "viewer"]))
+    db: Client = Depends(get_supabase)
 ):
     try:
-        res = db.table("fleet").select("*").order("created_at", desc=True).execute()
+        # Sekarang publik bisa melihat daftar armada (untuk landing page)
+        res = db.table("fleet").select("*").order("name").execute()
         return res.data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -65,7 +69,16 @@ def update_bike(
     user: dict = Depends(require_role(["admin", "staff"]))
 ):
     try:
-        update_data = {k: v for k, v in bike.model_dump().items() if v is not None}
+        # Ambil data dari model, sertakan investor_id dan investor_name meskipun None
+        full_data = bike.model_dump()
+        update_data = {k: v for k, v in full_data.items() if v is not None}
+        
+        # Secara eksplisit masukkan investor_id dan investor_name jika ada dalam request (bisa None)
+        if 'investor_id' in full_data:
+            update_data['investor_id'] = full_data['investor_id']
+        if 'investor_name' in full_data:
+            update_data['investor_name'] = full_data['investor_name']
+
         res = db.table("fleet").update(update_data).eq("id", id).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="Bike not found")

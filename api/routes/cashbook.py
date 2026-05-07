@@ -60,10 +60,31 @@ def delete_entry(
     user: dict = Depends(require_role(["admin"]))
 ):
     try:
-        res = db.table("cashbook").delete().eq("id", id).execute()
-        if not res.data:
+        # 1. Ambil data kas dulu untuk mendapatkan reference_id (ID Rental)
+        entry_res = db.table("cashbook").select("*").eq("id", id).execute()
+        if not entry_res.data:
             raise HTTPException(status_code=404, detail="Data kas tidak ditemukan")
-        return {"status": "success", "message": "Transaksi kas berhasil dihapus"}
+        
+        entry = entry_res.data[0]
+        reference_id = entry.get("reference_id")
+
+        # 2. Jika ada reference_id, hapus data rental terkait
+        if reference_id:
+            # Cek data rental untuk update status sepeda
+            rental_res = db.table("rentals").select("bike_id, status").eq("id", reference_id).execute()
+            if rental_res.data:
+                rental = rental_res.data[0]
+                # Jika rental masih 'Active', kembalikan status sepeda ke 'Available'
+                if rental.get("status") == "Active":
+                    db.table("fleet").update({"status": "Available"}).eq("id", rental["bike_id"]).execute()
+                
+                # Hapus data rental
+                db.table("rentals").delete().eq("id", reference_id).execute()
+
+        # 3. Hapus entri kas itu sendiri
+        db.table("cashbook").delete().eq("id", id).execute()
+        
+        return {"status": "success", "message": "Transaksi kas dan riwayat penyewaan terkait berhasil dihapus"}
     except HTTPException as he:
         raise he
     except Exception as e:
