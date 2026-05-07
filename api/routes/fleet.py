@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional
-from api.dependencies import get_supabase
+from api.dependencies import get_supabase, require_role
 from supabase import Client
 from datetime import datetime
 
@@ -33,7 +33,10 @@ class Fleet(FleetBase):
     created_at: datetime
 
 @router.get("/", response_model=List[Fleet])
-def get_fleet(db: Client = Depends(get_supabase)):
+def get_fleet(
+    db: Client = Depends(get_supabase),
+    user: dict = Depends(require_role(["admin", "staff", "viewer"]))
+):
     try:
         res = db.table("fleet").select("*").order("created_at", desc=True).execute()
         return res.data
@@ -41,7 +44,11 @@ def get_fleet(db: Client = Depends(get_supabase)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/", response_model=Fleet)
-def create_bike(bike: FleetCreate, db: Client = Depends(get_supabase)):
+def create_bike(
+    bike: FleetCreate,
+    db: Client = Depends(get_supabase),
+    user: dict = Depends(require_role(["admin", "staff"]))
+):
     try:
         res = db.table("fleet").insert(bike.model_dump()).execute()
         if not res.data:
@@ -51,9 +58,13 @@ def create_bike(bike: FleetCreate, db: Client = Depends(get_supabase)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.put("/{id}", response_model=Fleet)
-def update_bike(id: str, bike: FleetUpdate, db: Client = Depends(get_supabase)):
+def update_bike(
+    id: str,
+    bike: FleetUpdate,
+    db: Client = Depends(get_supabase),
+    user: dict = Depends(require_role(["admin", "staff"]))
+):
     try:
-        # filter out None values to avoid overwriting with nulls if not provided
         update_data = {k: v for k, v in bike.model_dump().items() if v is not None}
         res = db.table("fleet").update(update_data).eq("id", id).execute()
         if not res.data:
@@ -63,7 +74,11 @@ def update_bike(id: str, bike: FleetUpdate, db: Client = Depends(get_supabase)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/{id}")
-def delete_bike(id: str, db: Client = Depends(get_supabase)):
+def delete_bike(
+    id: str,
+    db: Client = Depends(get_supabase),
+    user: dict = Depends(require_role(["admin"]))
+):
     try:
         res = db.table("fleet").delete().eq("id", id).execute()
         if not res.data:

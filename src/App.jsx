@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from '@/components/ui/sonner'
+import { AuthProvider } from '@/hooks/useAuth'
 
 // Pages
 import Login from '@/pages/auth/Login'
@@ -8,6 +9,7 @@ import Fleet from '@/pages/admin/Fleet'
 import Rentals from '@/pages/admin/Rentals'
 import Users from '@/pages/admin/Users'
 import Settings from '@/pages/admin/Settings'
+import Cashbook from '@/pages/admin/Cashbook'
 
 // Layouts & Guards
 import AdminLayout from '@/layouts/AdminLayout'
@@ -15,7 +17,7 @@ import ProtectedRoute from '@/components/ProtectedRoute'
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Router>
         <Routes>
           {/* Public Routes */}
@@ -27,9 +29,10 @@ function App() {
             <Route element={<AdminLayout />}>
               <Route index element={<Dashboard />} />
               <Route path="rentals" element={<Rentals />} />
-              <Route path="fleet" element={<Fleet />} />
-              <Route path="users" element={<Users />} />
-              <Route path="settings" element={<Settings />} />
+              <Route path="cashbook" element={<Cashbook />} />
+              <Route path="fleet" element={<ProtectedRoute roles={['admin', 'staff']}><Fleet /></ProtectedRoute>} />
+              <Route path="users" element={<ProtectedRoute roles={['admin']}><Users /></ProtectedRoute>} />
+              <Route path="settings" element={<ProtectedRoute roles={['admin']}><Settings /></ProtectedRoute>} />
             </Route>
           </Route>
           
@@ -38,10 +41,8 @@ function App() {
         </Routes>
       </Router>
 
-      
-      {/* Global Toaster for notifications */}
       <Toaster richColors position="top-right" />
-    </>
+    </AuthProvider>
   )
 }
 

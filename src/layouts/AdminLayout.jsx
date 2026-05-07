@@ -1,12 +1,14 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
-import { LayoutDashboard, Bike, Users, Settings, LogOut, CreditCard } from 'lucide-react'
+import { LayoutDashboard, Bike, Users, Settings, LogOut, CreditCard, Wallet } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export default function AdminLayout() {
   const location = useLocation()
   const navigate = useNavigate()
+  const { profile, hasRole } = useAuth()
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -14,12 +16,15 @@ export default function AdminLayout() {
   }
 
   const navItems = [
-    { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
-    { name: 'Penyewaan', path: '/admin/rentals', icon: CreditCard },
-    { name: 'Armada Sepeda', path: '/admin/fleet', icon: Bike },
-    { name: 'Pengguna', path: '/admin/users', icon: Users },
-    { name: 'Pengaturan', path: '/admin/settings', icon: Settings },
+    { name: 'Dashboard', path: '/admin', icon: LayoutDashboard, roles: ['admin', 'staff', 'viewer'] },
+    { name: 'Penyewaan', path: '/admin/rentals', icon: CreditCard, roles: ['admin', 'staff', 'viewer'] },
+    { name: 'Buku Kas', path: '/admin/cashbook', icon: Wallet, roles: ['admin', 'staff', 'viewer'] },
+    { name: 'Armada Sepeda', path: '/admin/fleet', icon: Bike, roles: ['admin', 'staff'] },
+    { name: 'Pengguna', path: '/admin/users', icon: Users, roles: ['admin'] },
+    { name: 'Pengaturan', path: '/admin/settings', icon: Settings, roles: ['admin'] },
   ]
+
+  const visibleNavItems = navItems.filter((item) => hasRole(item.roles))
 
   return (
     <div className="flex min-h-screen w-full bg-muted/40">
@@ -35,7 +40,7 @@ export default function AdminLayout() {
         </div>
         <div className="flex-1 overflow-auto py-2">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4 gap-1">
-            {navItems.map((item) => {
+            {visibleNavItems.map((item) => {
               const Icon = item.icon
               const isActive = location.pathname === item.path
               return (
@@ -57,6 +62,12 @@ export default function AdminLayout() {
           </nav>
         </div>
         <div className="mt-auto p-4 border-t">
+          <div className="mb-2 px-3 text-xs text-muted-foreground">
+            {profile?.email}
+            <span className="ml-1 inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+              {profile?.role}
+            </span>
+          </div>
           <Button variant="outline" className="w-full flex justify-start gap-3" onClick={handleLogout}>
             <LogOut className="h-4 w-4" />
             Logout
@@ -68,7 +79,6 @@ export default function AdminLayout() {
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-64 w-full">
         {/* Header (Mobile) */}
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-          {/* Untuk sekarang header kosong di desktop, bisa ditambah breadcrumb dll nanti */}
           <div className="sm:hidden flex items-center gap-2 font-semibold">
              <Bike className="h-5 w-5 text-primary" />
              <span>Rental Sepeda</span>

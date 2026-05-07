@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Bike, DollarSign, Users, Activity, Clock, CheckCircle2, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 import { Badge } from "@/components/ui/Badge"
+import { apiFetch } from '@/lib/api'
 
 export default function Dashboard() {
   const [stats, setStats] = useState({
@@ -15,28 +16,23 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState([])
   const [loading, setLoading] = useState(true)
 
-  const fetchDashboardData = async () => {
-    try {
-      const [statsRes, transRes] = await Promise.all([
-        fetch('/api/rentals/stats'),
-        fetch('/api/rentals/')
-      ])
-
-      if (!statsRes.ok || !transRes.ok) throw new Error('Gagal mengambil data dashboard')
-
-      const statsData = await statsRes.json()
-      const transData = await transRes.json()
-
-      setStats(statsData)
-      setTransactions(transData.slice(0, 5)) // Get latest 5
-    } catch (error) {
-      toast.error(error.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const [statsData, transData] = await Promise.all([
+          apiFetch('/api/rentals/stats'),
+          apiFetch('/api/rentals/')
+        ])
+
+        setStats(statsData)
+        setTransactions(transData.slice(0, 5))
+      } catch (error) {
+        toast.error(error.message)
+      } finally {
+        setLoading(false)
+      }
+    }
+
     fetchDashboardData()
   }, [])
 
@@ -56,7 +52,7 @@ export default function Dashboard() {
       </div>
       
       <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-4">
-        <Card className="bg-background/60 backdrop-blur-xl border-white/10">
+        <Card className="bg-background/80 border-white/10">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Pendapatan</CardTitle>
             <div className="p-2 bg-green-500/10 rounded-lg text-green-500">
@@ -71,7 +67,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-background/60 backdrop-blur-xl border-white/10">
+        <Card className="bg-background/80 border-white/10">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Rental Aktif</CardTitle>
             <div className="p-2 bg-blue-500/10 rounded-lg text-blue-500">
@@ -86,7 +82,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-background/60 backdrop-blur-xl border-white/10">
+        <Card className="bg-background/80 border-white/10">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Armada Tersedia</CardTitle>
             <div className="p-2 bg-orange-500/10 rounded-lg text-orange-500">
@@ -101,7 +97,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-background/60 backdrop-blur-xl border-white/10">
+        <Card className="bg-background/80 border-white/10">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Pengguna</CardTitle>
             <div className="p-2 bg-purple-500/10 rounded-lg text-purple-500">
@@ -118,7 +114,7 @@ export default function Dashboard() {
       </div>
       
       <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3">
-        <Card className="xl:col-span-2 bg-background/60 backdrop-blur-xl border-white/10">
+        <Card className="xl:col-span-2 bg-background/80 border-white/10">
           <CardHeader>
             <CardTitle>Transaksi Terbaru</CardTitle>
             <CardDescription>Lima transaksi penyewaan terakhir.</CardDescription>
@@ -156,7 +152,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
         
-        <Card className="bg-background/60 backdrop-blur-xl border-white/10">
+        <Card className="bg-background/80 border-white/10">
           <CardHeader>
             <CardTitle>Status Sistem</CardTitle>
           </CardHeader>

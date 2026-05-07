@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import { Badge } from "@/components/ui/Badge"
+import { apiFetch } from '@/lib/api'
+import { useAuth } from '@/hooks/useAuth'
 import {
   Dialog,
   DialogContent,
@@ -23,6 +25,7 @@ export default function Fleet() {
   const [editOpen, setEditOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [selectedBike, setSelectedBike] = useState(null)
+  const { profile: currentUser } = useAuth()
   
   const [formData, setFormData] = useState({
     name: '',
@@ -34,40 +37,39 @@ export default function Fleet() {
     image_url: ''
   })
 
-  useEffect(() => {
-    fetchFleet()
-  }, [])
-
-  const fetchFleet = async () => {
+  const loadFleetData = async (showLoading = false) => {
     try {
-      setLoading(true)
-      const response = await fetch('/api/fleet/')
-      if (!response.ok) throw new Error('Gagal mengambil data armada')
-      const data = await response.json()
+      if (showLoading) setLoading(true)
+      const data = await apiFetch('/api/fleet/')
       setBikes(data)
     } catch (error) {
       toast.error(error.message)
     } finally {
-      setLoading(false)
+      if (showLoading) setLoading(false)
     }
   }
+
+  useEffect(() => {
+    // Inline fetch for initial load prevents React Compiler from falsely detecting synchronous state updates
+    apiFetch('/api/fleet/')
+      .then(data => setBikes(data))
+      .catch(error => toast.error(error.message))
+      .finally(() => setLoading(false))
+  }, [])
 
   const handleAddBike = async (e) => {
     e.preventDefault()
     try {
       setSubmitting(true)
-      const response = await fetch('/api/fleet/', {
+      await apiFetch('/api/fleet/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       })
-
-      if (!response.ok) throw new Error('Gagal menambahkan sepeda')
       
       toast.success('Sepeda berhasil ditambahkan')
       setOpen(false)
       resetForm()
-      fetchFleet()
+      loadFleetData(true)
     } catch (error) {
       toast.error(error.message)
     } finally {
@@ -80,18 +82,15 @@ export default function Fleet() {
     if (!selectedBike) return
     try {
       setSubmitting(true)
-      const response = await fetch(`/api/fleet/${selectedBike.id}`, {
+      await apiFetch(`/api/fleet/${selectedBike.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       })
-
-      if (!response.ok) throw new Error('Gagal memperbarui data sepeda')
       
       toast.success('Data sepeda berhasil diperbarui')
       setEditOpen(false)
       resetForm()
-      fetchFleet()
+      loadFleetData(true)
     } catch (error) {
       toast.error(error.message)
     } finally {
@@ -103,12 +102,11 @@ export default function Fleet() {
     if (!confirm('Apakah Anda yakin ingin menghapus sepeda ini?')) return
     try {
       setLoading(true)
-      const response = await fetch(`/api/fleet/${id}`, {
+      await apiFetch(`/api/fleet/${id}`, {
         method: 'DELETE'
       })
-      if (!response.ok) throw new Error('Gagal menghapus sepeda')
       toast.success('Sepeda berhasil dihapus')
-      fetchFleet()
+      loadFleetData(true)
     } catch (error) {
       toast.error(error.message)
     } finally {
@@ -178,7 +176,7 @@ export default function Fleet() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {bikes.length > 0 ? (
             bikes.map((bike) => (
-              <Card key={bike.id} className="overflow-hidden border-white/10 bg-background/60 backdrop-blur-xl group">
+              <Card key={bike.id} className="overflow-hidden border-white/10 bg-background/80 group">
                 <div className="aspect-video w-full bg-muted flex items-center justify-center relative overflow-hidden">
                   {bike.image_url ? (
                     <img src={bike.image_url} alt={bike.name} className="h-full w-full object-cover transition-transform group-hover:scale-105" />
@@ -215,15 +213,17 @@ export default function Fleet() {
                     <Button variant="outline" className="flex-1 gap-2" onClick={() => openEdit(bike)}>
                       <Edit size={16} /> Edit
                     </Button>
-                    <Button variant="destructive" size="icon" onClick={() => handleDeleteBike(bike.id)}>
-                      <Trash2 size={16} />
-                    </Button>
+                    {currentUser?.role === 'admin' && (
+                      <Button variant="destructive" size="icon" onClick={() => handleDeleteBike(bike.id)}>
+                        <Trash2 size={16} />
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>
             ))
           ) : (
-            <Card className="col-span-full border-white/10 bg-background/60 backdrop-blur-xl py-12 text-center">
+            <Card className="col-span-full border-white/10 bg-background/80 py-12 text-center">
               <CardContent className="flex flex-col items-center">
                 <Bike size={48} className="text-muted-foreground/20 mb-4" />
                 <h3 className="text-lg font-medium">Belum ada data sepeda</h3>
