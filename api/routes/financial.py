@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
-from api.dependencies import get_supabase, require_role
+from dependencies import get_supabase, require_role
 from supabase import Client
 from typing import List, Optional
 from datetime import datetime, timedelta, timezone

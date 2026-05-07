@@ -1,12 +1,10 @@
 import os
 from typing import Optional
 from supabase import create_client, Client
-from dotenv import load_dotenv, find_dotenv
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-# Load .env from root
-load_dotenv(find_dotenv())
+# Environment variables are managed by Vercel
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import List, Optional
-from api.dependencies import get_supabase, require_role
+from dependencies import get_supabase, require_role
 from supabase import Client
 
 router = APIRouter()
