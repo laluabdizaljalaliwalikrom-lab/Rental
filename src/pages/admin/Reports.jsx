@@ -169,15 +169,15 @@ export default function Reports() {
           </CardContent>
         </Card>
 
-        <Card className="glass-card relative overflow-hidden group border-white/5 hover:border-white/20 transition-all duration-500">
+        <Card className="glass-card relative overflow-hidden group border-border hover:border-primary/20 transition-all duration-500">
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <TrendingUp size={80} strokeWidth={1.5} className="text-white" />
+            <TrendingUp size={80} strokeWidth={1.5} className="text-foreground" />
           </div>
           <CardHeader className="pb-2">
-            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">Laba Bersih</p>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Laba Bersih</p>
             <CardTitle className={cn(
               "text-2xl font-bold tracking-tighter",
-              data?.summary.net_profit >= 0 ? 'text-blue-400' : 'text-red-400'
+              data?.summary.net_profit >= 0 ? 'text-primary' : 'text-red-500'
             )}>
               Rp {data?.summary.net_profit.toLocaleString()}
             </CardTitle>
@@ -189,13 +189,13 @@ export default function Reports() {
           </CardContent>
         </Card>
 
-        <Card className="glass-card relative overflow-hidden group border-white/5 hover:border-white/20 transition-all duration-500">
+        <Card className="glass-card relative overflow-hidden group border-border hover:border-primary/20 transition-all duration-500">
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <DollarSign size={80} strokeWidth={1.5} className="text-white" />
+            <DollarSign size={80} strokeWidth={1.5} className="text-foreground" />
           </div>
           <CardHeader className="pb-2">
-            <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em]">Saldo Kas Akhir</p>
-            <CardTitle className="text-2xl font-bold text-purple-400 tracking-tighter">Rp {data?.summary.cash_on_hand.toLocaleString()}</CardTitle>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Saldo Kas Akhir</p>
+            <CardTitle className="text-2xl font-bold text-purple-500 tracking-tighter">Rp {data?.summary.cash_on_hand.toLocaleString()}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50">
@@ -217,7 +217,7 @@ export default function Reports() {
             <CardDescription className="text-muted-foreground font-medium text-xs">Visualisasi pendapatan vs pengeluaran harian.</CardDescription>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="h-[350px] w-full mt-4 min-w-0 min-h-0">
+            <div className="min-h-[350px] w-full mt-4 min-w-0">
               {data?.trends.length > 0 ? (
                 <ResponsiveContainer width="99%" height="100%">
                   <AreaChart data={data.trends} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
@@ -258,8 +258,8 @@ export default function Reports() {
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
-                <div className="flex h-full items-center justify-center border-2 border-dashed border-white/5 rounded-2xl bg-white/[0.02]">
-                  <p className="text-white/20 text-xs font-bold uppercase tracking-widest">Data tidak cukup untuk grafik tren</p>
+                <div className="flex h-full items-center justify-center border-2 border-dashed border-border rounded-2xl bg-muted/20">
+                  <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest">Data tidak cukup untuk grafik tren</p>
                 </div>
               )}
             </div>
@@ -276,7 +276,7 @@ export default function Reports() {
             <CardDescription className="text-muted-foreground font-medium text-xs">Proporsi pendapatan vs pengeluaran.</CardDescription>
           </CardHeader>
           <CardContent className="p-6 flex flex-col items-center">
-            <div className="h-[280px] w-full min-w-0 min-h-0">
+            <div className="min-h-[280px] w-full min-w-0">
                {data?.summary.total_income > 0 || data?.summary.total_expense > 0 ? (
                  <ResponsiveContainer width="99%" height="100%">
                    <PieChart>
@@ -295,25 +295,25 @@ export default function Reports() {
                        ))}
                      </Pie>
                      <Tooltip 
-                       contentStyle={{ backgroundColor: 'rgba(15,15,15,0.95)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', backdropFilter: 'blur(10px)' }}
+                       contentStyle={{ backgroundColor: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: '16px', backdropFilter: 'blur(10px)' }}
                        itemStyle={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}
                      />
                    </PieChart>
                  </ResponsiveContainer>
                ) : (
-                  <div className="flex h-full items-center justify-center border-2 border-dashed border-white/5 rounded-2xl bg-white/[0.02] w-full">
-                    <p className="text-white/20 text-xs font-bold uppercase tracking-widest text-center px-6">Belum ada data distribusi</p>
+                  <div className="flex h-full items-center justify-center border-2 border-dashed border-border rounded-2xl bg-muted/20 w-full">
+                    <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest text-center px-6">Belum ada data distribusi</p>
                   </div>
                )}
             </div>
             <div className="flex gap-6 mt-6">
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-[#10b981] shadow-[0_0_8px_#10b981]" />
-                  <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Income</span>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Income</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-[#f43f5e] shadow-[0_0_8px_#f43f5e]" />
-                  <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">Expense</span>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Expense</span>
                 </div>
             </div>
           </CardContent>
@@ -321,22 +321,22 @@ export default function Reports() {
       </div>
 
       {/* Investor Dividends Table */}
-      <Card className="glass-card border-white/5 overflow-hidden">
+      <Card className="glass-card border-border overflow-hidden">
         <CardHeader className="pb-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <CardTitle className="text-xl font-bold text-white flex items-center gap-3">
+              <CardTitle className="text-xl font-bold text-foreground flex items-center gap-3">
                 Distribusi Laba & Dividen
                 <Button 
                   variant="ghost" 
                   size="icon" 
-                  className="h-8 w-8 rounded-lg bg-white/5 text-white/40 hover:text-white hover:bg-white/10 transition-all shadow-inner" 
+                  className="h-8 w-8 rounded-lg bg-muted border border-border text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-all shadow-inner" 
                   onClick={() => loadReport()}
                 >
                   <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
                 </Button>
               </CardTitle>
-              <CardDescription className="text-white/40 font-medium mt-1 text-xs">Perhitungan bagi hasil berdasarkan kepemilikan armada.</CardDescription>
+              <CardDescription className="text-muted-foreground font-medium mt-1 text-xs">Perhitungan bagi hasil berdasarkan kepemilikan armada.</CardDescription>
             </div>
             <Badge className="bg-blue-500/10 text-blue-400 border-none px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest h-fit">
               PERIODE: {period}
@@ -347,43 +347,43 @@ export default function Reports() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
               <thead>
-                <tr className="bg-white/[0.02] border-y border-white/5">
-                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30">Investor</th>
-                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30 text-right">Omzet Kotor</th>
-                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30 text-right">Biaya Perawatan</th>
-                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30 text-right">Gaji Staff</th>
-                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30 text-right">Dividen Bersih</th>
+                <tr className="bg-muted/50 border-y border-border">
+                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Investor</th>
+                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Omzet Kotor</th>
+                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Biaya Perawatan</th>
+                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Gaji Staff</th>
+                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Dividen Bersih</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-border">
                 {data?.investor_splits.length > 0 ? (
                   data.investor_splits.map((item, idx) => (
-                    <tr key={idx} className="group hover:bg-white/[0.03] transition-all">
-                      <td className="px-6 py-5 font-bold text-white tracking-tight">{item.name}</td>
-                      <td className="px-6 py-5 text-right font-medium text-white/70">Rp {item.revenue.toLocaleString()}</td>
-                      <td className="px-6 py-5 text-right text-red-400/60 font-medium">- Rp {item.maintenance.toLocaleString()}</td>
-                      <td className="px-6 py-5 text-right text-orange-400/60 font-medium">- Rp {item.staff_salary.toLocaleString()}</td>
-                      <td className="px-6 py-5 text-right font-black text-green-400 text-base tracking-tighter">
+                    <tr key={idx} className="group hover:bg-muted/20 transition-all">
+                      <td className="px-6 py-5 font-bold text-foreground tracking-tight">{item.name}</td>
+                      <td className="px-6 py-5 text-right font-medium text-muted-foreground">Rp {item.revenue.toLocaleString()}</td>
+                      <td className="px-6 py-5 text-right text-red-500/60 font-medium">- Rp {item.maintenance.toLocaleString()}</td>
+                      <td className="px-6 py-5 text-right text-orange-500/60 font-medium">- Rp {item.staff_salary.toLocaleString()}</td>
+                      <td className="px-6 py-5 text-right font-black text-green-500 text-base tracking-tighter">
                         Rp {item.dividend.toLocaleString()}
                       </td>
                     </tr>
                   ))
                 ) : (
-                  <tr>
+                    <tr>
                     <td colSpan="5" className="px-6 py-16 text-center">
-                      <p className="text-white/20 text-xs font-bold uppercase tracking-widest italic">Tidak ada data penyewaan periode ini</p>
+                      <p className="text-muted-foreground/30 text-xs font-bold uppercase tracking-widest italic">Tidak ada data penyewaan periode ini</p>
                     </td>
                   </tr>
                 )}
               </tbody>
               {data?.investor_splits.length > 0 && (
-                <tfoot className="bg-white/[0.04] border-t border-white/10">
+                <tfoot className="bg-muted/50 border-t border-border">
                   <tr className="font-black text-[10px] uppercase tracking-[0.2em]">
-                    <td className="px-6 py-6 text-white">TOTAL DISTRIBUSI</td>
-                    <td className="px-6 py-6 text-right text-white/50 font-bold">Rp {data.summary.total_income.toLocaleString()}</td>
-                    <td className="px-6 py-6 text-right text-red-400/40 font-bold">- Rp {data.summary.total_maintenance_fee.toLocaleString()}</td>
-                    <td className="px-6 py-6 text-right text-orange-400/40 font-bold">- Rp {data.summary.total_staff_salary.toLocaleString()}</td>
-                    <td className="px-6 py-6 text-right text-green-400 text-lg tracking-tighter">Rp {data.summary.total_investor_dividend.toLocaleString()}</td>
+                    <td className="px-6 py-6 text-foreground">TOTAL DISTRIBUSI</td>
+                    <td className="px-6 py-6 text-right text-muted-foreground font-bold">Rp {data.summary.total_income.toLocaleString()}</td>
+                    <td className="px-6 py-6 text-right text-red-500/40 font-bold">- Rp {data.summary.total_maintenance_fee.toLocaleString()}</td>
+                    <td className="px-6 py-6 text-right text-orange-500/40 font-bold">- Rp {data.summary.total_staff_salary.toLocaleString()}</td>
+                    <td className="px-6 py-6 text-right text-green-500 text-lg tracking-tighter">Rp {data.summary.total_investor_dividend.toLocaleString()}</td>
                   </tr>
                 </tfoot>
               )}
@@ -393,30 +393,30 @@ export default function Reports() {
       </Card>
 
       {/* Top Revenue Sources */}
-      <Card className="glass-card border-white/5 overflow-hidden">
+      <Card className="glass-card border-border overflow-hidden">
         <CardHeader className="pb-6">
-          <CardTitle className="text-xl font-bold text-white">Transaksi Terbesar (Top Revenue)</CardTitle>
-          <CardDescription className="text-white/40 font-medium mt-1 text-xs">Daftar pendapatan dengan nominal tertinggi di periode ini.</CardDescription>
+          <CardTitle className="text-xl font-bold text-foreground">Transaksi Terbesar (Top Revenue)</CardTitle>
+          <CardDescription className="text-muted-foreground font-medium mt-1 text-xs">Daftar pendapatan dengan nominal tertinggi di periode ini.</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-left">
               <thead>
-                <tr className="bg-white/[0.02] border-y border-white/5">
-                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30">Tanggal</th>
-                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30">Deskripsi Transaksi</th>
-                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-white/30 text-right">Jumlah</th>
+                <tr className="bg-muted/50 border-y border-border">
+                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Tanggal</th>
+                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Deskripsi Transaksi</th>
+                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Jumlah</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-border">
                 {data?.top_revenue_sources.length > 0 ? (
                   data.top_revenue_sources.map((item, idx) => (
-                    <tr key={idx} className="group hover:bg-white/[0.03] transition-all">
-                      <td className="px-6 py-5 whitespace-nowrap text-[10px] font-black uppercase tracking-widest text-white/40">
+                    <tr key={idx} className="group hover:bg-muted/20 transition-all">
+                      <td className="px-6 py-5 whitespace-nowrap text-[10px] font-black uppercase tracking-widest text-muted-foreground/50">
                         {new Date(item.created_at).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })}
                       </td>
-                      <td className="px-6 py-5 font-bold text-white tracking-tight">{item.description}</td>
-                      <td className="px-6 py-5 text-right font-black text-green-400 text-base tracking-tighter">
+                      <td className="px-6 py-5 font-bold text-foreground tracking-tight">{item.description}</td>
+                      <td className="px-6 py-5 text-right font-black text-green-500 text-base tracking-tighter">
                         Rp {item.amount.toLocaleString()}
                       </td>
                     </tr>
@@ -424,7 +424,7 @@ export default function Reports() {
                 ) : (
                   <tr>
                     <td colSpan="3" className="px-6 py-16 text-center">
-                      <p className="text-white/20 text-xs font-bold uppercase tracking-widest italic">Tidak ada transaksi pendapatan besar</p>
+                      <p className="text-muted-foreground/30 text-xs font-bold uppercase tracking-widest italic">Tidak ada transaksi pendapatan besar</p>
                     </td>
                   </tr>
                 )}

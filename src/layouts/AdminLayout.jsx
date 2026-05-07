@@ -87,7 +87,7 @@ export default function AdminLayout() {
   const visibleNavItems = navItems.filter((item) => hasRole(item.roles))
 
   return (
-    <div className="flex min-h-screen w-full mesh-gradient text-foreground selection:bg-white/20">
+    <div className="flex min-h-screen w-full mesh-gradient text-foreground selection:bg-primary/20">
       {/* Background Glows */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-500/10 blur-[120px]" />
@@ -102,15 +102,15 @@ export default function AdminLayout() {
               <Bike size={22} strokeWidth={2.5} />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold tracking-tight text-white">Rental<span className="text-white/60">Pro</span></span>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-bold">Enterprise</span>
+              <span className="text-lg font-bold tracking-tight text-foreground">Rental<span className="text-primary">Pro</span></span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 font-bold">Enterprise</span>
             </div>
           </Link>
         </div>
 
         <div className="flex-1 overflow-auto py-6">
           <div className="px-6 mb-4">
-             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 mb-4">Navigation</p>
+             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50 mb-4">Navigation</p>
              <NavLinks items={visibleNavItems} activePath={location.pathname} />
           </div>
         </div>

@@ -41,7 +41,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="flex h-[400px] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-white/20" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary/30" />
       </div>
     )
   }
@@ -167,7 +167,7 @@ export default function Dashboard() {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-white/5 rounded-3xl text-white/30 space-y-2">
+              <div className="flex flex-col items-center justify-center h-48 border-2 border-dashed border-border rounded-3xl text-muted-foreground/30 space-y-2">
                 <Activity size={32} />
                 <p className="text-sm italic">Belum ada data transaksi yang tersedia.</p>
               </div>

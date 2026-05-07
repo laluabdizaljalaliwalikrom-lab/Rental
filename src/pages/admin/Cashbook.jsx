@@ -146,12 +146,12 @@ export default function Cashbook() {
     <div className="space-y-8 pb-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="rounded-2xl bg-white/10 p-3 text-white shadow-[0_0_20px_rgba(255,255,255,0.1)] border border-white/10">
+          <div className="rounded-2xl bg-primary/10 p-3 text-primary border border-primary/20">
             <Wallet size={28} strokeWidth={2.5} />
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-white">Buku Kas</h2>
-            <p className="text-sm text-white/40">Kelola arus kas, pengeluaran operasional, dan pendapatan harian.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground">Buku Kas</h2>
+            <p className="text-sm text-muted-foreground">Kelola arus kas, pengeluaran operasional, dan pendapatan harian.</p>
           </div>
         </div>
         {(profile?.role === 'admin' || profile?.role === 'staff') && (
@@ -163,14 +163,14 @@ export default function Cashbook() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
-        <Card className="glass-card border-white/5 relative overflow-hidden group">
+        <Card className="glass-card border-border relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-            <Wallet size={80} strokeWidth={1.5} className="text-white" />
+            <Wallet size={80} strokeWidth={1.5} className="text-foreground" />
           </div>
           <CardContent className="p-6">
             <div className="flex flex-col">
-              <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] mb-2">Saldo Kas Akhir</p>
-              <div className="text-3xl font-black text-blue-400 tracking-tighter">Rp {balance.toLocaleString()}</div>
+              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-2">Saldo Kas Akhir</p>
+              <div className="text-3xl font-black text-primary tracking-tighter">Rp {balance.toLocaleString()}</div>
             </div>
           </CardContent>
         </Card>
@@ -206,7 +206,7 @@ export default function Cashbook() {
         <CardContent className="p-0">
           {loading ? (
             <div className="flex h-[300px] items-center justify-center">
-              <Loader2 className="h-10 w-10 animate-spin text-white/10" />
+              <Loader2 className="h-10 w-10 animate-spin text-primary/30" />
             </div>
           ) : entries.length > 0 ? (
             <div className="overflow-x-auto">
@@ -254,7 +254,7 @@ export default function Cashbook() {
                       {profile?.role === 'admin' && (
                         <td className="px-6 py-5 text-right">
                           <div className="flex justify-end items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl bg-white/5 text-white/40 hover:bg-white/10 hover:text-white border border-white/5 transition-all" onClick={() => openEdit(entry)}>
+                            <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl bg-muted border border-border text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-all" onClick={() => openEdit(entry)}>
                               <Edit size={14} />
                             </Button>
                             <Button size="icon" variant="ghost" className="h-9 w-9 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/10 transition-all" onClick={() => { setSelectedEntry(entry); setDeleteOpen(true); }}>
@@ -269,13 +269,12 @@ export default function Cashbook() {
               </table>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-20 text-center">
-              <div className="rounded-full bg-white/5 p-8 mb-6 border border-white/5">
-                <Wallet className="h-16 w-16 text-white/10" strokeWidth={1} />
+            <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
+              <div className="h-20 w-20 rounded-full bg-muted flex items-center justify-center mb-2">
+                <Wallet className="h-10 w-10 text-muted-foreground/30" strokeWidth={1.5} />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Belum ada aktivitas kas</h3>
-              <p className="text-sm text-white/30 max-w-xs font-medium">
-                Seluruh pencatatan kas masuk dan keluar akan tampil di panel ini secara mendetail.
+              <p className="text-sm text-muted-foreground max-w-xs font-medium italic">
+                Belum ada rekaman transaksi keuangan yang tersedia untuk periode ini.
               </p>
             </div>
           )}
@@ -284,24 +283,24 @@ export default function Cashbook() {
 
       {/* Edit Entry Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent className="sm:max-w-[425px] glass border-white/10 text-white p-0 overflow-hidden">
-          <DialogHeader className="p-6 pb-0">
-            <DialogTitle className="text-2xl font-bold">Edit Transaksi Kas</DialogTitle>
-            <DialogDescription className="text-white/40">
-              Perbarui rincian nominal atau deskripsi transaksi terpilih.
+        <DialogContent className="sm:max-w-[425px] glass border-border text-foreground p-0 overflow-hidden">
+          <DialogHeader className="p-6 pb-2">
+            <DialogTitle className="text-2xl font-bold">Sesuaikan Transaksi</DialogTitle>
+            <DialogDescription className="text-muted-foreground font-medium">
+              Perbarui rincian data transaksi buku kas terpilih.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleEdit}>
             <div className="px-6 py-6 grid gap-6">
               <div className="grid gap-2">
-                <Label className="text-[10px] uppercase font-bold tracking-widest text-white/40">Jenis Klasifikasi</Label>
+                <Label className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Jenis Klasifikasi</Label>
                 <div className="grid grid-cols-2 gap-3 mt-1">
                   <Button 
                     type="button" 
                     variant="ghost"
                     className={cn(
                       "h-11 rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all",
-                      editData.type === 'debit' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'bg-white/5 text-white/30 border border-white/5 hover:bg-white/10'
+                      editData.type === 'debit' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'bg-muted text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setEditData({...editData, type: 'debit'})}
                   >
@@ -312,7 +311,7 @@ export default function Cashbook() {
                     variant="ghost"
                     className={cn(
                       "h-11 rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all",
-                      editData.type === 'credit' ? 'bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-white/5 text-white/30 border border-white/5 hover:bg-white/10'
+                      editData.type === 'credit' ? 'bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-muted text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setEditData({...editData, type: 'credit'})}
                   >
@@ -321,11 +320,11 @@ export default function Cashbook() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="edit-amount" className="text-[10px] uppercase font-bold tracking-widest text-white/40">Jumlah Nominal (Rp) *</Label>
+                <Label htmlFor="edit-amount" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Jumlah Nominal (Rp) *</Label>
                 <Input 
                   id="edit-amount" 
                   type="number"
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/20 h-12 rounded-xl focus:ring-blue-500/50"
+                  className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-12 rounded-xl focus:ring-primary/50"
                   placeholder="Contoh: 50000" 
                   value={editData.amount}
                   onChange={(e) => setEditData({...editData, amount: e.target.value})}
@@ -333,10 +332,10 @@ export default function Cashbook() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="edit-description" className="text-[10px] uppercase font-bold tracking-widest text-white/40">Keterangan Transaksi *</Label>
+                <Label htmlFor="edit-description" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Keterangan Transaksi *</Label>
                 <Input 
                   id="edit-description" 
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/20 h-12 rounded-xl focus:ring-blue-500/50"
+                  className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-12 rounded-xl focus:ring-primary/50"
                   placeholder="Contoh: Pembelian suku cadang" 
                   value={editData.description}
                   onChange={(e) => setEditData({...editData, description: e.target.value})}
@@ -344,9 +343,9 @@ export default function Cashbook() {
                 />
               </div>
             </div>
-            <DialogFooter className="p-6 pt-2 bg-white/[0.02] border-t border-white/5">
-              <Button type="button" variant="ghost" className="rounded-xl border border-white/10 text-white/40 hover:bg-white/5" onClick={() => setEditOpen(false)}>Batal</Button>
-              <Button type="submit" className="h-12 px-6 rounded-xl bg-white text-black font-black uppercase tracking-widest shadow-xl transition-all" disabled={submitting}>
+            <DialogFooter className="p-6 pt-2 bg-muted/50 border-t border-border">
+              <Button type="button" variant="ghost" className="rounded-xl border border-border text-muted-foreground hover:bg-muted" onClick={() => setEditOpen(false)}>Batal</Button>
+              <Button type="submit" className="h-12 px-6 rounded-xl bg-primary text-primary-foreground font-black uppercase tracking-widest shadow-xl transition-all" disabled={submitting}>
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Simpan Perubahan
               </Button>
@@ -357,24 +356,24 @@ export default function Cashbook() {
 
       {/* Add Entry Dialog */}
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <DialogContent className="sm:max-w-[425px] glass border-white/10 text-white p-0 overflow-hidden">
+        <DialogContent className="sm:max-w-[425px] glass border-border text-foreground p-0 overflow-hidden">
           <DialogHeader className="p-6 pb-0">
             <DialogTitle className="text-2xl font-bold">Catat Transaksi Manual</DialogTitle>
-            <DialogDescription className="text-white/40">
+            <DialogDescription className="text-muted-foreground">
               Lakukan pencatatan manual untuk pemasukan atau pengeluaran operasional.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleAdd}>
             <div className="px-6 py-6 grid gap-6">
               <div className="grid gap-2">
-                <Label className="text-[10px] uppercase font-bold tracking-widest text-white/40">Jenis Klasifikasi</Label>
+                <Label className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Jenis Klasifikasi</Label>
                 <div className="grid grid-cols-2 gap-3 mt-1">
                   <Button 
                     type="button" 
                     variant="ghost"
                     className={cn(
                       "h-11 rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all",
-                      formData.type === 'debit' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'bg-white/5 text-white/30 border border-white/5 hover:bg-white/10'
+                      formData.type === 'debit' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'bg-muted text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setFormData({...formData, type: 'debit'})}
                   >
@@ -385,7 +384,7 @@ export default function Cashbook() {
                     variant="ghost"
                     className={cn(
                       "h-11 rounded-xl font-bold uppercase text-[10px] tracking-widest transition-all",
-                      formData.type === 'credit' ? 'bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-white/5 text-white/30 border border-white/5 hover:bg-white/10'
+                      formData.type === 'credit' ? 'bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-muted text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setFormData({...formData, type: 'credit'})}
                   >
@@ -394,11 +393,11 @@ export default function Cashbook() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="amount" className="text-[10px] uppercase font-bold tracking-widest text-white/40">Jumlah Nominal (Rp) *</Label>
+                <Label htmlFor="amount" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Jumlah Nominal (Rp) *</Label>
                 <Input 
                   id="amount" 
                   type="number"
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/20 h-12 rounded-xl focus:ring-blue-500/50"
+                  className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-12 rounded-xl focus:ring-primary/50"
                   placeholder="Contoh: 50000" 
                   value={formData.amount}
                   onChange={(e) => setFormData({...formData, amount: e.target.value})}
@@ -406,10 +405,10 @@ export default function Cashbook() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="description" className="text-[10px] uppercase font-bold tracking-widest text-white/40">Keterangan Transaksi *</Label>
+                <Label htmlFor="description" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Keterangan Transaksi *</Label>
                 <Input 
                   id="description" 
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/20 h-12 rounded-xl focus:ring-blue-500/50"
+                  className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-12 rounded-xl focus:ring-primary/50"
                   placeholder="Contoh: Dana awal modal" 
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
@@ -417,9 +416,9 @@ export default function Cashbook() {
                 />
               </div>
             </div>
-            <DialogFooter className="p-6 pt-2 bg-white/[0.02] border-t border-white/5">
-              <Button type="button" variant="ghost" className="rounded-xl border border-white/10 text-white/40 hover:bg-white/5" onClick={() => setAddOpen(false)}>Batal</Button>
-              <Button type="submit" className="h-12 px-6 rounded-xl bg-blue-600 text-white font-bold uppercase tracking-widest shadow-xl shadow-blue-600/20 transition-all" disabled={submitting}>
+            <DialogFooter className="p-6 pt-2 bg-muted/50 border-t border-border">
+              <Button type="button" variant="ghost" className="rounded-xl border border-border text-muted-foreground hover:bg-muted" onClick={() => setAddOpen(false)}>Batal</Button>
+              <Button type="submit" className="h-12 px-6 rounded-xl bg-primary text-primary-foreground font-bold uppercase tracking-widest shadow-xl shadow-primary/20 transition-all" disabled={submitting}>
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Simpan Transaksi
               </Button>
@@ -430,19 +429,14 @@ export default function Cashbook() {
 
       {/* Delete Confirm Dialog */}
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent className="sm:max-w-[425px] glass border-white/10 text-white p-0 overflow-hidden">
-          <DialogHeader className="p-6 pb-2">
-            <DialogTitle className="text-2xl font-bold flex items-center gap-3 text-red-500">
-              <Trash2 size={24} /> Hapus Transaksi
-            </DialogTitle>
-            <DialogDescription className="text-white/40 pt-2">
-              Apakah Anda yakin ingin menghapus data <strong className="text-white">{selectedEntry?.description}</strong> senilai <strong className="text-white">Rp {selectedEntry?.amount?.toLocaleString()}</strong>?
+        <DialogContent className="sm:max-w-[425px] glass border-border text-foreground p-0 overflow-hidden">
+          <DialogHeader className="p-0">
+            <DialogTitle className="text-2xl font-bold text-center pt-6">Hapus Transaksi?</DialogTitle>
+            <DialogDescription className="text-muted-foreground pt-4 leading-relaxed text-center px-6">
+              Tindakan ini akan menghapus catatan kas secara permanen. Apakah Anda yakin?
             </DialogDescription>
           </DialogHeader>
           <div className="px-6 py-4 space-y-4">
-            <p className="text-xs text-white/30 font-medium leading-relaxed">
-              Tindakan ini tidak dapat dibatalkan dan akan langsung mempengaruhi akumulasi saldo akhir buku kas Anda.
-            </p>
             {selectedEntry?.reference_id && (
               <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 flex items-start gap-3">
                 <span className="text-lg">⚠️</span>
@@ -452,12 +446,12 @@ export default function Cashbook() {
               </div>
             )}
           </div>
-          <DialogFooter className="p-6 bg-white/[0.02] border-t border-white/5 gap-3">
-            <Button variant="ghost" className="flex-1 rounded-xl border border-white/10 text-white/40 hover:bg-white/5" onClick={() => setDeleteOpen(false)} disabled={submitting}>Batal</Button>
-            <Button variant="ghost" className="flex-1 rounded-xl bg-red-600 text-white hover:bg-red-700 font-bold uppercase text-[10px] tracking-widest shadow-lg shadow-red-600/20 transition-all" onClick={handleDeleteEntry} disabled={submitting}>
-              {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Hapus Permanen"}
+          <div className="flex gap-4 p-6 bg-muted/50 border-t border-border">
+            <Button variant="ghost" className="flex-1 rounded-xl border border-border text-muted-foreground hover:bg-muted" onClick={() => setDeleteOpen(false)} disabled={submitting}>Batal</Button>
+            <Button className="flex-1 rounded-xl bg-red-500 text-white hover:bg-red-600 font-bold" onClick={handleDeleteEntry} disabled={submitting}>
+              {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Ya, Hapus"}
             </Button>
-          </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

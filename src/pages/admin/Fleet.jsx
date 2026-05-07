@@ -154,17 +154,17 @@ export default function Fleet() {
               Tambah Sepeda
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] glass border-white/10 text-white p-0 overflow-hidden">
+          <DialogContent className="sm:max-w-[425px] glass border-border text-foreground p-0 overflow-hidden">
             <DialogHeader className="p-6 pb-0">
               <DialogTitle className="text-2xl font-bold">Tambah Sepeda Baru</DialogTitle>
-              <DialogDescription className="text-white/40">Masukkan detail armada sepeda baru di bawah ini.</DialogDescription>
+              <DialogDescription className="text-muted-foreground font-medium">Masukkan detail armada sepeda baru di bawah ini.</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleAddBike}>
               <div className="px-6 py-4">
                 <BikeForm formData={formData} setFormData={setFormData} />
               </div>
-              <DialogFooter className="p-6 pt-2 bg-white/[0.02] border-t border-white/5">
-                <Button type="submit" className="w-full h-12 rounded-xl bg-white text-black hover:bg-white/90 font-black uppercase tracking-widest transition-all shadow-xl" disabled={submitting}>
+              <DialogFooter className="p-6 pt-2 bg-muted/50 border-t border-border">
+                <Button type="submit" className="w-full h-12 rounded-xl bg-primary text-primary-foreground hover:opacity-90 font-black uppercase tracking-widest transition-all shadow-xl" disabled={submitting}>
                   {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Simpan Armada
                 </Button>
@@ -176,7 +176,7 @@ export default function Fleet() {
 
       {loading ? (
         <div className="flex h-[400px] items-center justify-center">
-          <Loader2 className="h-10 w-10 animate-spin text-white/10" />
+          <Loader2 className="h-10 w-10 animate-spin text-muted-foreground/20" />
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -245,13 +245,10 @@ export default function Fleet() {
             ))
           ) : (
             <Card className="col-span-full glass-card py-20 text-center flex flex-col items-center justify-center space-y-4">
-              <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center text-white/10 mb-2">
+              <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center text-muted-foreground/30 mb-2">
                 <Bike size={40} strokeWidth={1} />
               </div>
-              <div className="space-y-1">
-                <h3 className="text-xl font-bold text-white">Belum ada data armada</h3>
-                <p className="text-sm text-white/40">Mulai operasional Anda dengan menambahkan sepeda baru.</p>
-              </div>
+              <p className="text-muted-foreground text-sm font-bold uppercase tracking-widest italic">Belum ada armada terdaftar</p>
             </Card>
           )}
         </div>
@@ -259,17 +256,17 @@ export default function Fleet() {
 
       {/* Edit Dialog */}
       <Dialog open={editOpen} onOpenChange={(val) => { setEditOpen(val); if(!val) resetForm(); }}>
-        <DialogContent className="sm:max-w-[425px] glass border-white/10 text-white p-0 overflow-hidden">
+        <DialogContent className="sm:max-w-[425px] glass border-border text-foreground p-0 overflow-hidden">
           <DialogHeader className="p-6 pb-0">
-            <DialogTitle className="text-2xl font-bold">Edit Data Sepeda</DialogTitle>
-            <DialogDescription className="text-white/40">Perbarui informasi armada sepeda <span className="text-white font-bold">{selectedBike?.name}</span>.</DialogDescription>
+            <DialogTitle className="text-2xl font-bold">Edit Detail Sepeda</DialogTitle>
+            <DialogDescription className="text-muted-foreground font-medium">Perbarui informasi armada sepeda <span className="text-primary font-bold">{selectedBike?.name}</span>.</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleUpdateBike}>
             <div className="px-6 py-4">
               <BikeForm formData={formData} setFormData={setFormData} />
             </div>
-            <DialogFooter className="p-6 pt-2 bg-white/[0.02] border-t border-white/5">
-              <Button type="submit" className="w-full h-12 rounded-xl bg-white text-black hover:bg-white/90 font-black uppercase tracking-widest transition-all shadow-xl" disabled={submitting}>
+            <DialogFooter className="p-6 pt-2 bg-muted/50 border-t border-border">
+              <Button type="submit" className="w-full h-12 rounded-xl bg-primary text-primary-foreground hover:opacity-90 font-black uppercase tracking-widest transition-all shadow-xl" disabled={submitting}>
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Simpan Perubahan
               </Button>
@@ -283,79 +280,75 @@ export default function Fleet() {
 
 function BikeForm({ formData, setFormData }) {
   return (
-    <div className="grid gap-6 py-2">
+    <div className="space-y-4">
       <div className="grid gap-2">
-        <Label htmlFor="name" className="text-[10px] uppercase font-bold tracking-widest text-white/40">Nama Sepeda *</Label>
+        <Label htmlFor="name" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Nama Sepeda *</Label>
         <Input 
           id="name" 
-          placeholder="Contoh: Polygon Xtrada 5" 
+          placeholder="Contoh: Honda Vario 160" 
           required 
-          className="bg-white/5 border-white/10 text-white placeholder:text-white/20 h-11 rounded-xl focus:ring-blue-500/50"
-          value={formData.name}
-          onChange={(e) => setFormData({...formData, name: e.target.value})}
+          className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-11 rounded-xl focus:ring-primary/50"
+          value={formData.name} 
+          onChange={(e) => setFormData({...formData, name: e.target.value})} 
         />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="grid gap-2">
-          <Label htmlFor="brand" className="text-[10px] uppercase font-bold tracking-widest text-white/40">Merk</Label>
+          <Label htmlFor="brand" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Merk</Label>
           <Input 
             id="brand" 
-            placeholder="Polygon" 
-            className="bg-white/5 border-white/10 text-white placeholder:text-white/20 h-11 rounded-xl focus:ring-blue-500/50"
-            value={formData.brand}
-            onChange={(e) => setFormData({...formData, brand: e.target.value})}
+            placeholder="Honda" 
+            className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-11 rounded-xl focus:ring-primary/50"
+            value={formData.brand} 
+            onChange={(e) => setFormData({...formData, brand: e.target.value})} 
           />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="type" className="text-[10px] uppercase font-bold tracking-widest text-white/40">Tipe</Label>
+          <Label htmlFor="type" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Tipe</Label>
           <Input 
             id="type" 
-            placeholder="MTB" 
-            className="bg-white/5 border-white/10 text-white placeholder:text-white/20 h-11 rounded-xl focus:ring-blue-500/50"
-            value={formData.type}
-            onChange={(e) => setFormData({...formData, type: e.target.value})}
+            placeholder="Matic" 
+            className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-11 rounded-xl focus:ring-primary/50"
+            value={formData.type} 
+            onChange={(e) => setFormData({...formData, type: e.target.value})} 
           />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="grid gap-2">
-          <Label htmlFor="price_h" className="text-[10px] uppercase font-bold tracking-widest text-white/40">Sewa per Jam *</Label>
+          <Label htmlFor="price_h" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Sewa per Jam *</Label>
           <Input 
             id="price_h" 
             type="number" 
-            placeholder="15000" 
-            required
-            className="bg-white/5 border-white/10 text-white placeholder:text-white/20 h-11 rounded-xl focus:ring-blue-500/50"
-            value={formData.price_per_hour || ''}
-            onChange={(e) => setFormData({...formData, price_per_hour: e.target.value === '' ? 0 : parseFloat(e.target.value)})}
+            required 
+            className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-11 rounded-xl focus:ring-primary/50"
+            value={formData.price_per_hour} 
+            onChange={(e) => setFormData({...formData, price_per_hour: parseInt(e.target.value) || 0})} 
           />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="price_d" className="text-[10px] uppercase font-bold tracking-widest text-white/40">Sewa per Hari *</Label>
+          <Label htmlFor="price_d" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Sewa per Hari *</Label>
           <Input 
             id="price_d" 
             type="number" 
-            placeholder="120000" 
-            required
-            className="bg-white/5 border-white/10 text-white placeholder:text-white/20 h-11 rounded-xl focus:ring-blue-500/50"
-            value={formData.price_per_day || ''}
-            onChange={(e) => setFormData({...formData, price_per_day: e.target.value === '' ? 0 : parseFloat(e.target.value)})}
+            required 
+            className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-11 rounded-xl focus:ring-primary/50"
+            value={formData.price_per_day} 
+            onChange={(e) => setFormData({...formData, price_per_day: parseInt(e.target.value) || 0})} 
           />
         </div>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="image" className="text-[10px] uppercase font-bold tracking-widest text-white/40">URL Gambar (Opsional)</Label>
-        <div className="flex gap-2">
-          <div className="relative flex-1">
-            <ImageIcon className="absolute left-3.5 top-3.5 h-4 w-4 text-white/20" />
-            <Input 
-              id="image" 
-              className="pl-11 bg-white/5 border-white/10 text-white placeholder:text-white/20 h-11 rounded-xl focus:ring-blue-500/50"
-              placeholder="https://images.unsplash.com/..." 
-              value={formData.image_url}
-              onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-            />
-          </div>
+        <Label htmlFor="image" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">URL Gambar (Opsional)</Label>
+        <div className="relative">
+          <ImageIcon size={14} className="absolute left-3.5 top-3.5 text-muted-foreground/40" />
+          <Input 
+            id="image" 
+            placeholder="https://..." 
+            className="pl-11 bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-11 rounded-xl focus:ring-primary/50"
+            value={formData.image_url} 
+            onChange={(e) => setFormData({...formData, image_url: e.target.value})} 
+          />
         </div>
       </div>
     </div>

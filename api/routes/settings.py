@@ -8,23 +8,23 @@ router = APIRouter()
 
 class SystemSettings(BaseModel):
     id: Optional[str] = "global"
-    staff_salary_percentage: float = 10.0 # Default 10%
-    maintenance_fee_percentage: float = 5.0 # Default 5%
-    maintenance_fee_nominal: float = 0.0 # Jika ingin nominal tetap per transaksi
+    staff_salary_percentage: Optional[float] = 10.0
+    maintenance_fee_percentage: Optional[float] = 5.0
+    maintenance_fee_nominal: Optional[float] = 0.0
 
 class LandingSettings(BaseModel):
     id: Optional[str] = "landing"
-    hero_title_id: str = "Mendefinisikan Ulang Pergerakan Urban."
-    hero_title_en: str = "Redefining Urban Motion."
-    hero_desc_id: str = "Desain minimalis, performa maksimal. Armada premium kami dirancang untuk kecepatan, kenyamanan, dan efisiensi di setiap jalanan kota."
-    hero_desc_en: str = "Minimalist design, maximum performance. Our premium fleet is engineered for speed, comfort, and efficiency in every city street."
-    hero_image_url: str = "/premium_hero_bike_1778159126854.png"
-    promo_text_id: str = "Mobilitas Premium"
-    promo_text_en: str = "Premium Mobility"
-    stats_perf: str = "99.9%"
-    stats_sec: str = "Military"
-    stats_ready: str = "24/7"
-    stats_rating: str = "4.9/5"
+    hero_title_id: Optional[str] = "Mendefinisikan Ulang Pergerakan Urban."
+    hero_title_en: Optional[str] = "Redefining Urban Motion."
+    hero_desc_id: Optional[str] = "Desain minimalis, performa maksimal. Armada premium kami dirancang untuk kecepatan, kenyamanan, dan efisiensi di setiap jalanan kota."
+    hero_desc_en: Optional[str] = "Minimalist design, maximum performance. Our premium fleet is engineered for speed, comfort, and efficiency in every city street."
+    hero_image_url: Optional[str] = "/premium_hero_bike_1778159126854.png"
+    promo_text_id: Optional[str] = "Mobilitas Premium"
+    promo_text_en: Optional[str] = "Premium Mobility"
+    stats_perf: Optional[str] = "99.9%"
+    stats_sec: Optional[str] = "Military"
+    stats_ready: Optional[str] = "24/7"
+    stats_rating: Optional[str] = "4.9/5"
 
 # --- Global System Settings ---
 
