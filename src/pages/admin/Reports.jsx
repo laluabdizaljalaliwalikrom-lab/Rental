@@ -133,12 +133,12 @@ export default function Reports() {
 
       {/* Summary Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="bg-background/80 border-white/10 relative overflow-hidden group">
+        <Card className="glass-card relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
             <TrendingUp size={48} className="text-green-500" />
           </div>
           <CardHeader className="pb-2">
-            <CardDescription className="text-xs font-medium uppercase tracking-wider">Total Pendapatan</CardDescription>
+            <CardDescription className="text-xs font-bold uppercase tracking-wider text-white/40">Total Pendapatan</CardDescription>
             <CardTitle className="text-2xl font-bold text-green-500">Rp {data?.summary.total_income.toLocaleString()}</CardTitle>
           </CardHeader>
           <CardContent>
@@ -150,12 +150,12 @@ export default function Reports() {
           </CardContent>
         </Card>
 
-        <Card className="bg-background/80 border-white/10 relative overflow-hidden group">
+        <Card className="glass-card relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
             <TrendingDown size={48} className="text-red-500" />
           </div>
           <CardHeader className="pb-2">
-            <CardDescription className="text-xs font-medium uppercase tracking-wider">Total Pengeluaran</CardDescription>
+            <CardDescription className="text-xs font-bold uppercase tracking-wider text-white/40">Total Pengeluaran</CardDescription>
             <CardTitle className="text-2xl font-bold text-red-500">Rp {data?.summary.total_expense.toLocaleString()}</CardTitle>
           </CardHeader>
           <CardContent>
@@ -167,30 +167,30 @@ export default function Reports() {
           </CardContent>
         </Card>
 
-        <Card className="bg-background/80 border-white/10 relative overflow-hidden group">
+        <Card className="glass-card relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <TrendingUp size={48} className="text-primary" />
+            <TrendingUp size={48} className="text-blue-500" />
           </div>
           <CardHeader className="pb-2">
-            <CardDescription className="text-xs font-medium uppercase tracking-wider">Laba Bersih</CardDescription>
-            <CardTitle className={`text-2xl font-bold ${data?.summary.net_profit >= 0 ? 'text-primary' : 'text-red-500'}`}>
+            <CardDescription className="text-xs font-bold uppercase tracking-wider text-white/40">Laba Bersih</CardDescription>
+            <CardTitle className={`text-2xl font-bold ${data?.summary.net_profit >= 0 ? 'text-blue-500' : 'text-red-500'}`}>
               Rp {data?.summary.net_profit.toLocaleString()}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1 text-xs text-muted-foreground italic">
               Periode {period}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-background/80 border-white/10 relative overflow-hidden group">
+        <Card className="glass-card relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <DollarSign size={48} className="text-blue-500" />
+            <DollarSign size={48} className="text-purple-500" />
           </div>
           <CardHeader className="pb-2">
-            <CardDescription className="text-xs font-medium uppercase tracking-wider">Saldo Kas Akhir</CardDescription>
-            <CardTitle className="text-2xl font-bold text-blue-500">Rp {data?.summary.cash_on_hand.toLocaleString()}</CardTitle>
+            <CardDescription className="text-xs font-bold uppercase tracking-wider text-white/40">Saldo Kas Akhir</CardDescription>
+            <CardTitle className="text-2xl font-bold text-purple-500">Rp {data?.summary.cash_on_hand.toLocaleString()}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -203,7 +203,7 @@ export default function Reports() {
       {/* Charts Grid */}
       <div className="grid gap-6 md:grid-cols-7">
         {/* Main Trend Chart */}
-        <Card className="md:col-span-4 border-white/10 bg-background/80 overflow-hidden">
+        <Card className="md:col-span-4 glass-card overflow-hidden">
           <CardHeader>
             <CardTitle className="text-lg font-semibold flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-primary" />
@@ -211,7 +211,7 @@ export default function Reports() {
             </CardTitle>
             <CardDescription>Grafik pendapatan vs pengeluaran harian.</CardDescription>
           </CardHeader>
-          <CardContent className="h-[300px] mt-4">
+          <CardContent className="h-[300px] min-h-[300px] mt-4 overflow-hidden">
             {data?.trends.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={data.trends}>
@@ -260,7 +260,7 @@ export default function Reports() {
         </Card>
 
         {/* Ratio Chart */}
-        <Card className="md:col-span-3 border-white/10 bg-background/80 overflow-hidden">
+        <Card className="md:col-span-3 glass-card overflow-hidden">
           <CardHeader>
             <CardTitle className="text-lg font-semibold flex items-center gap-2">
               <PieChartIcon className="h-4 w-4 text-primary" />
@@ -268,7 +268,7 @@ export default function Reports() {
             </CardTitle>
             <CardDescription>Persentase pendapatan terhadap biaya.</CardDescription>
           </CardHeader>
-          <CardContent className="h-[300px] flex flex-col items-center justify-center mt-4">
+          <CardContent className="h-[300px] flex flex-col items-center justify-center mt-4 overflow-hidden">
              {data?.summary.total_income > 0 || data?.summary.total_expense > 0 ? (
                <ResponsiveContainer width="100%" height="100%">
                  <PieChart>
@@ -311,7 +311,7 @@ export default function Reports() {
       </div>
 
       {/* Investor Dividends Table */}
-      <Card className="border-white/10 bg-background/80">
+      <Card className="glass-card">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -384,7 +384,7 @@ export default function Reports() {
       </Card>
 
       {/* Top Revenue Sources */}
-      <Card className="border-white/10 bg-background/80">
+      <Card className="glass-card">
         <CardHeader>
           <CardTitle>Transaksi Terbesar (Top Revenue)</CardTitle>
           <CardDescription>Daftar pendapatan dengan nominal tertinggi di periode ini.</CardDescription>
