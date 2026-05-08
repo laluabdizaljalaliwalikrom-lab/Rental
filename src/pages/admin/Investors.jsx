@@ -12,6 +12,7 @@ import {
   MapPin,
   ChevronRight,
   Loader2
+
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -58,28 +59,11 @@ export default function Investors() {
   }
 
   useEffect(() => {
-    let isMounted = true
-
-    const fetchInitialData = async () => {
-      try {
-        const data = await apiFetch('/api/investors/')
-        if (isMounted) {
-          setInvestors(data)
-          setLoading(false)
-        }
-      } catch (error) {
-        if (isMounted) {
-          toast.error("Gagal memuat data investor: " + error.message)
-          setLoading(false)
-        }
-      }
-    }
-
-    fetchInitialData()
-
-    return () => {
-      isMounted = false
-    }
+    // Inline fetch prevents React Compiler from falsely detecting synchronous state updates
+    apiFetch('/api/investors/')
+      .then(data => setInvestors(data))
+      .catch(error => toast.error("Gagal memuat data investor: " + error.message))
+      .finally(() => setLoading(false))
   }, [])
 
   const handleSubmit = async (e) => {
@@ -128,7 +112,6 @@ export default function Investors() {
   const openClaimModal = async () => {
     try {
       const allFleet = await apiFetch('/api/fleet/')
-      // Filter sepeda yang belum punya investor atau masih milik Pusat
       const available = allFleet.filter(bike => !bike.investor_id || bike.investor_name === 'Pusat')
       setAvailableFleet(available)
       setIsClaimOpen(true)
@@ -149,11 +132,8 @@ export default function Investors() {
       })
       toast.success(`${bike.name} berhasil diklaim`)
 
-      // Refresh data
       const updatedFleet = await apiFetch(`/api/investors/${selectedInvestor.id}/fleet/`)
       setInvestorFleet(updatedFleet)
-
-      // Update available list
       setAvailableFleet(prev => prev.filter(b => b.id !== bike.id))
     } catch (error) {
       toast.error("Gagal mengklaim armada: " + error.message)
@@ -175,7 +155,6 @@ export default function Investors() {
       })
       toast.success(`${bike.name} berhasil dilepaskan ke Pusat`)
 
-      // Refresh data
       const updatedFleet = await apiFetch(`/api/investors/${selectedInvestor.id}/fleet/`)
       setInvestorFleet(updatedFleet)
     } catch (error) {
@@ -198,11 +177,11 @@ export default function Investors() {
             <Users size={28} strokeWidth={2.5} />
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground">Manajemen Investor</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Manajemen Investor</h2>
             <p className="text-sm text-muted-foreground">Kelola mitra investor dan kepemilikan armada mereka.</p>
           </div>
         </div>
-        <Button onClick={() => { setFormData({ name: '', email: '', phone: '', address: '' }); setIsAddOpen(true) }} className="h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg shadow-blue-600/20 transition-all uppercase tracking-widest text-[10px] px-6">
+        <Button onClick={() => { setFormData({ name: '', email: '', phone: '', address: '' }); setIsAddOpen(true) }} className="h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-600/20 transition-all uppercase tracking-wider text-[10px] px-6">
           <Plus size={18} className="mr-2" />
           Tambah Investor
         </Button>
@@ -227,8 +206,8 @@ export default function Investors() {
           <Card key={investor.id} className="glass-card overflow-hidden group border-border hover:border-primary/20 transition-all duration-500">
             <CardHeader className="pb-4 flex flex-row items-start justify-between space-y-0">
               <div className="space-y-1.5">
-                <CardTitle className="text-2xl font-bold text-foreground tracking-tight group-hover:text-primary transition-colors">{investor.name}</CardTitle>
-                <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+                <CardTitle className="text-xl font-semibold text-foreground tracking-tight group-hover:text-primary transition-colors">{investor.name}</CardTitle>
+                <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
                   <Mail size={12} className="text-muted-foreground/40" /> {investor.email || '-'}
                 </div>
               </div>
@@ -251,10 +230,10 @@ export default function Investors() {
                 </div>
                 <Button
                   variant="ghost"
-                  className="w-full h-12 mt-2 rounded-xl bg-muted/50 border border-border text-foreground hover:bg-muted font-bold transition-all flex items-center justify-between group/btn px-4"
+                  className="w-full h-12 mt-2 rounded-xl bg-muted/50 border border-border text-foreground hover:bg-muted font-semibold transition-all flex items-center justify-between group/btn px-4"
                   onClick={() => openFleetModal(investor)}
                 >
-                  <div className="flex items-center gap-2 uppercase tracking-widest text-[9px]">
+                  <div className="flex items-center gap-2 uppercase tracking-wider text-[9px]">
                     <Bike size={16} className="text-primary" />
                     <span>Lihat Koleksi Armada</span>
                   </div>
@@ -267,9 +246,9 @@ export default function Investors() {
       </div>
 
       <Dialog open={isAddOpen || isEditOpen} onOpenChange={(val) => { setIsAddOpen(val); setIsEditOpen(val); }}>
-        <DialogContent className="sm:max-w-[500px] glass border-border text-foreground p-0 overflow-hidden">
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
           <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
-            <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">
+            <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-3">
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 {isEditOpen ? <Edit2 size={24} /> : <Plus size={24} />}
               </div>
@@ -279,10 +258,10 @@ export default function Investors() {
               Masukkan detail informasi mitra investor Anda di bawah ini.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSubmit}>
-            <div className="px-6 py-6 grid gap-6">
+          <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
+            <div className="px-6 py-6 flex-1 overflow-y-auto custom-scrollbar space-y-6">
               <div className="grid gap-2">
-                <Label htmlFor="name" className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">Nama Lengkap Mitra *</Label>
+                <Label htmlFor="name" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Nama Lengkap Mitra *</Label>
                 <Input
                   id="name"
                   required
@@ -293,7 +272,7 @@ export default function Investors() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="email" className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">Alamat Korespondensi (Email)</Label>
+                <Label htmlFor="email" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Alamat Korespondensi (Email)</Label>
                 <Input
                   id="email"
                   type="email"
@@ -304,7 +283,7 @@ export default function Investors() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="phone" className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">Nomor WhatsApp Aktif</Label>
+                <Label htmlFor="phone" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Nomor WhatsApp Aktif</Label>
                 <Input
                   id="phone"
                   className="bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 h-12 rounded-xl focus:ring-primary/50 transition-all"
@@ -314,7 +293,7 @@ export default function Investors() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="address" className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">Alamat Domisili</Label>
+                <Label htmlFor="address" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Alamat Domisili</Label>
                 <Input
                   id="address"
                   className="bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 h-12 rounded-xl focus:ring-primary/50 transition-all"
@@ -325,7 +304,7 @@ export default function Investors() {
               </div>
             </div>
             <DialogFooter className="p-8 bg-muted/50 border-t border-border">
-              <Button type="submit" className="w-full h-14 rounded-2xl bg-primary text-primary-foreground hover:opacity-90 font-black uppercase tracking-[0.2em] shadow-xl transition-all text-xs">
+              <Button type="submit" className="w-full h-14 rounded-2xl bg-primary text-primary-foreground hover:opacity-90 font-semibold uppercase tracking-wider shadow-xl transition-all text-xs">
                 {isEditOpen ? 'Simpan Perubahan' : 'Daftarkan Investor Baru'}
               </Button>
             </DialogFooter>
@@ -334,9 +313,9 @@ export default function Investors() {
       </Dialog>
 
       <Dialog open={isFleetOpen} onOpenChange={setIsFleetOpen}>
-        <DialogContent className="sm:max-w-[550px] max-h-[85vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
+        <DialogContent className="sm:max-w-[550px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
           <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
-            <DialogTitle className="flex items-center gap-3 text-2xl font-black">
+            <DialogTitle className="flex items-center gap-3 text-2xl font-semibold">
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 <Bike size={24} />
               </div>
@@ -348,9 +327,9 @@ export default function Investors() {
           </DialogHeader>
           <div className="px-6 py-4 flex-1 overflow-y-auto custom-scrollbar space-y-4">
             <div className="flex justify-between items-center pb-2">
-              <h4 className="text-[10px] font-black text-muted-foreground/60 uppercase tracking-[0.2em]">Koleksi Saat Ini</h4>
+              <h4 className="text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-wider">Koleksi Saat Ini</h4>
               {currentUser?.role === 'admin' && (
-                <Button size="sm" variant="ghost" className="h-9 px-4 rounded-xl bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white font-bold text-[10px] uppercase tracking-widest transition-all" onClick={openClaimModal}>
+                <Button size="sm" variant="ghost" className="h-9 px-4 rounded-xl bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white font-semibold text-[10px] uppercase tracking-wider transition-all" onClick={openClaimModal}>
                   <Plus size={12} className="mr-1.5" /> Klaim Baru
                 </Button>
               )}
@@ -364,13 +343,13 @@ export default function Investors() {
                       <Bike size={24} strokeWidth={1.5} />
                     </div>
                     <div>
-                      <h4 className="font-bold text-foreground tracking-tight">{bike.name}</h4>
-                      <p className="text-[10px] text-muted-foreground/60 font-bold uppercase tracking-widest">{bike.brand} &bull; {bike.type}</p>
+                      <h4 className="font-semibold text-foreground tracking-tight">{bike.name}</h4>
+                      <p className="text-[10px] text-muted-foreground/60 font-semibold uppercase tracking-wider">{bike.brand} &bull; {bike.type}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
                     <Badge className={cn(
-                      "text-[9px] font-black px-3 py-1 rounded-full uppercase border-none",
+                      "text-[9px] font-semibold px-3 py-1 rounded-full uppercase border-none",
                       bike.status === 'Available' ? 'bg-green-500/20 text-green-400' : 'bg-orange-500/20 text-orange-400'
                     )}>
                       {bike.status}
@@ -396,7 +375,7 @@ export default function Investors() {
                     Investor ini belum memiliki armada yang terdaftar secara resmi.
                   </p>
                   {currentUser?.role === 'admin' && (
-                    <Button variant="link" className="text-blue-400 text-[10px] font-bold uppercase tracking-widest mt-4 hover:no-underline hover:text-foreground" onClick={openClaimModal}>
+                    <Button variant="link" className="text-blue-400 text-[10px] font-semibold uppercase tracking-wider mt-4 hover:no-underline hover:text-foreground" onClick={openClaimModal}>
                       + Klik untuk Tambahkan Armada
                     </Button>
                   )}
@@ -404,51 +383,51 @@ export default function Investors() {
               )}
             </div>
           </div>
-          <DialogFooter className="p-8 bg-muted/50 border-t border-border mt-auto">
-            <Button variant="ghost" className="w-full h-12 rounded-xl border border-border text-muted-foreground hover:bg-muted hover:text-foreground font-black uppercase tracking-widest text-[10px]" onClick={() => setIsFleetOpen(false)}>Tutup Jendela</Button>
+          <DialogFooter className="p-8 bg-muted/50 border-t border-border">
+            <Button variant="ghost" className="w-full h-12 rounded-xl border border-border text-muted-foreground hover:bg-muted hover:text-foreground font-semibold uppercase tracking-wider text-[10px]" onClick={() => setIsFleetOpen(false)}>Tutup Jendela</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       <Dialog open={isClaimOpen} onOpenChange={setIsClaimOpen}>
-        <DialogContent className="sm:max-w-[500px] glass border-border text-foreground p-0 overflow-hidden">
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
           <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
-            <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">
+            <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-3">
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 <Plus size={24} />
               </div>
               Klaim Armada Baru
             </DialogTitle>
             <DialogDescription className="text-muted-foreground font-medium pt-1">
-              Daftar armada milik <strong className="text-primary font-bold">Pusat</strong> yang tersedia untuk dialihkan.
+              Daftar armada milik <strong className="text-primary font-semibold">Pusat</strong> yang tersedia untuk dialihkan.
             </DialogDescription>
           </DialogHeader>
-          <div className="px-6 py-4 max-h-[50vh] overflow-y-auto custom-scrollbar space-y-3">
+          <div className="px-6 py-4 flex-1 overflow-y-auto custom-scrollbar space-y-3">
             {availableFleet.length > 0 ? availableFleet.map((bike) => (
               <div key={bike.id} className="flex items-center justify-between p-4 rounded-2xl border border-border bg-muted/30 hover:bg-muted/50 transition-all">
                 <div>
-                  <h5 className="font-bold text-foreground tracking-tight">{bike.name}</h5>
-                  <p className="text-[10px] text-muted-foreground/60 font-bold uppercase tracking-widest">{bike.brand} &bull; {bike.type}</p>
+                  <h5 className="font-semibold text-foreground tracking-tight">{bike.name}</h5>
+                  <p className="text-[10px] text-muted-foreground/60 font-semibold uppercase tracking-wider">{bike.brand} &bull; {bike.type}</p>
                 </div>
                 <Button
                   size="sm"
                   disabled={claiming}
                   onClick={() => handleClaim(bike)}
-                  className="h-10 px-5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 font-bold text-[10px] uppercase tracking-widest shadow-lg shadow-blue-600/20 transition-all"
+                  className="h-10 px-5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 font-semibold text-[10px] uppercase tracking-wider shadow-lg shadow-blue-600/20 transition-all"
                 >
                   {claiming ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Klaim'}
                 </Button>
               </div>
             )) : (
               <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-muted-foreground/30 text-[10px] font-black uppercase tracking-widest italic">
+                <p className="text-muted-foreground/30 text-[10px] font-semibold uppercase tracking-wider italic">
                   Tidak ada armada Pusat yang tersedia
                 </p>
               </div>
             )}
           </div>
           <DialogFooter className="p-8 bg-muted/50 border-t border-border">
-            <Button variant="ghost" className="w-full h-12 rounded-xl border border-border text-muted-foreground hover:bg-muted hover:text-foreground font-black uppercase tracking-widest text-[10px]" onClick={() => setIsClaimOpen(false)}>Batal Klaim</Button>
+            <Button variant="ghost" className="w-full h-12 rounded-xl border border-border text-muted-foreground hover:bg-muted hover:text-foreground font-semibold uppercase tracking-wider text-[10px]" onClick={() => setIsClaimOpen(false)}>Batal Klaim</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

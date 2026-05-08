@@ -55,7 +55,7 @@ export default function Dashboard() {
         </div>
         <div className="relative z-10 max-w-2xl">
           <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">System Live</Badge>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground mb-4">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-4">
             Hello, Control Center.
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed">
@@ -68,13 +68,13 @@ export default function Dashboard() {
       <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="glass-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total Revenue</CardTitle>
+            <CardTitle className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Total Revenue</CardTitle>
             <div className="h-8 w-8 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500">
               <DollarSign size={16} />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-foreground">Rp {stats.total_revenue.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-foreground">Rp {stats.total_revenue.toLocaleString()}</div>
             <div className="flex items-center gap-1.5 mt-2 text-xs text-green-500">
               <ArrowUpRight size={14} />
               <span>{stats.total_rentals} Transaksi Berhasil</span>
@@ -84,13 +84,13 @@ export default function Dashboard() {
 
         <Card className="glass-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Active Rentals</CardTitle>
+            <CardTitle className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Active Rentals</CardTitle>
             <div className="h-8 w-8 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
               <Activity size={16} />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-foreground">{stats.active_rentals}</div>
+            <div className="text-2xl font-bold text-foreground">{stats.active_rentals}</div>
             <div className="flex items-center gap-1.5 mt-2 text-xs text-blue-500">
               <Clock size={14} />
               <span>Sedang Dipinjam</span>
@@ -100,13 +100,13 @@ export default function Dashboard() {
 
         <Card className="glass-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Available Fleet</CardTitle>
+            <CardTitle className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Available Fleet</CardTitle>
             <div className="h-8 w-8 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500">
               <Bike size={16} />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-foreground">{stats.available_bikes}</div>
+            <div className="text-2xl font-bold text-foreground">{stats.available_bikes}</div>
             <div className="flex items-center gap-1.5 mt-2 text-xs text-orange-500">
               <CheckCircle2 size={14} />
               <span>Unit Siap Jalan</span>
@@ -116,13 +116,13 @@ export default function Dashboard() {
 
         <Card className="glass-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total Customers</CardTitle>
+            <CardTitle className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Total Customers</CardTitle>
             <div className="h-8 w-8 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-500">
               <Users size={16} />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-foreground">{stats.total_rentals}</div>
+            <div className="text-2xl font-bold text-foreground">{stats.total_rentals}</div>
             <div className="flex items-center gap-1.5 mt-2 text-xs text-purple-500">
               <Users size={14} />
               <span>Riwayat Pelanggan</span>
@@ -135,7 +135,7 @@ export default function Dashboard() {
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2 glass-card border-border">
           <CardHeader className="border-b border-border">
-            <CardTitle className="text-xl font-bold text-foreground">Recent Transactions</CardTitle>
+            <CardTitle className="text-lg font-semibold text-foreground">Recent Transactions</CardTitle>
             <CardDescription className="text-muted-foreground">Lima aktivitas penyewaan terbaru.</CardDescription>
           </CardHeader>
           <CardContent className="pt-6">
@@ -148,16 +148,16 @@ export default function Dashboard() {
                         {t.status === 'Active' ? <Clock size={22} /> : <CheckCircle2 size={22} />}
                       </div>
                       <div>
-                        <p className="font-bold text-foreground">{t.customer_name}</p>
+                        <p className="font-semibold text-foreground">{t.customer_name}</p>
                         <p className="text-xs text-muted-foreground font-medium">
                           {t.rental_type} &bull; {t.duration} {t.rental_type === 'Short' ? 'Jam' : 'Hari'}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold text-foreground text-lg">Rp {t.total_price.toLocaleString()}</p>
+                      <p className="font-semibold text-foreground text-lg">Rp {t.total_price.toLocaleString()}</p>
                       <Badge variant={t.status === 'Active' ? 'default' : 'secondary'} className={cn(
-                        "text-[10px] uppercase tracking-wider font-bold h-6",
+                        "text-[10px] uppercase tracking-wider font-semibold h-6",
                         t.status === 'Active' ? "bg-blue-500 text-white" : "bg-muted text-muted-foreground"
                       )}>
                         {t.status}
@@ -177,7 +177,7 @@ export default function Dashboard() {
         
         <Card className="glass-card border-border">
           <CardHeader className="border-b border-border">
-            <CardTitle className="text-xl font-bold text-foreground">System Pulse</CardTitle>
+            <CardTitle className="text-lg font-semibold text-foreground">System Pulse</CardTitle>
             <CardDescription className="text-muted-foreground">Status integrasi real-time.</CardDescription>
           </CardHeader>
           <CardContent className="pt-8">
@@ -188,7 +188,7 @@ export default function Dashboard() {
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-bold text-foreground">Cloud Infrastructure</p>
+                      <p className="text-sm font-semibold text-foreground">Cloud Infrastructure</p>
                       <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
                     </div>
                     <p className="text-xs text-muted-foreground leading-relaxed">Supabase database cluster is active and healthy.</p>
@@ -201,7 +201,7 @@ export default function Dashboard() {
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-bold text-foreground">API Gateway</p>
+                      <p className="text-sm font-semibold text-foreground">API Gateway</p>
                       <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
                     </div>
                     <p className="text-xs text-muted-foreground leading-relaxed">FastAPI server responding in optimized latency.</p>
@@ -214,7 +214,7 @@ export default function Dashboard() {
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <p className="text-sm font-bold text-foreground">Security Layer</p>
+                      <p className="text-sm font-semibold text-foreground">Security Layer</p>
                       <div className="h-1.5 w-1.5 rounded-full bg-purple-500 animate-pulse" />
                     </div>
                     <p className="text-xs text-muted-foreground leading-relaxed">JWT authentication & RLS policy active.</p>

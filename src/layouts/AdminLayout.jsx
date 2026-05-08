@@ -53,7 +53,7 @@ const NavLinks = ({ items, activePath, onItemClick = () => {} }) => (
             "h-4 w-4 transition-transform duration-300 group-hover:scale-110",
             isActive ? "text-primary-foreground" : "text-muted-foreground"
           )} />
-          <span className="flex-1 font-semibold">{item.name}</span>
+          <span className="flex-1 font-medium">{item.name}</span>
           {isActive && <ChevronRight className="h-3 w-3 opacity-50" />}
         </Link>
       )
@@ -103,14 +103,14 @@ export default function AdminLayout() {
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold tracking-tighter text-foreground">Rental<span className="text-primary">Pro</span></span>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40 font-black">Enterprise Edition</span>
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground/40 font-semibold">Enterprise Edition</span>
             </div>
           </Link>
         </div>
 
         <div className="flex-1 overflow-auto py-6">
           <div className="px-6 mb-4">
-             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50 mb-4">Navigation</p>
+             <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/50 mb-4">Navigation</p>
              <NavLinks items={visibleNavItems} activePath={location.pathname} />
           </div>
         </div>
@@ -118,12 +118,12 @@ export default function AdminLayout() {
         {/* User Profile in Sidebar */}
         <div className="p-4 mx-4 mb-6 rounded-3xl bg-primary/5 border border-primary/10">
           <div className="flex items-center gap-3 mb-4">
-            <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground font-black shadow-lg">
+            <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground font-semibold shadow-lg">
               {profile?.email?.[0].toUpperCase()}
             </div>
             <div className="flex flex-col overflow-hidden">
-              <span className="text-xs font-black text-foreground truncate uppercase tracking-tight">{profile?.email?.split('@')[0]}</span>
-              <span className="text-[9px] text-muted-foreground uppercase font-black tracking-widest opacity-50">{profile?.role}</span>
+              <span className="text-xs font-semibold text-foreground truncate uppercase tracking-tight">{profile?.email?.split('@')[0]}</span>
+              <span className="text-[9px] text-muted-foreground uppercase font-semibold tracking-wider opacity-50">{profile?.role}</span>
             </div>
           </div>
           <Button 
@@ -132,7 +132,7 @@ export default function AdminLayout() {
             onClick={handleLogout}
           >
             <LogOut className="h-4 w-4" />
-            <span className="text-[10px] font-black uppercase tracking-widest">Sign Out</span>
+            <span className="text-[10px] font-semibold uppercase tracking-wider">Sign Out</span>
           </Button>
         </div>
       </aside>
@@ -140,7 +140,7 @@ export default function AdminLayout() {
       {/* Main Content Area */}
       <div className="flex flex-col sm:pl-80 w-full min-h-screen">
         {/* Top Header */}
-        <header className="sticky top-0 z-30 flex h-20 items-center gap-4 px-4 sm:px-8 bg-transparent">
+        <header className="sticky top-0 z-30 flex h-20 items-center gap-4 px-4 sm:px-8 bg-background/80 backdrop-blur-xl border-b border-border/50">
           {/* Mobile Menu Trigger */}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -191,8 +191,8 @@ export default function AdminLayout() {
             </Button>
             <div className="h-10 w-px bg-border mx-2 hidden sm:block" />
             <div className="hidden sm:flex flex-col items-end">
-               <span className="text-sm font-bold text-foreground">Welcome back</span>
-               <span className="text-[10px] text-muted-foreground uppercase tracking-widest">Active System</span>
+               <span className="text-sm font-semibold text-foreground">Welcome back</span>
+               <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Active System</span>
             </div>
           </div>
         </header>

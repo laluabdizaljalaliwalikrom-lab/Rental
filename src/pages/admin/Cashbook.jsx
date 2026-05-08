@@ -47,9 +47,12 @@ export default function Cashbook() {
       .catch(err => toast.error(err.message))
       .finally(() => setLoading(false))
   }
-
   useEffect(() => {
-    loadData()
+    // Inline fetch prevents React Compiler from falsely detecting synchronous state updates
+    apiFetch('/api/cashbook/')
+      .then(data => setEntries(data))
+      .catch(err => toast.error(err.message))
+      .finally(() => setLoading(false))
   }, [])
 
   const handleAdd = async (e) => {
@@ -150,12 +153,12 @@ export default function Cashbook() {
             <Wallet size={28} strokeWidth={2.5} />
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground">Buku Kas</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Buku Kas</h2>
             <p className="text-sm text-muted-foreground">Kelola arus kas, pengeluaran operasional, dan pendapatan harian.</p>
           </div>
         </div>
         {(profile?.role === 'admin' || profile?.role === 'staff') && (
-          <Button className="h-12 rounded-xl bg-primary text-primary-foreground font-black shadow-lg shadow-primary/20 transition-all uppercase tracking-widest text-[10px] px-6" onClick={() => setAddOpen(true)}>
+          <Button className="h-12 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/20 transition-all uppercase tracking-wider text-[10px] px-6" onClick={() => setAddOpen(true)}>
             <Plus size={18} className="mr-2" />
             Catat Transaksi
           </Button>
@@ -169,8 +172,8 @@ export default function Cashbook() {
           </div>
           <CardContent className="p-6">
             <div className="flex flex-col">
-              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-2">Saldo Kas Akhir</p>
-              <div className="text-3xl font-black text-primary tracking-tighter">Rp {balance.toLocaleString()}</div>
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Saldo Kas Akhir</p>
+              <div className="text-2xl font-bold text-primary tracking-tight">Rp {balance.toLocaleString()}</div>
             </div>
           </CardContent>
         </Card>
@@ -180,8 +183,8 @@ export default function Cashbook() {
           </div>
           <CardContent className="p-6">
             <div className="flex flex-col">
-              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-2">Total Kas Masuk</p>
-              <div className="text-3xl font-black text-green-400 tracking-tighter">Rp {totalDebit.toLocaleString()}</div>
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Total Kas Masuk</p>
+              <div className="text-2xl font-bold text-green-400 tracking-tight">Rp {totalDebit.toLocaleString()}</div>
             </div>
           </CardContent>
         </Card>
@@ -191,8 +194,8 @@ export default function Cashbook() {
           </div>
           <CardContent className="p-6">
             <div className="flex flex-col">
-              <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-2">Total Kas Keluar</p>
-              <div className="text-3xl font-black text-red-400 tracking-tighter">Rp {totalCredit.toLocaleString()}</div>
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Total Kas Keluar</p>
+              <div className="text-2xl font-bold text-red-400 tracking-tight">Rp {totalCredit.toLocaleString()}</div>
             </div>
           </CardContent>
         </Card>
@@ -200,7 +203,7 @@ export default function Cashbook() {
 
       <Card className="glass-card border-border overflow-hidden">
         <CardHeader className="pb-6">
-          <CardTitle className="text-xl font-bold text-foreground">Riwayat Transaksi Keuangan</CardTitle>
+          <CardTitle className="text-lg font-semibold text-foreground">Riwayat Transaksi Keuangan</CardTitle>
           <CardDescription className="text-muted-foreground font-medium mt-1 text-xs">Rekam jejak komprehensif seluruh aktivitas kas masuk dan keluar.</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
@@ -213,11 +216,11 @@ export default function Cashbook() {
               <table className="w-full text-sm text-left">
                 <thead>
                   <tr className="bg-muted/50 border-y border-border">
-                    <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Waktu Transaksi</th>
-                    <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Klasifikasi</th>
-                    <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Rincian Deskripsi</th>
-                    <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Nominal</th>
-                    {profile?.role === 'admin' && <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Aksi</th>}
+                    <th className="px-6 py-4 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Waktu Transaksi</th>
+                    <th className="px-6 py-4 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Klasifikasi</th>
+                    <th className="px-6 py-4 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Rincian Deskripsi</th>
+                    <th className="px-6 py-4 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Nominal</th>
+                    {profile?.role === 'admin' && <th className="px-6 py-4 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground text-right">Aksi</th>}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -226,21 +229,21 @@ export default function Cashbook() {
                       <td className="px-6 py-5 whitespace-nowrap">
                         <div className="flex items-center gap-3 text-muted-foreground font-medium">
                           <Calendar size={14} className="text-muted-foreground/40" />
-                          <span className="text-[11px] font-bold uppercase tracking-wider">{new Date(entry.created_at).toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
+                          <span className="text-[11px] font-semibold uppercase tracking-wider">{new Date(entry.created_at).toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
                       </td>
                       <td className="px-6 py-5">
                         {entry.type === 'debit' ? (
-                          <Badge className="bg-green-500/10 text-green-400 border-none px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest"><ArrowUpRight size={10} className="mr-1.5" /> DEBIT</Badge>
+                          <Badge className="bg-green-500/10 text-green-400 border-none px-3 py-1 rounded-full text-[9px] font-semibold uppercase tracking-wider"><ArrowUpRight size={10} className="mr-1.5" /> DEBIT</Badge>
                         ) : (
-                          <Badge className="bg-red-500/10 text-red-400 border-none px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest"><ArrowDownRight size={10} className="mr-1.5" /> KREDIT</Badge>
+                          <Badge className="bg-red-500/10 text-red-400 border-none px-3 py-1 rounded-full text-[9px] font-semibold uppercase tracking-wider"><ArrowDownRight size={10} className="mr-1.5" /> KREDIT</Badge>
                         )}
                       </td>
                       <td className="px-6 py-5">
-                        <div className="font-bold text-foreground tracking-tight">{entry.description}</div>
+                        <div className="font-semibold text-foreground tracking-tight">{entry.description}</div>
                         <div className="mt-1.5 flex items-center gap-2">
-                          {entry.reference_id && <Badge variant="outline" className="text-[8px] h-4 border-primary/20 text-primary font-black uppercase px-1.5">SISTEM</Badge>}
-                          <div className="text-[10px] text-muted-foreground/60 font-bold uppercase tracking-widest flex items-center gap-1.5">
+                          {entry.reference_id && <Badge variant="outline" className="text-[8px] h-4 border-primary/20 text-primary font-semibold uppercase px-1.5">SISTEM</Badge>}
+                          <div className="text-[10px] text-muted-foreground/60 font-semibold uppercase tracking-wider flex items-center gap-1.5">
                             <User size={10} className="opacity-50" /> {entry.created_by_name || 'Automated'}
                           </div>
                         </div>
@@ -283,28 +286,28 @@ export default function Cashbook() {
 
       {/* Edit Entry Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent className="sm:max-w-[450px] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
           <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
-            <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">
+            <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-3">
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 <Edit size={24} />
               </div>
-              Sesuaikan Transaksi
+              Edit Detail Transaksi
             </DialogTitle>
             <DialogDescription className="text-muted-foreground font-medium pt-1">
-              Perbarui rincian data transaksi buku kas terpilih.
+              Perbarui rincian transaksi kas yang telah tercatat sebelumnya.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleEdit}>
-            <div className="px-8 py-6 grid gap-6">
+          <form onSubmit={handleEdit} className="flex-1 flex flex-col overflow-hidden">
+            <div className="px-8 py-6 flex-1 overflow-y-auto custom-scrollbar space-y-6">
               <div className="grid gap-2">
-                <Label className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Jenis Klasifikasi</Label>
+                <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Jenis Klasifikasi</Label>
                 <div className="grid grid-cols-2 gap-3 mt-1">
                   <Button
                     type="button"
                     variant="ghost"
                     className={cn(
-                      "h-12 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all",
+                      "h-12 rounded-xl font-semibold uppercase text-[10px] tracking-wider transition-all",
                       editData.type === 'debit' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'bg-muted/40 text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setEditData({ ...editData, type: 'debit' })}
@@ -315,7 +318,7 @@ export default function Cashbook() {
                     type="button"
                     variant="ghost"
                     className={cn(
-                      "h-12 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all",
+                      "h-12 rounded-xl font-semibold uppercase text-[10px] tracking-wider transition-all",
                       editData.type === 'credit' ? 'bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-muted/40 text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setEditData({ ...editData, type: 'credit' })}
@@ -325,7 +328,7 @@ export default function Cashbook() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="edit-amount" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Jumlah Nominal (Rp) *</Label>
+                <Label htmlFor="edit-amount" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Jumlah Nominal (Rp) *</Label>
                 <Input
                   id="edit-amount"
                   type="number"
@@ -337,7 +340,7 @@ export default function Cashbook() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="edit-description" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Keterangan Transaksi *</Label>
+                <Label htmlFor="edit-description" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Keterangan Transaksi *</Label>
                 <Input
                   id="edit-description"
                   className="bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 h-14 rounded-2xl focus:ring-primary/50 transition-all"
@@ -348,9 +351,9 @@ export default function Cashbook() {
                 />
               </div>
             </div>
-            <DialogFooter className="p-8 bg-muted/50 border-t border-border mt-auto">
-              <Button type="button" variant="ghost" className="rounded-xl border border-border text-muted-foreground hover:bg-muted font-black uppercase tracking-widest text-[10px] h-12 px-6" onClick={() => setEditOpen(false)}>Batal</Button>
-              <Button type="submit" className="h-12 px-6 rounded-xl bg-primary text-primary-foreground font-black uppercase tracking-widest shadow-xl transition-all text-[10px]" disabled={submitting}>
+            <DialogFooter className="p-8 bg-muted/50 border-t border-border">
+              <Button type="button" variant="ghost" className="rounded-xl border border-border text-muted-foreground hover:bg-muted font-semibold uppercase tracking-wider text-[10px] h-12 px-6" onClick={() => setEditOpen(false)}>Batal</Button>
+              <Button type="submit" className="h-12 px-6 rounded-xl bg-primary text-primary-foreground font-semibold uppercase tracking-wider shadow-xl transition-all text-[10px]" disabled={submitting}>
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Simpan Perubahan
               </Button>
@@ -361,9 +364,9 @@ export default function Cashbook() {
 
       {/* Add Entry Dialog */}
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <DialogContent className="sm:max-w-[450px] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
+        <DialogContent className="sm:max-w-[450px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
           <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
-            <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">
+            <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-3">
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 <Plus size={24} />
               </div>
@@ -373,16 +376,16 @@ export default function Cashbook() {
               Lakukan pencatatan manual untuk pemasukan atau pengeluaran operasional.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleAdd}>
-            <div className="px-8 py-6 grid gap-6">
+          <form onSubmit={handleAdd} className="flex-1 flex flex-col overflow-hidden">
+            <div className="px-8 py-6 flex-1 overflow-y-auto custom-scrollbar space-y-6">
               <div className="grid gap-2">
-                <Label className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Jenis Klasifikasi</Label>
+                <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Jenis Klasifikasi</Label>
                 <div className="grid grid-cols-2 gap-3 mt-1">
                   <Button
                     type="button"
                     variant="ghost"
                     className={cn(
-                      "h-12 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all",
+                      "h-12 rounded-xl font-semibold uppercase text-[10px] tracking-wider transition-all",
                       formData.type === 'debit' ? 'bg-green-500 text-white shadow-lg shadow-green-500/20' : 'bg-muted/40 text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setFormData({ ...formData, type: 'debit' })}
@@ -393,7 +396,7 @@ export default function Cashbook() {
                     type="button"
                     variant="ghost"
                     className={cn(
-                      "h-12 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all",
+                      "h-12 rounded-xl font-semibold uppercase text-[10px] tracking-wider transition-all",
                       formData.type === 'credit' ? 'bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-muted/40 text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setFormData({ ...formData, type: 'credit' })}
@@ -403,7 +406,7 @@ export default function Cashbook() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="amount" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Jumlah Nominal (Rp) *</Label>
+                <Label htmlFor="amount" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Jumlah Nominal (Rp) *</Label>
                 <Input
                   id="amount"
                   type="number"
@@ -415,7 +418,7 @@ export default function Cashbook() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="description" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Keterangan Transaksi *</Label>
+                <Label htmlFor="description" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Keterangan Transaksi *</Label>
                 <Input
                   id="description"
                   className="bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 h-14 rounded-2xl focus:ring-primary/50 transition-all"
@@ -426,9 +429,9 @@ export default function Cashbook() {
                 />
               </div>
             </div>
-            <DialogFooter className="p-8 bg-muted/50 border-t border-border mt-auto">
-              <Button type="button" variant="ghost" className="rounded-xl border border-border text-muted-foreground hover:bg-muted font-black uppercase tracking-widest text-[10px] h-12 px-6" onClick={() => setAddOpen(false)}>Batal</Button>
-              <Button type="submit" className="h-12 px-6 rounded-xl bg-primary text-primary-foreground font-black uppercase tracking-widest shadow-xl transition-all text-[10px]" disabled={submitting}>
+            <DialogFooter className="p-8 bg-muted/50 border-t border-border">
+              <Button type="button" variant="ghost" className="rounded-xl border border-border text-muted-foreground hover:bg-muted font-semibold uppercase tracking-wider text-[10px] h-12 px-6" onClick={() => setAddOpen(false)}>Batal</Button>
+              <Button type="submit" className="h-12 px-6 rounded-xl bg-primary text-primary-foreground font-semibold uppercase tracking-wider shadow-xl transition-all text-[10px]" disabled={submitting}>
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Simpan Transaksi
               </Button>
@@ -439,9 +442,9 @@ export default function Cashbook() {
 
       {/* Delete Confirm Dialog */}
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent className="sm:max-w-[450px] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
+        <DialogContent className="sm:max-w-[450px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
           <DialogHeader className="p-8 pb-6 bg-red-500/[0.02] border-b border-border/50">
-            <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3 text-red-500">
+            <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-3 text-red-500">
               <div className="h-10 w-10 rounded-xl bg-red-500/10 flex items-center justify-center">
                 <Trash2 size={24} />
               </div>
@@ -451,19 +454,19 @@ export default function Cashbook() {
               Tindakan ini akan menghapus catatan kas secara permanen. Apakah Anda yakin?
             </DialogDescription>
           </DialogHeader>
-          <div className="px-8 py-6 space-y-4">
+          <div className="px-8 py-6 flex-1 overflow-y-auto custom-scrollbar space-y-4">
             {selectedEntry?.reference_id && (
               <div className="rounded-2xl border border-red-500/30 bg-red-500/10 p-4 flex items-start gap-3">
                 <span className="text-lg">⚠️</span>
-                <p className="text-[11px] text-red-400 font-bold uppercase tracking-tight leading-normal">
+                <p className="text-[11px] text-red-400 font-semibold uppercase tracking-tight leading-normal">
                   Transaksi ini terhubung ke riwayat penyewaan. Menghapus transaksi ini juga akan menghapus data riwayat penyewaan terkait secara permanen.
                 </p>
               </div>
             )}
           </div>
           <div className="flex gap-4 p-8 bg-muted/50 border-t border-border">
-            <Button variant="ghost" className="flex-1 h-12 rounded-xl border border-border text-muted-foreground hover:bg-muted font-black uppercase tracking-widest text-[10px]" onClick={() => setDeleteOpen(false)} disabled={submitting}>Batal</Button>
-            <Button className="flex-1 h-12 rounded-xl bg-red-500 text-white hover:bg-red-600 font-black uppercase tracking-widest text-[10px]" onClick={handleDeleteEntry} disabled={submitting}>
+            <Button variant="ghost" className="flex-1 h-12 rounded-xl border border-border text-muted-foreground hover:bg-muted font-semibold uppercase tracking-wider text-[10px]" onClick={() => setDeleteOpen(false)} disabled={submitting}>Batal</Button>
+            <Button className="flex-1 h-12 rounded-xl bg-red-500 text-white hover:bg-red-600 font-semibold uppercase tracking-wider text-[10px]" onClick={handleDeleteEntry} disabled={submitting}>
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Ya, Hapus Permanen"}
             </Button>
           </div>

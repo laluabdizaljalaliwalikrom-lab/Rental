@@ -141,21 +141,21 @@ export default function Fleet() {
             <Bike size={28} strokeWidth={2.5} />
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground">Manajemen Armada</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Manajemen Armada</h2>
             <p className="text-sm text-muted-foreground">Kelola unit sepeda, harga sewa, dan pantau status ketersediaan.</p>
           </div>
         </div>
         
         <Dialog open={open} onOpenChange={(val) => { setOpen(val); if(!val) resetForm(); }}>
           <DialogTrigger asChild>
-            <Button className="h-12 rounded-xl bg-primary text-primary-foreground font-black shadow-lg shadow-primary/20 transition-all uppercase tracking-widest text-[10px] px-6">
+            <Button className="h-12 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/20 transition-all uppercase tracking-wider text-[10px] px-6">
               <Plus size={18} className="mr-2" />
               Tambah Sepeda
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px] glass border-border text-foreground p-0 overflow-hidden">
+          <DialogContent className="sm:max-w-[500px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
             <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
-              <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">
+              <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-3">
                 <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                   <Plus size={24} />
                 </div>
@@ -163,12 +163,12 @@ export default function Fleet() {
               </DialogTitle>
               <DialogDescription className="text-muted-foreground font-medium pt-1">Masukkan detail armada sepeda baru di bawah ini.</DialogDescription>
             </DialogHeader>
-            <form onSubmit={handleAddBike}>
-              <div className="px-8 py-6">
+            <form onSubmit={handleAddBike} className="flex-1 flex flex-col overflow-hidden">
+              <div className="px-8 py-6 flex-1 overflow-y-auto custom-scrollbar">
                 <BikeForm formData={formData} setFormData={setFormData} />
               </div>
               <DialogFooter className="p-8 bg-muted/50 border-t border-border">
-                <Button type="submit" className="w-full h-14 rounded-2xl bg-primary text-primary-foreground hover:opacity-90 font-black uppercase tracking-widest transition-all shadow-xl text-xs" disabled={submitting}>
+                <Button type="submit" className="w-full h-14 rounded-2xl bg-primary text-primary-foreground hover:opacity-90 font-semibold uppercase tracking-wider transition-all shadow-xl text-xs" disabled={submitting}>
                   {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Simpan Armada Baru
                 </Button>
@@ -193,12 +193,12 @@ export default function Fleet() {
                   ) : (
                     <div className="flex flex-col items-center gap-2 opacity-20 group-hover:opacity-40 transition-opacity">
                       <Bike size={64} strokeWidth={1} className="text-foreground" />
-                      <span className="text-[10px] uppercase tracking-widest font-bold text-foreground">No Image</span>
+                      <span className="text-[10px] uppercase tracking-wider font-medium text-foreground">No Image</span>
                     </div>
                   )}
                   <div className="absolute top-4 right-4 flex gap-2">
                     <Badge className={cn(
-                      "border-none px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg",
+                      "border-none px-3 py-1 rounded-full text-[9px] font-semibold uppercase tracking-wider shadow-lg",
                       bike.status === 'Available' ? 'bg-green-500 text-white' : 'bg-orange-500 text-white'
                     )}>
                       {bike.status}
@@ -208,7 +208,7 @@ export default function Fleet() {
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors tracking-tight">{bike.name}</CardTitle>
+                      <CardTitle className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors tracking-tight">{bike.name}</CardTitle>
                       <CardDescription className="text-muted-foreground font-medium">{bike.brand} &bull; {bike.type}</CardDescription>
                     </div>
                   </div>
@@ -216,19 +216,19 @@ export default function Fleet() {
                 <CardContent className="space-y-6">
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div className="p-3 rounded-2xl bg-muted/40 border border-border group-hover:bg-muted/60 transition-colors">
-                      <p className="text-muted-foreground text-[9px] uppercase font-bold tracking-[0.15em] mb-1">Per Jam</p>
-                      <p className="font-bold text-foreground text-base tracking-tighter">Rp {bike.price_per_hour.toLocaleString()}</p>
+                      <p className="text-muted-foreground text-[9px] uppercase font-medium tracking-wider mb-1">Per Jam</p>
+                      <p className="font-semibold text-foreground text-base tracking-tighter">Rp {bike.price_per_hour.toLocaleString()}</p>
                     </div>
                     <div className="p-3 rounded-2xl bg-muted/40 border border-border group-hover:bg-muted/60 transition-colors">
-                      <p className="text-muted-foreground text-[9px] uppercase font-bold tracking-[0.15em] mb-1">Per Hari</p>
-                      <p className="font-bold text-foreground text-base tracking-tighter">Rp {bike.price_per_day.toLocaleString()}</p>
+                      <p className="text-muted-foreground text-[9px] uppercase font-medium tracking-wider mb-1">Per Hari</p>
+                      <p className="font-semibold text-foreground text-base tracking-tighter">Rp {bike.price_per_day.toLocaleString()}</p>
                     </div>
                   </div>
                   
                   <div className="flex gap-2">
                     <Button 
                       variant="ghost" 
-                      className="flex-1 h-12 rounded-xl bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 font-bold transition-all uppercase tracking-widest text-[9px]" 
+                      className="flex-1 h-12 rounded-xl bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 font-semibold transition-all uppercase tracking-wider text-[9px]" 
                       onClick={() => openEdit(bike)}
                     >
                       <Edit size={14} className="mr-2" /> Detail
@@ -258,24 +258,23 @@ export default function Fleet() {
         </div>
       )}
 
-      {/* Edit Dialog */}
       <Dialog open={editOpen} onOpenChange={(val) => { setEditOpen(val); if(!val) resetForm(); }}>
-        <DialogContent className="sm:max-w-[500px] glass border-border text-foreground p-0 overflow-hidden">
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
           <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
-            <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">
+            <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-3">
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 <Bike size={24} />
               </div>
               Edit Detail Sepeda
             </DialogTitle>
-            <DialogDescription className="text-muted-foreground font-medium pt-1">Perbarui informasi armada sepeda <span className="text-primary font-bold">{selectedBike?.name}</span>.</DialogDescription>
+            <DialogDescription className="text-muted-foreground font-medium pt-1">Perbarui informasi armada sepeda <span className="text-primary font-semibold">{selectedBike?.name}</span>.</DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleUpdateBike}>
-            <div className="px-8 py-6">
+          <form onSubmit={handleUpdateBike} className="flex-1 flex flex-col overflow-hidden">
+            <div className="px-8 py-6 flex-1 overflow-y-auto custom-scrollbar">
               <BikeForm formData={formData} setFormData={setFormData} />
             </div>
             <DialogFooter className="p-8 bg-muted/50 border-t border-border">
-              <Button type="submit" className="w-full h-14 rounded-2xl bg-primary text-primary-foreground hover:opacity-90 font-black uppercase tracking-widest transition-all shadow-xl text-xs" disabled={submitting}>
+              <Button type="submit" className="w-full h-14 rounded-2xl bg-primary text-primary-foreground hover:opacity-90 font-semibold uppercase tracking-wider transition-all shadow-xl text-xs" disabled={submitting}>
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Simpan Perubahan Armada
               </Button>
@@ -291,7 +290,7 @@ function BikeForm({ formData, setFormData }) {
   return (
     <div className="space-y-4">
       <div className="grid gap-2">
-        <Label htmlFor="name" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Nama Sepeda *</Label>
+        <Label htmlFor="name" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Nama Sepeda *</Label>
         <Input 
           id="name" 
           placeholder="Contoh: Honda Vario 160" 
@@ -303,7 +302,7 @@ function BikeForm({ formData, setFormData }) {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="grid gap-2">
-          <Label htmlFor="brand" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Merk</Label>
+          <Label htmlFor="brand" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Merk</Label>
           <Input 
             id="brand" 
             placeholder="Honda" 
@@ -313,7 +312,7 @@ function BikeForm({ formData, setFormData }) {
           />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="type" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Tipe</Label>
+          <Label htmlFor="type" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Tipe</Label>
           <Input 
             id="type" 
             placeholder="Matic" 
@@ -325,7 +324,7 @@ function BikeForm({ formData, setFormData }) {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="grid gap-2">
-          <Label htmlFor="price_h" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Sewa per Jam *</Label>
+          <Label htmlFor="price_h" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Sewa per Jam *</Label>
           <Input 
             id="price_h" 
             type="number" 
@@ -336,7 +335,7 @@ function BikeForm({ formData, setFormData }) {
           />
         </div>
         <div className="grid gap-2">
-          <Label htmlFor="price_d" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">Sewa per Hari *</Label>
+          <Label htmlFor="price_d" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Sewa per Hari *</Label>
           <Input 
             id="price_d" 
             type="number" 
@@ -348,7 +347,7 @@ function BikeForm({ formData, setFormData }) {
         </div>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="image" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">URL Gambar (Opsional)</Label>
+        <Label htmlFor="image" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">URL Gambar (Opsional)</Label>
         <div className="relative">
           <ImageIcon size={14} className="absolute left-4 top-4 text-muted-foreground/40" />
           <Input 

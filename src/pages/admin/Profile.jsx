@@ -14,7 +14,7 @@ export default function Profile() {
   const { profile, refreshProfile } = useAuth()
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
-  
+
   const [formData, setFormData] = useState({
     full_name: profile?.full_name || '',
     phone: profile?.phone || '',
@@ -32,7 +32,7 @@ export default function Profile() {
     e.preventDefault()
     try {
       setLoading(true)
-      
+
       // 1. Update email if changed (via Supabase Auth)
       if (formData.email !== profile.email) {
         const { error: authError } = await supabase.auth.updateUser({
@@ -107,7 +107,7 @@ export default function Profile() {
 
     try {
       setLoading(true)
-      
+
       // 1. Verifikasi Password Saat Ini (Re-authentication)
       const { error: signInError } = await supabase.auth.signInWithPassword({
         email: profile.email,
@@ -123,7 +123,7 @@ export default function Profile() {
         password: passwordData.newPassword
       })
       if (error) throw error
-      
+
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' })
       toast.success("Password berhasil diubah")
     } catch (error) {
@@ -141,7 +141,7 @@ export default function Profile() {
             <User size={28} strokeWidth={2.5} />
           </div>
           <div>
-            <h2 className="text-3xl font-black tracking-tight text-foreground">Profil Personal</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Profil Personal</h2>
             <p className="text-sm text-muted-foreground">Kelola informasi identitas dan kredensial keamanan akun Anda.</p>
           </div>
         </div>
@@ -165,11 +165,11 @@ export default function Profile() {
                   <input type="file" className="hidden" accept="image/*" onChange={handleUpdateAvatar} disabled={uploading} />
                 </label>
               </div>
-              <h3 className="text-2xl font-black text-foreground tracking-tighter mb-1">{formData.full_name || 'Personal Account'}</h3>
+              <h3 className="text-xl font-semibold text-foreground tracking-tight mb-1">{formData.full_name || 'Personal Account'}</h3>
               <div className="flex justify-center">
-                 <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 font-black text-[9px] uppercase tracking-widest px-3 py-1 rounded-full">
-                    <ShieldCheck size={10} className="mr-1.5" /> {profile?.role || 'Staff'}
-                 </Badge>
+                <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 font-semibold text-[9px] uppercase tracking-wider px-3 py-1 rounded-full">
+                  <ShieldCheck size={10} className="mr-1.5" /> {profile?.role || 'Staff'}
+                </Badge>
               </div>
             </CardContent>
           </Card>
@@ -180,19 +180,19 @@ export default function Profile() {
           {/* General Info */}
           <Card className="glass-card border-border">
             <CardHeader className="p-8 pb-4">
-              <CardTitle className="text-xl font-bold flex items-center gap-3">
+              <CardTitle className="text-lg font-semibold flex items-center gap-3">
                 <User size={20} className="text-primary" /> Informasi Dasar
               </CardTitle>
-              <CardDescription className="font-medium text-xs">Informasi utama identitas personel yang terdaftar di sistem.</CardDescription>
+              <CardDescription className="text-[11px] text-muted-foreground">Informasi utama identitas personel yang terdaftar di sistem.</CardDescription>
             </CardHeader>
             <CardContent className="p-8 pt-4">
               <form onSubmit={handleUpdateProfile} className="space-y-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="full_name" className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">Nama Lengkap Sesuai ID</Label>
-                  <Input 
-                    id="full_name" 
-                    value={formData.full_name} 
-                    onChange={e => setFormData({...formData, full_name: e.target.value})}
+                  <Label htmlFor="full_name" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Nama Lengkap Sesuai ID</Label>
+                  <Input
+                    id="full_name"
+                    value={formData.full_name}
+                    onChange={e => setFormData({ ...formData, full_name: e.target.value })}
                     placeholder="Masukkan nama lengkap"
                     className="h-14 bg-muted/40 border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                   />
@@ -201,10 +201,10 @@ export default function Profile() {
                   <Label htmlFor="phone" className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">Nomor WhatsApp Personel</Label>
                   <div className="relative">
                     <Phone size={18} className="absolute left-4 top-4 text-muted-foreground/40" />
-                    <Input 
-                      id="phone" 
-                      value={formData.phone} 
-                      onChange={e => setFormData({...formData, phone: e.target.value})}
+                    <Input
+                      id="phone"
+                      value={formData.phone}
+                      onChange={e => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="0812xxxx"
                       className="h-14 pl-12 bg-muted/40 border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                     />
@@ -214,11 +214,11 @@ export default function Profile() {
                   <Label htmlFor="email" className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">Alamat Korespondensi (Email)</Label>
                   <div className="relative">
                     <Mail size={18} className="absolute left-4 top-4 text-muted-foreground/40" />
-                    <Input 
-                      id="email" 
+                    <Input
+                      id="email"
                       type="email"
-                      value={formData.email} 
-                      onChange={e => setFormData({...formData, email: e.target.value})}
+                      value={formData.email}
+                      onChange={e => setFormData({ ...formData, email: e.target.value })}
                       placeholder="email@example.com"
                       className="h-14 pl-12 bg-muted/40 border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                     />
@@ -245,45 +245,45 @@ export default function Profile() {
               <form onSubmit={handleChangePassword} className="space-y-6">
                 <div className="grid gap-2">
                   <Label htmlFor="curr_pass" className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">Password Saat Ini *</Label>
-                  <Input 
-                    id="curr_pass" 
+                  <Input
+                    id="curr_pass"
                     type="password"
                     required
                     value={passwordData.currentPassword}
-                    onChange={e => setPasswordData({...passwordData, currentPassword: e.target.value})}
+                    onChange={e => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                     className="h-14 bg-muted/40 border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                     placeholder="••••••••"
                   />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-border/50 pt-8 mt-4">
-                   <div className="grid gap-2">
+                  <div className="grid gap-2">
                     <Label htmlFor="new_pass" className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">Password Baru *</Label>
-                    <Input 
-                      id="new_pass" 
+                    <Input
+                      id="new_pass"
                       type="password"
                       required
                       value={passwordData.newPassword}
-                      onChange={e => setPasswordData({...passwordData, newPassword: e.target.value})}
+                      onChange={e => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                       className="h-14 bg-muted/40 border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                       placeholder="Minimal 6 karakter"
                     />
                   </div>
                   <div className="grid gap-2">
                     <Label htmlFor="confirm_pass" className="text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">Konfirmasi Password *</Label>
-                    <Input 
-                      id="confirm_pass" 
+                    <Input
+                      id="confirm_pass"
                       type="password"
                       required
                       value={passwordData.confirmPassword}
-                      onChange={e => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+                      onChange={e => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                       className="h-14 bg-muted/40 border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                       placeholder="Ulangi password baru"
                     />
                   </div>
                 </div>
                 <Button type="submit" variant="ghost" disabled={loading} className="h-14 w-full sm:w-auto px-8 rounded-2xl border-red-500/20 bg-red-500/5 text-red-500 hover:bg-red-500 hover:text-white font-black uppercase tracking-widest transition-all text-[11px]">
-                   {loading ? <Loader2 size={18} className="animate-spin mr-2" /> : <Lock size={18} className="mr-2" />}
-                   Ubah Kata Sandi Sekarang
+                  {loading ? <Loader2 size={18} className="animate-spin mr-2" /> : <Lock size={18} className="mr-2" />}
+                  Ubah Kata Sandi Sekarang
                 </Button>
               </form>
             </CardContent>

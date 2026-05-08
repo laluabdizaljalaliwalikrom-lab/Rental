@@ -153,7 +153,7 @@ export default function Rentals() {
             <CreditCard size={32} strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="text-3xl font-black tracking-tighter text-foreground">Sistem Penyewaan</h1>
+            <h1 className="text-2xl font-semibold tracking-tight text-foreground">Sistem Penyewaan</h1>
             <p className="text-sm text-muted-foreground font-medium italic">Manajemen operasional armada & transaksi harian.</p>
           </div>
         </div>
@@ -161,10 +161,10 @@ export default function Rentals() {
 
       <Tabs defaultValue="available" className="w-full">
         <TabsList className="bg-muted border border-border p-1 rounded-2xl h-14 w-fit">
-          <TabsTrigger value="available" className="h-12 px-8 rounded-xl font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">
+          <TabsTrigger value="available" className="h-12 px-8 rounded-xl font-semibold uppercase text-[10px] tracking-wider data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">
             <ListFilter size={14} className="mr-2" /> Sewa Sepeda
           </TabsTrigger>
-          <TabsTrigger value="history" className="h-12 px-8 rounded-xl font-black uppercase text-[10px] tracking-widest data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">
+          <TabsTrigger value="history" className="h-12 px-8 rounded-xl font-semibold uppercase text-[10px] tracking-wider data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all">
             <History size={14} className="mr-2" /> Riwayat Rental
           </TabsTrigger>
         </TabsList>
@@ -185,29 +185,29 @@ export default function Rentals() {
                       ) : (
                         <div className="flex flex-col items-center gap-2 opacity-20 group-hover:opacity-40 transition-opacity">
                           <Bike size={64} strokeWidth={1} className="text-foreground" />
-                          <span className="text-[10px] uppercase tracking-widest font-bold text-foreground">No Image</span>
+                          <span className="text-[10px] uppercase tracking-wider font-medium text-foreground">No Image</span>
                         </div>
                       )}
                       <div className="absolute top-4 right-4">
-                        <Badge className="bg-green-500 text-white border-none px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg">Tersedia</Badge>
+                        <Badge className="bg-green-500 text-white border-none px-3 py-1 rounded-full text-[9px] font-semibold uppercase tracking-wider shadow-lg">Tersedia</Badge>
                       </div>
                     </div>
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-xl font-bold text-foreground group-hover:text-primary transition-colors tracking-tight">{bike.name}</CardTitle>
+                      <CardTitle className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors tracking-tight">{bike.name}</CardTitle>
                       <CardDescription className="text-muted-foreground font-medium">{bike.brand} &bull; {bike.type}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
                       <div className="grid grid-cols-2 gap-3 text-sm">
                         <div className="p-3 rounded-2xl bg-muted/40 border border-border group-hover:bg-muted/60 transition-colors text-center">
-                          <p className="text-muted-foreground text-[9px] uppercase font-bold tracking-[0.15em] mb-1">Per Jam</p>
-                          <p className="font-bold text-foreground text-base tracking-tighter">Rp {bike.price_per_hour.toLocaleString()}</p>
+                          <p className="text-muted-foreground text-[9px] uppercase font-medium tracking-wider mb-1">Per Jam</p>
+                          <p className="font-semibold text-foreground text-base tracking-tighter">Rp {bike.price_per_hour.toLocaleString()}</p>
                         </div>
                         <div className="p-3 rounded-2xl bg-muted/40 border border-border group-hover:bg-muted/60 transition-colors text-center">
-                          <p className="text-muted-foreground text-[9px] uppercase font-bold tracking-[0.15em] mb-1">Per Hari</p>
-                          <p className="font-bold text-foreground text-base tracking-tighter">Rp {bike.price_per_day.toLocaleString()}</p>
+                          <p className="text-muted-foreground text-[9px] uppercase font-medium tracking-wider mb-1">Per Hari</p>
+                          <p className="font-semibold text-foreground text-base tracking-tighter">Rp {bike.price_per_day.toLocaleString()}</p>
                         </div>
                       </div>
-                      <Button className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-[0.2em] text-[10px] shadow-lg shadow-blue-600/20 transition-all" onClick={() => { setSelectedBike(bike); setRentOpen(true); }}>
+                      <Button className="w-full h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold uppercase tracking-wider text-[10px] shadow-lg shadow-blue-600/20 transition-all" onClick={() => { setSelectedBike(bike); setRentOpen(true); }}>
                         <CreditCard size={16} className="mr-2" /> Sewa Sekarang
                       </Button>
                     </CardContent>
@@ -231,7 +231,7 @@ export default function Rentals() {
         <TabsContent value="history" className="mt-8">
           <Card className="glass-card border-border overflow-hidden">
             <CardHeader className="pb-6">
-              <CardTitle className="text-xl font-bold text-foreground">Aktivitas Transaksi</CardTitle>
+              <CardTitle className="text-lg font-semibold text-foreground">Aktivitas Transaksi</CardTitle>
               <CardDescription className="text-muted-foreground font-medium mt-1 text-xs">Rekam jejak komprehensif transaksi rental sepeda Anda.</CardDescription>
             </CardHeader>
             <CardContent className="p-0">
@@ -325,23 +325,21 @@ export default function Rentals() {
 
       {/* Rent Dialog */}
       <Dialog open={rentOpen} onOpenChange={setRentOpen}>
-        <DialogContent className="sm:max-w-[550px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
+        <DialogContent className="sm:max-w-[600px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
           <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
-            <DialogTitle className="text-3xl font-black tracking-tighter flex items-center gap-3">
+            <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-3">
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <CreditCard size={24} />
+                <Bike size={24} />
               </div>
-              Konfigurasi Rental
+              Proses Penyewaan: {selectedBike?.name}
             </DialogTitle>
-            <DialogDescription className="text-muted-foreground font-medium pt-2">
-              Selesaikan rincian data penyewa untuk unit <span className="text-primary font-bold">{selectedBike?.name}</span>.
-            </DialogDescription>
+            <DialogDescription className="text-muted-foreground font-medium pt-1">Lengkapi data pelanggan di bawah untuk melakukan pendaftaran rental.</DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleRentBike} className="flex flex-col min-h-0 flex-1">
-            <div className="px-8 py-4 overflow-y-auto flex-1 custom-scrollbar space-y-8">
+          <form onSubmit={handleRentBike} className="flex-1 flex flex-col overflow-hidden">
+            <div className="px-8 py-6 flex-1 overflow-y-auto custom-scrollbar">
               <div className="space-y-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="customer" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Nama Lengkap Penyewa *</Label>
+                  <Label htmlFor="customer" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Nama Lengkap Penyewa *</Label>
                   <Input 
                     id="customer" 
                     placeholder="Masukkan nama sesuai identitas resmi" 
@@ -354,7 +352,7 @@ export default function Rentals() {
 
                 <div className="grid grid-cols-2 gap-6">
                   <div className="grid gap-2">
-                    <Label htmlFor="phone" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Nomor WhatsApp *</Label>
+                    <Label htmlFor="phone" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Nomor WhatsApp *</Label>
                     <Input 
                       id="phone" 
                       placeholder="0812xxxx" 
@@ -365,14 +363,14 @@ export default function Rentals() {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Metode Identitas *</Label>
+                    <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Metode Identitas *</Label>
                     <div className="flex gap-2 p-1 bg-muted border border-border rounded-2xl h-14">
                       {['KTP', 'SIM', 'Paspor'].map(type => (
                         <button
                           key={type}
                           type="button"
                           className={cn(
-                            "flex-1 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
+                            "flex-1 rounded-xl text-[10px] font-semibold uppercase tracking-wider transition-all",
                             rentalData.identity_type === type ? 'bg-primary text-primary-foreground shadow-lg' : 'text-muted-foreground/60 hover:text-foreground'
                           )}
                           onClick={() => setRentalData({...rentalData, identity_type: type})}
@@ -385,7 +383,7 @@ export default function Rentals() {
                 </div>
 
                 <div className="grid gap-2">
-                  <Label htmlFor="idNumber" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Nomor Registrasi {rentalData.identity_type} *</Label>
+                  <Label htmlFor="idNumber" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Nomor Registrasi {rentalData.identity_type} *</Label>
                   <Input 
                     id="idNumber" 
                     placeholder={`Masukkan nomor seri ${rentalData.identity_type}`}
@@ -397,7 +395,7 @@ export default function Rentals() {
                 </div>
 
                 <div className="grid gap-2">
-                  <Label htmlFor="address" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Lokasi Domisili / Hotel / Menginap *</Label>
+                  <Label htmlFor="address" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Lokasi Domisili / Hotel / Menginap *</Label>
                   <Input 
                     id="address" 
                     placeholder="Alamat lengkap selama masa penyewaan" 
@@ -409,12 +407,12 @@ export default function Rentals() {
                 </div>
 
                 <div className="grid gap-2">
-                  <Label className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Paket Durasi *</Label>
+                  <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Paket Durasi *</Label>
                   <div className="grid grid-cols-2 gap-4">
                     <button 
                       type="button" 
                       className={cn(
-                        "h-16 rounded-2xl flex items-center justify-center gap-3 font-black uppercase text-[10px] tracking-widest border transition-all",
+                        "h-16 rounded-2xl flex items-center justify-center gap-3 font-semibold uppercase text-[10px] tracking-wider border transition-all",
                         rentalData.rental_type === 'Short' ? 'bg-primary border-primary/20 text-primary-foreground shadow-lg' : 'bg-muted border-border text-muted-foreground/60 hover:bg-muted/80'
                       )}
                       onClick={() => setRentalData({...rentalData, rental_type: 'Short'})}
@@ -424,7 +422,7 @@ export default function Rentals() {
                     <button 
                       type="button" 
                       className={cn(
-                        "h-16 rounded-2xl flex items-center justify-center gap-3 font-black uppercase text-[10px] tracking-widest border transition-all",
+                        "h-16 rounded-2xl flex items-center justify-center gap-3 font-semibold uppercase text-[10px] tracking-wider border transition-all",
                         rentalData.rental_type === 'Long' ? 'bg-primary border-primary/20 text-primary-foreground shadow-lg' : 'bg-muted border-border text-muted-foreground/60 hover:bg-muted/80'
                       )}
                       onClick={() => setRentalData({...rentalData, rental_type: 'Long'})}
@@ -435,7 +433,7 @@ export default function Rentals() {
                 </div>
 
                 <div className="grid gap-2">
-                  <Label htmlFor="duration" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">
+                  <Label htmlFor="duration" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">
                     Kuantitas ({rentalData.rental_type === 'Short' ? 'Jam' : 'Hari'})
                   </Label>
                   <Input 
@@ -449,12 +447,12 @@ export default function Rentals() {
                 </div>
 
                 <div className="grid gap-2">
-                    <Label className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Dokumentasi Identitas Resmi *</Label>
+                    <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Dokumentasi Identitas Resmi *</Label>
                     <div className="flex items-center justify-center w-full">
                       <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-2xl cursor-pointer bg-muted/30 hover:bg-muted/50 transition-all">
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
                           <Camera className="w-8 h-8 mb-3 text-muted-foreground/40" />
-                          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+                          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
                             {identityImage ? 'Identitas Siap' : 'Klik untuk Ambil / Unggah Foto'}
                           </p>
                         </div>
@@ -467,14 +465,14 @@ export default function Rentals() {
             <div className="p-8 bg-primary/[0.03] border-t border-border mt-auto">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                   <p className="text-muted-foreground text-[10px] font-black uppercase tracking-widest opacity-60">Estimasi Pembayaran</p>
-                   <p className="text-xs font-bold text-primary italic">Sudah termasuk pajak & layanan</p>
+                   <p className="text-muted-foreground text-[10px] font-semibold uppercase tracking-wider opacity-60">Estimasi Pembayaran</p>
+                   <p className="text-xs font-medium text-primary italic">Sudah termasuk pajak & layanan</p>
                 </div>
-                <div className="text-4xl font-black text-foreground tracking-tighter">
+                <div className="text-3xl font-semibold text-foreground tracking-tight">
                   Rp {(rentalData.rental_type === 'Short' ? (selectedBike?.price_per_hour * rentalData.duration) : (selectedBike?.price_per_day * rentalData.duration))?.toLocaleString()}
                 </div>
               </div>
-              <Button type="submit" className="w-full h-16 rounded-2xl bg-primary text-primary-foreground font-black uppercase tracking-widest shadow-2xl hover:opacity-90 transition-all disabled:opacity-50 text-xs" disabled={submitting}>
+              <Button type="submit" className="w-full h-16 rounded-2xl bg-primary text-primary-foreground font-semibold uppercase tracking-wider shadow-2xl hover:opacity-90 transition-all disabled:opacity-50 text-xs" disabled={submitting}>
                 {submitting ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Konfirmasi & Proses Rental"}
               </Button>
             </div>
@@ -482,21 +480,20 @@ export default function Rentals() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Rental Confirm Dialog */}
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent className="sm:max-w-[400px] glass border-border text-foreground p-8 text-center">
+        <DialogContent className="sm:max-w-[400px] max-h-[90vh] glass border-border text-foreground p-8 text-center flex flex-col items-center">
           <div className="mx-auto w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 mb-6">
             <Trash2 size={32} />
           </div>
           <DialogHeader className="p-0">
-            <DialogTitle className="text-2xl font-bold text-center">Hapus Riwayat?</DialogTitle>
+            <DialogTitle className="text-xl font-semibold text-center">Hapus Riwayat?</DialogTitle>
             <DialogDescription className="text-muted-foreground pt-4 leading-relaxed text-center">
               Tindakan ini akan menghapus data rental secara permanen dari sistem. Apakah Anda yakin ingin melanjutkan?
             </DialogDescription>
           </DialogHeader>
-          <div className="flex gap-4 mt-8">
-            <Button variant="ghost" className="flex-1 h-12 rounded-xl border border-border text-muted-foreground hover:bg-muted" onClick={() => setDeleteOpen(false)} disabled={submitting}>Batal</Button>
-            <Button className="flex-1 h-12 rounded-xl bg-red-500 text-white hover:bg-red-600 font-bold" onClick={handleDeleteRental} disabled={submitting}>
+          <div className="flex gap-4 mt-8 w-full">
+            <Button variant="ghost" className="flex-1 h-12 rounded-xl border border-border text-muted-foreground hover:bg-muted font-semibold" onClick={() => setDeleteOpen(false)} disabled={submitting}>Batal</Button>
+            <Button className="flex-1 h-12 rounded-xl bg-red-500 text-white hover:bg-red-600 font-semibold" onClick={handleDeleteRental} disabled={submitting}>
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Ya, Hapus"}
             </Button>
           </div>

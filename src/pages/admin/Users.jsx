@@ -58,7 +58,7 @@ export default function Users() {
   const loadUsers = async () => {
     try {
       setLoading(true)
-      const data = await apiFetch('/api/users/')
+      const data = await apiFetch('/api/profiles/')
       setUsers(data)
     } catch (error) {
       toast.error(error.message)
@@ -68,14 +68,18 @@ export default function Users() {
   }
 
   useEffect(() => {
-    loadUsers()
+    // Inline fetch prevents React Compiler from falsely detecting synchronous state updates
+    apiFetch('/api/profiles/')
+      .then(data => setUsers(data))
+      .catch(error => toast.error(error.message))
+      .finally(() => setLoading(false))
   }, [])
 
   const handleUpdate = async (e) => {
     e.preventDefault()
     try {
       setSubmitting(true)
-      await apiFetch(`/api/users/${selectedUser.id}`, {
+      await apiFetch(`/api/profiles/${selectedUser.id}`, {
         method: 'PUT',
         body: JSON.stringify(formData)
       })
@@ -93,14 +97,18 @@ export default function Users() {
     e.preventDefault()
     try {
       setSubmitting(true)
-      await apiFetch('/api/users/register', {
+      await apiFetch('/api/profiles/', {
         method: 'POST',
         body: JSON.stringify(addFormData)
       })
       toast.success('Pengguna baru berhasil ditambahkan')
       setAddOpen(false)
       setAddFormData({ email: '', password: '', full_name: '', role: 'viewer' })
-      loadUsers()
+      setLoading(true)
+      apiFetch('/api/profiles/')
+        .then(data => setUsers(data))
+        .catch(error => toast.error(error.message))
+        .finally(() => setLoading(false))
     } catch (error) {
       toast.error(error.message)
     } finally {
@@ -111,7 +119,7 @@ export default function Users() {
   const handleDelete = async () => {
     try {
       setSubmitting(true)
-      await apiFetch(`/api/users/${selectedUser.id}`, {
+      await apiFetch(`/api/profiles/${selectedUser.id}`, {
         method: 'DELETE'
       })
       toast.success('Pengguna berhasil dihapus')
@@ -140,9 +148,9 @@ export default function Users() {
 
   const getRoleBadge = (role) => {
     switch (role) {
-      case 'admin': return <Badge className="bg-red-500 text-white border-none px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg shadow-red-500/20"><ShieldCheck size={10} className="mr-1.5" /> SUPER ADMIN</Badge>
-      case 'staff': return <Badge className="bg-blue-500 text-white border-none px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg shadow-blue-500/20"><ShieldAlert size={10} className="mr-1.5" /> STAFF OPERATOR</Badge>
-      default: return <Badge className="bg-gray-500 text-white border-none px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg shadow-gray-500/20"><ShieldQuestion size={10} className="mr-1.5" /> VIEWER ONLY</Badge>
+      case 'admin': return <Badge className="bg-red-500 text-white border-none px-3 py-1 rounded-full text-[9px] font-semibold uppercase tracking-wider shadow-lg shadow-red-500/20"><ShieldCheck size={10} className="mr-1.5" /> SUPER ADMIN</Badge>
+      case 'staff': return <Badge className="bg-blue-500 text-white border-none px-3 py-1 rounded-full text-[9px] font-semibold uppercase tracking-wider shadow-lg shadow-blue-500/20"><ShieldAlert size={10} className="mr-1.5" /> STAFF OPERATOR</Badge>
+      default: return <Badge className="bg-gray-500 text-white border-none px-3 py-1 rounded-full text-[9px] font-semibold uppercase tracking-wider shadow-lg shadow-gray-500/20"><ShieldQuestion size={10} className="mr-1.5" /> VIEWER ONLY</Badge>
     }
   }
 
@@ -154,13 +162,13 @@ export default function Users() {
             <UsersIcon size={28} strokeWidth={2.5} />
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground">Manajemen Pengguna</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Manajemen Pengguna</h2>
             <p className="text-sm text-muted-foreground">Kelola hak akses, tim admin, dan pantau aktivitas akun.</p>
           </div>
         </div>
 
         {currentUser?.role === 'admin' && (
-          <Button onClick={() => setAddOpen(true)} className="h-12 rounded-xl bg-primary text-primary-foreground font-black shadow-lg shadow-primary/20 transition-all uppercase tracking-widest text-[10px] px-6">
+          <Button onClick={() => setAddOpen(true)} className="h-12 rounded-xl bg-primary text-primary-foreground font-semibold shadow-lg shadow-primary/20 transition-all uppercase tracking-wider text-[10px] px-6">
             <UserPlus size={18} className="mr-2" />
             Tambah Akun
           </Button>
@@ -180,7 +188,7 @@ export default function Users() {
       <div className="grid gap-6">
         <Card className="glass-card border-border overflow-hidden">
           <CardHeader className="pb-6">
-            <CardTitle className="text-xl font-bold text-foreground tracking-tight">Daftar Akun Terdaftar</CardTitle>
+            <CardTitle className="text-lg font-semibold text-foreground tracking-tight">Daftar Akun Terdaftar</CardTitle>
             <CardDescription className="text-muted-foreground font-medium mt-1 text-xs">Informasi lengkap seluruh personel yang memiliki akses ke sistem.</CardDescription>
           </CardHeader>
           <CardContent className="p-0">
@@ -193,10 +201,10 @@ export default function Users() {
                 <table className="w-full text-sm text-left">
                   <thead>
                     <tr className="bg-muted/50 border-y border-border">
-                      <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Identitas Pengguna</th>
-                      <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Level Akses</th>
-                      <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Terakhir Update</th>
-                      <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Aksi</th>
+                      <th className="px-6 py-4 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Identitas Pengguna</th>
+                      <th className="px-6 py-4 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Level Akses</th>
+                      <th className="px-6 py-4 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground">Terakhir Update</th>
+                      <th className="px-6 py-4 font-semibold text-[10px] uppercase tracking-wider text-muted-foreground text-right">Aksi</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5">
@@ -204,13 +212,13 @@ export default function Users() {
                       <tr key={user.id} className="group hover:bg-muted/20 transition-all border-b border-border last:border-0">
                         <td className="px-6 py-5">
                           <div className="flex items-center gap-4">
-                            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary font-bold border border-primary/10">
+                            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-primary font-semibold border border-primary/10">
                               {user.email[0].toUpperCase()}
                             </div>
                             <div>
-                              <div className="font-bold text-foreground tracking-tight flex items-center gap-2">
+                              <div className="font-semibold text-foreground tracking-tight flex items-center gap-2">
                                 {user.full_name || 'Tanpa Nama'}
-                                {user.id === currentUser?.id && <Badge variant="outline" className="text-[8px] h-4 border-primary/20 text-primary font-black uppercase px-1.5">SAYA</Badge>}
+                                {user.id === currentUser?.id && <Badge variant="outline" className="text-[8px] h-4 border-primary/20 text-primary font-semibold uppercase px-1.5">SAYA</Badge>}
                               </div>
                               <div className="text-[11px] text-muted-foreground/60 font-medium">{user.email}</div>
                             </div>
@@ -220,7 +228,7 @@ export default function Users() {
                           {getRoleBadge(user.role)}
                         </td>
                         <td className="px-6 py-5 whitespace-nowrap">
-                          <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/40">
+                          <div className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground/40">
                             {new Date(user.updated_at || user.created_at).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}
                           </div>
                         </td>
@@ -248,22 +256,22 @@ export default function Users() {
 
       {/* Edit Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent className="sm:max-w-[500px] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
           <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
-            <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">
+            <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-3">
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 <Edit size={24} />
               </div>
               Edit Detail Pengguna
             </DialogTitle>
             <DialogDescription className="text-muted-foreground font-medium pt-1">
-              Ubah rincian identitas atau level akses untuk <span className="text-primary font-bold">{selectedUser?.email}</span>.
+              Ubah rincian identitas atau level akses untuk <span className="text-primary font-semibold">{selectedUser?.email}</span>.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleUpdate}>
-            <div className="px-8 py-6 grid gap-6">
+          <form onSubmit={handleUpdate} className="flex-1 flex flex-col overflow-hidden">
+            <div className="px-8 py-6 flex-1 overflow-y-auto custom-scrollbar space-y-6">
               <div className="grid gap-2">
-                <Label htmlFor="fullname" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Nama Lengkap Personel *</Label>
+                <Label htmlFor="fullname" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Nama Lengkap Personel *</Label>
                 <Input
                   id="fullname"
                   placeholder="Masukkan nama lengkap"
@@ -274,13 +282,13 @@ export default function Users() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Level Hak Akses (Role)</Label>
+                <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Level Hak Akses (Role)</Label>
                 <div className="flex flex-col gap-3 mt-1">
                   <Button
                     type="button"
                     variant="ghost"
                     className={cn(
-                      "h-14 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all justify-start px-5",
+                      "h-14 rounded-2xl font-semibold uppercase text-[10px] tracking-wider transition-all justify-start px-5",
                       formData.role === 'admin' ? 'bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-muted/40 text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setFormData({ ...formData, role: 'admin' })}
@@ -292,7 +300,7 @@ export default function Users() {
                     type="button"
                     variant="ghost"
                     className={cn(
-                      "h-14 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all justify-start px-5",
+                      "h-14 rounded-2xl font-semibold uppercase text-[10px] tracking-wider transition-all justify-start px-5",
                       formData.role === 'staff' ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'bg-muted/40 text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setFormData({ ...formData, role: 'staff' })}
@@ -304,7 +312,7 @@ export default function Users() {
                     type="button"
                     variant="ghost"
                     className={cn(
-                      "h-14 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all justify-start px-5",
+                      "h-14 rounded-2xl font-semibold uppercase text-[10px] tracking-wider transition-all justify-start px-5",
                       formData.role === 'viewer' ? 'bg-gray-500 text-white shadow-lg shadow-gray-500/20' : 'bg-muted/40 text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setFormData({ ...formData, role: 'viewer' })}
@@ -314,15 +322,15 @@ export default function Users() {
                   </Button>
                 </div>
                 {selectedUser?.id === currentUser?.id && (
-                  <p className="text-[10px] text-orange-500 mt-2 font-bold italic">
+                  <p className="text-[10px] text-orange-500 mt-2 font-semibold italic">
                     * Hak akses sendiri tidak dapat diubah untuk keamanan sistem.
                   </p>
                 )}
               </div>
             </div>
-            <DialogFooter className="p-8 bg-muted/50 border-t border-border mt-auto">
-              <Button type="button" variant="ghost" className="rounded-xl border border-border text-muted-foreground hover:bg-muted font-black uppercase tracking-widest text-[10px] h-12 px-6" onClick={() => setEditOpen(false)}>Batal</Button>
-              <Button type="submit" className="h-12 px-6 rounded-xl bg-primary text-primary-foreground font-black uppercase tracking-widest shadow-xl transition-all text-[10px]" disabled={submitting}>
+            <DialogFooter className="p-8 bg-muted/50 border-t border-border">
+              <Button type="button" variant="ghost" className="rounded-xl border border-border text-muted-foreground hover:bg-muted font-semibold uppercase tracking-wider text-[10px] h-12 px-6" onClick={() => setEditOpen(false)}>Batal</Button>
+              <Button type="submit" className="h-12 px-6 rounded-xl bg-primary text-primary-foreground font-semibold uppercase tracking-wider shadow-xl transition-all text-[10px]" disabled={submitting}>
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Simpan Perubahan
               </Button>
@@ -333,9 +341,9 @@ export default function Users() {
 
       {/* Add User Dialog */}
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
-        <DialogContent className="sm:max-w-[500px] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
           <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
-            <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">
+            <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-3">
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 <UserPlus size={24} />
               </div>
@@ -345,10 +353,10 @@ export default function Users() {
               Buat akses personel baru. Password harus terdiri dari minimal 6 karakter.
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleAdd}>
-            <div className="px-8 py-6 grid gap-6">
+          <form onSubmit={handleAdd} className="flex-1 flex flex-col overflow-hidden">
+            <div className="px-8 py-6 flex-1 overflow-y-auto custom-scrollbar space-y-6">
               <div className="grid gap-2">
-                <Label htmlFor="add-email" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Alamat Email Resmi *</Label>
+                <Label htmlFor="add-email" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Alamat Email Resmi *</Label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-4.5 h-4 w-4 text-muted-foreground/40" />
                   <Input
@@ -363,7 +371,7 @@ export default function Users() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="add-password" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Kata Sandi (Password) *</Label>
+                <Label htmlFor="add-password" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Kata Sandi (Password) *</Label>
                 <div className="relative">
                   <Key className="absolute left-4 top-4.5 h-4 w-4 text-muted-foreground/40" />
                   <Input
@@ -379,7 +387,7 @@ export default function Users() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="add-fullname" className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Nama Lengkap Personel *</Label>
+                <Label htmlFor="add-fullname" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Nama Lengkap Personel *</Label>
                 <div className="relative">
                   <User className="absolute left-4 top-4.5 h-4 w-4 text-muted-foreground/40" />
                   <Input
@@ -393,13 +401,13 @@ export default function Users() {
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label className="text-[10px] uppercase font-black tracking-[0.2em] text-muted-foreground/60">Level Hak Akses (Role)</Label>
+                <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Level Hak Akses (Role)</Label>
                 <div className="grid grid-cols-3 gap-3 mt-1">
-                  <Button
+                   <Button
                     type="button"
                     variant="ghost"
                     className={cn(
-                      "h-12 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all",
+                      "h-12 rounded-xl font-semibold uppercase text-[10px] tracking-wider transition-all",
                       addFormData.role === 'admin' ? 'bg-red-500 text-white shadow-lg shadow-red-500/20' : 'bg-muted/40 text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setAddFormData({ ...addFormData, role: 'admin' })}
@@ -410,7 +418,7 @@ export default function Users() {
                     type="button"
                     variant="ghost"
                     className={cn(
-                      "h-12 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all",
+                      "h-12 rounded-xl font-semibold uppercase text-[10px] tracking-wider transition-all",
                       addFormData.role === 'staff' ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/20' : 'bg-muted/40 text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setAddFormData({ ...addFormData, role: 'staff' })}
@@ -421,7 +429,7 @@ export default function Users() {
                     type="button"
                     variant="ghost"
                     className={cn(
-                      "h-12 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all",
+                      "h-12 rounded-xl font-semibold uppercase text-[10px] tracking-wider transition-all",
                       addFormData.role === 'viewer' ? 'bg-gray-500 text-white shadow-lg shadow-gray-500/20' : 'bg-muted/40 text-muted-foreground border border-border hover:bg-muted/80'
                     )}
                     onClick={() => setAddFormData({ ...addFormData, role: 'viewer' })}
@@ -431,9 +439,9 @@ export default function Users() {
                 </div>
               </div>
             </div>
-            <DialogFooter className="p-8 bg-muted/50 border-t border-border mt-auto">
-              <Button type="button" variant="ghost" className="rounded-xl border border-border text-muted-foreground hover:bg-muted font-black uppercase tracking-widest text-[10px] h-12 px-6" onClick={() => setAddOpen(false)}>Batal</Button>
-              <Button type="submit" className="h-12 px-6 rounded-xl bg-primary text-primary-foreground font-black uppercase tracking-widest shadow-xl transition-all text-[10px]" disabled={submitting}>
+            <DialogFooter className="p-8 bg-muted/50 border-t border-border">
+              <Button type="button" variant="ghost" className="rounded-xl border border-border text-muted-foreground hover:bg-muted font-semibold uppercase tracking-wider text-[10px] h-12 px-6" onClick={() => setAddOpen(false)}>Batal</Button>
+              <Button type="submit" className="h-12 px-6 rounded-xl bg-primary text-primary-foreground font-semibold uppercase tracking-wider shadow-xl transition-all text-[10px]" disabled={submitting}>
                 {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <UserPlus className="mr-2 h-4 w-4" />}
                 Daftarkan Sekarang
               </Button>
@@ -444,26 +452,26 @@ export default function Users() {
 
       {/* Delete Confirm Dialog */}
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent className="sm:max-w-[450px] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
+        <DialogContent className="sm:max-w-[450px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
           <DialogHeader className="p-8 pb-6 bg-red-500/[0.02] border-b border-border/50">
-            <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3 text-red-500">
+            <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-3 text-red-500">
               <div className="h-10 w-10 rounded-xl bg-red-500/10 flex items-center justify-center">
                 <Trash2 size={24} />
               </div>
               Hapus Akses Personel?
             </DialogTitle>
             <DialogDescription className="text-muted-foreground font-medium pt-1">
-              Apakah Anda yakin ingin menghapus akun <span className="text-red-500 font-bold">{selectedUser?.email}</span> secara permanen?
+              Apakah Anda yakin ingin menghapus akun <span className="text-red-500 font-semibold">{selectedUser?.email}</span> secara permanen?
             </DialogDescription>
           </DialogHeader>
-          <div className="px-8 py-6">
-            <p className="text-[11px] text-muted-foreground font-bold uppercase tracking-wider leading-relaxed bg-muted/30 p-4 rounded-2xl border border-border">
+          <div className="px-8 py-6 flex-1 overflow-y-auto custom-scrollbar">
+            <p className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wider leading-relaxed bg-muted/30 p-4 rounded-2xl border border-border">
               Tindakan ini tidak dapat dibatalkan. Pengguna yang dihapus akan segera kehilangan seluruh akses ke dasbor dan sistem admin.
             </p>
           </div>
           <div className="flex gap-4 p-8 bg-muted/50 border-t border-border">
-            <Button variant="ghost" className="flex-1 h-12 rounded-xl border border-border text-muted-foreground hover:bg-muted font-black uppercase tracking-widest text-[10px]" onClick={() => setDeleteOpen(false)} disabled={submitting}>Batal</Button>
-            <Button className="flex-1 h-12 rounded-xl bg-red-500 text-white hover:bg-red-600 font-black uppercase tracking-widest text-[10px]" onClick={handleDelete} disabled={submitting}>
+            <Button variant="ghost" className="flex-1 h-12 rounded-xl border border-border text-muted-foreground hover:bg-muted font-semibold uppercase tracking-wider text-[10px]" onClick={() => setDeleteOpen(false)} disabled={submitting}>Batal</Button>
+            <Button className="flex-1 h-12 rounded-xl bg-red-500 text-white hover:bg-red-600 font-semibold uppercase tracking-wider text-[10px]" onClick={handleDelete} disabled={submitting}>
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Ya, Hapus Akun"}
             </Button>
           </div>

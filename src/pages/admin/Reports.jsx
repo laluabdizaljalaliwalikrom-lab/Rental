@@ -104,7 +104,7 @@ export default function Reports() {
             <BarChart3 size={28} strokeWidth={2.5} />
           </div>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-foreground">Laporan Keuangan</h2>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Laporan Keuangan</h2>
             <p className="text-sm text-muted-foreground">Analisis mendalam arus kas dan performa bisnis Anda.</p>
           </div>
         </div>
@@ -114,7 +114,7 @@ export default function Reports() {
               <button
                 key={p}
                 className={cn(
-                  "capitalize text-[10px] h-8 px-4 rounded-lg font-black uppercase tracking-widest transition-all",
+                  "capitalize text-[10px] h-8 px-4 rounded-lg font-semibold uppercase tracking-wider transition-all",
                   period === p ? 'bg-primary text-primary-foreground shadow-lg' : 'text-muted-foreground hover:text-foreground'
                 )}
                 onClick={() => {
@@ -126,7 +126,7 @@ export default function Reports() {
               </button>
             ))}
           </div>
-          <Button variant="ghost" className="h-10 rounded-xl bg-muted/50 border border-border text-foreground hover:bg-muted font-bold px-4 transition-all">
+          <Button variant="ghost" className="h-10 rounded-xl bg-muted/50 border border-border text-foreground hover:bg-muted font-semibold px-4 transition-all">
             <Download size={16} className="mr-2" />
             Export
           </Button>
@@ -140,12 +140,12 @@ export default function Reports() {
             <TrendingUp size={80} strokeWidth={1.5} className="text-foreground" />
           </div>
           <CardHeader className="pb-2">
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Total Pendapatan</p>
-            <CardTitle className="text-2xl font-bold text-green-500 tracking-tighter">Rp {data?.summary.total_income.toLocaleString()}</CardTitle>
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Total Pendapatan</p>
+            <CardTitle className="text-xl font-bold text-green-500 tracking-tight">Rp {data?.summary.total_income.toLocaleString()}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <Badge className="bg-green-500/10 text-green-400 border-none px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest">
+              <Badge className="bg-green-500/10 text-green-400 border-none px-2 py-0.5 rounded-full text-[8px] font-semibold uppercase tracking-wider">
                 <ArrowUpRight size={10} className="mr-1" /> Arus Masuk
               </Badge>
             </div>
@@ -157,12 +157,12 @@ export default function Reports() {
             <TrendingDown size={80} strokeWidth={1.5} className="text-foreground" />
           </div>
           <CardHeader className="pb-2">
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Total Pengeluaran</p>
-            <CardTitle className="text-2xl font-bold text-red-500 tracking-tighter">Rp {data?.summary.total_expense.toLocaleString()}</CardTitle>
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Total Pengeluaran</p>
+            <CardTitle className="text-xl font-bold text-red-500 tracking-tight">Rp {data?.summary.total_expense.toLocaleString()}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <Badge className="bg-red-500/10 text-red-400 border-none px-2 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest">
+              <Badge className="bg-red-500/10 text-red-400 border-none px-2 py-0.5 rounded-full text-[8px] font-semibold uppercase tracking-wider">
                 <ArrowDownRight size={10} className="mr-1" /> Arus Keluar
               </Badge>
             </div>
@@ -174,9 +174,9 @@ export default function Reports() {
             <TrendingUp size={80} strokeWidth={1.5} className="text-foreground" />
           </div>
           <CardHeader className="pb-2">
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Laba Bersih</p>
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Laba Bersih</p>
             <CardTitle className={cn(
-              "text-2xl font-bold tracking-tighter",
+              "text-xl font-bold tracking-tight",
               data?.summary.net_profit >= 0 ? 'text-primary' : 'text-red-500'
             )}>
               Rp {data?.summary.net_profit.toLocaleString()}
@@ -194,8 +194,8 @@ export default function Reports() {
             <DollarSign size={80} strokeWidth={1.5} className="text-foreground" />
           </div>
           <CardHeader className="pb-2">
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Saldo Kas Akhir</p>
-            <CardTitle className="text-2xl font-bold text-purple-500 tracking-tighter">Rp {data?.summary.cash_on_hand.toLocaleString()}</CardTitle>
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Saldo Kas Akhir</p>
+            <CardTitle className="text-xl font-bold text-purple-500 tracking-tight">Rp {data?.summary.cash_on_hand.toLocaleString()}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50">
@@ -219,7 +219,7 @@ export default function Reports() {
           <CardContent className="p-6">
             <div className="min-h-[350px] w-full mt-4 min-w-0">
               {data?.trends.length > 0 ? (
-                <ResponsiveContainer width="99%" height="100%">
+                <ResponsiveContainer width="99%" height={100} minWidth={0}>
                   <AreaChart data={data.trends} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">
@@ -278,28 +278,28 @@ export default function Reports() {
           <CardContent className="p-6 flex flex-col items-center">
             <div className="min-h-[280px] w-full min-w-0">
                {data?.summary.total_income > 0 || data?.summary.total_expense > 0 ? (
-                 <ResponsiveContainer width="99%" height="100%">
-                   <PieChart>
-                     <Pie
-                       data={pieData}
-                       cx="50%"
-                       cy="50%"
-                       innerRadius={70}
-                       outerRadius={90}
-                       paddingAngle={8}
-                       dataKey="value"
-                       stroke="none"
-                     >
-                       {pieData.map((entry, index) => (
-                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                       ))}
-                     </Pie>
-                     <Tooltip 
-                       contentStyle={{ backgroundColor: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: '16px', backdropFilter: 'blur(10px)' }}
-                       itemStyle={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}
-                     />
-                   </PieChart>
-                 </ResponsiveContainer>
+                  <ResponsiveContainer width="99%" height={280} minWidth={0}>
+                    <PieChart>
+                      <Pie
+                        data={pieData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={70}
+                        outerRadius={90}
+                        paddingAngle={8}
+                        dataKey="value"
+                        stroke="none"
+                      >
+                        {pieData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: 'hsl(var(--popover))', border: '1px solid hsl(var(--border))', borderRadius: '16px', backdropFilter: 'blur(10px)' }}
+                        itemStyle={{ fontSize: '11px', fontWeight: 800, textTransform: 'uppercase' }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
                ) : (
                   <div className="flex h-full items-center justify-center border-2 border-dashed border-border rounded-2xl bg-muted/20 w-full">
                     <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest text-center px-6">Belum ada data distribusi</p>
