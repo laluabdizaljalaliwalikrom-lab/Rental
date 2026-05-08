@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Bike, Menu, ArrowUpRight, Globe, Camera, Loader2,
-  Activity, CheckCircle2, Navigation, Star, Search
+  Activity, CheckCircle2, Navigation, Star, Search, Plus
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/Badge'
