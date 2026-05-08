@@ -91,12 +91,17 @@ export default function Rentals() {
         identity_image_url = uploadRes.url
       }
 
+      const total_price = rentalData.rental_type === 'Short' 
+        ? (selectedBike.price_per_hour * rentalData.duration)
+        : (selectedBike.price_per_day * rentalData.duration)
+
       await apiFetch('/api/rentals/', {
         method: 'POST',
         body: JSON.stringify({
           ...rentalData,
           bike_id: selectedBike.id,
-          identity_image_url
+          identity_image_url,
+          total_price
         })
       })
 

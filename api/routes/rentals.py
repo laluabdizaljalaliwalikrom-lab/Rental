@@ -19,7 +19,7 @@ class RentalCreate(BaseModel):
     identity_image_url: Optional[str] = None
     rental_type: str
     duration: int
-    total_price: float
+    total_price: Optional[float] = None
 
 class Rental(BaseModel):
     id: str
@@ -90,11 +90,23 @@ async def create_rental(
             except:
                 pass
 
-        bike_res = db.table("fleet").select("status").eq("id", rental.bike_id).execute()
+        bike_res = db.table("fleet").select("status, price_per_hour, price_per_day, name").eq("id", rental.bike_id).execute()
         if not bike_res.data or bike_res.data[0]['status'] != 'Available':
             raise HTTPException(status_code=400, detail="Sepeda tidak tersedia")
+        
+        bike_info = bike_res.data[0]
+        
+        # Hitung total_price jika tidak dikirim dari frontend
+        if rental.total_price is None:
+            if rental.rental_type == 'Short':
+                total_price = bike_info['price_per_hour'] * rental.duration
+            else:
+                total_price = bike_info['price_per_day'] * rental.duration
+        else:
+            total_price = rental.total_price
 
         rental_data = rental.model_dump()
+        rental_data['total_price'] = total_price
         rental_data['status'] = 'Active'
         rental_data['start_time'] = datetime.now(timezone.utc).isoformat()
         rental_data['processed_by_name'] = current_user['full_name'] if current_user else 'Online Booking'
@@ -106,10 +118,7 @@ async def create_rental(
         rental_record = res.data[0]
         
         # Ambil detail armada untuk deskripsi kas
-        bike_name = "Sepeda"
-        bike_info = db.table("fleet").select("name").eq("id", rental.bike_id).execute()
-        if bike_info.data:
-            bike_name = bike_info.data[0]['name']
+        bike_name = bike_info.get('name', 'Sepeda')
 
         db.table("fleet").update({"status": "Rented"}).eq("id", rental.bike_id).execute()
 
