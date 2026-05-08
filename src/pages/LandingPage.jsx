@@ -65,6 +65,10 @@ const defaultTranslations = {
       btn: 'KONFIRMASI PESANAN',
       processing: 'Memproses...',
       gateway: 'Menghubungkan ke gerai aman'
+    },
+    auth: {
+      login: 'MASUK',
+      portal: 'PANEL ADMIN'
     }
   },
   en: {
@@ -114,6 +118,10 @@ const defaultTranslations = {
       btn: 'SECURE BOOKING',
       processing: 'Finalizing...',
       gateway: 'Connecting to secure gateway'
+    },
+    auth: {
+      login: 'LOGIN',
+      portal: 'ADMIN PORTAL'
     }
   }
 }
@@ -204,8 +212,8 @@ export default function LandingPage() {
   }, [])
 
   const filteredBikes = bikes.filter(b =>
-    b.name.toLowerCase().includes(search.toLowerCase()) ||
-    b.brand.toLowerCase().includes(search.toLowerCase())
+    (b.name?.toLowerCase() || '').includes(search.toLowerCase()) ||
+    (b.brand?.toLowerCase() || '').includes(search.toLowerCase())
   )
 
   const handleOpenBooking = (bike) => {
@@ -286,64 +294,85 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#f8f9fa] text-[#1a1a1a] selection:bg-blue-500 selection:text-white font-sans overflow-x-hidden antialiased">
       {/* Navbar Minimalist */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-700 ${scrolled ? 'py-4 bg-white/70 backdrop-blur-2xl border-b border-black/5' : 'py-8 bg-transparent'
-        }`}>
+      {/* Navbar Minimalist */}
+      <nav className={`fixed top-0 w-full z-50 transition-all duration-1000 ${
+        scrolled 
+          ? 'py-4 bg-white/80 backdrop-blur-xl border-b border-black/[0.03] shadow-sm' 
+          : 'py-8 bg-transparent'
+      }`}>
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-black flex items-center justify-center rounded-full">
-              <Bike size={20} className="text-white" />
+          <div className="flex items-center gap-4 group cursor-pointer">
+            <div className="w-11 h-11 bg-black flex items-center justify-center rounded-2xl rotate-3 group-hover:rotate-0 transition-all duration-500 shadow-xl shadow-black/10">
+              <Bike size={22} className="text-white" />
             </div>
-            <span className="font-bold text-lg tracking-tight uppercase">Zenith<span className="text-blue-600">Bike</span></span>
+            <div className="flex flex-col -space-y-1">
+              <span className="font-black text-xl tracking-tighter uppercase leading-none">Zenith</span>
+              <span className="text-[10px] font-bold text-blue-600 tracking-[0.3em] uppercase opacity-70">Mobility</span>
+            </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-10 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#666]">
-            <a href="#catalog" className="hover:text-black transition-colors">{t.nav.fleet}</a>
-            <a href="#stats" className="hover:text-black transition-colors">{t.nav.tech}</a>
-            <Link to="/login" className="hover:text-black transition-colors">{t.nav.system}</Link>
+          <div className="hidden md:flex items-center gap-12 text-[10px] font-bold uppercase tracking-[0.25em] text-black/40">
+            <a href="#catalog" className="hover:text-black transition-all hover:tracking-[0.35em] duration-500">{t.nav.fleet}</a>
+            <a href="#stats" className="hover:text-black transition-all hover:tracking-[0.35em] duration-500">{t.nav.tech}</a>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-1 p-1 bg-black/5 rounded-full border border-black/5">
+          <div className="flex items-center gap-6">
+            <div className="hidden sm:flex items-center p-1 bg-black/[0.03] rounded-full border border-black/[0.05]">
               <button
                 onClick={() => setLang('id')}
-                className={`px-3 py-1 text-[9px] font-black rounded-full transition-all ${lang === 'id' ? 'bg-white text-black shadow-sm' : 'text-[#999] hover:text-black'}`}
+                className={`px-4 py-1.5 text-[9px] font-bold rounded-full transition-all ${lang === 'id' ? 'bg-white text-black shadow-md' : 'text-black/30 hover:text-black'}`}
               >
                 ID
               </button>
               <button
                 onClick={() => setLang('en')}
-                className={`px-3 py-1 text-[9px] font-black rounded-full transition-all ${lang === 'en' ? 'bg-white text-black shadow-sm' : 'text-[#999] hover:text-black'}`}
+                className={`px-4 py-1.5 text-[9px] font-bold rounded-full transition-all ${lang === 'en' ? 'bg-white text-black shadow-md' : 'text-black/30 hover:text-black'}`}
               >
                 EN
               </button>
             </div>
 
+            <Link to="/login">
+              <Button className="hidden sm:flex rounded-2xl bg-black hover:bg-blue-600 px-8 py-6 text-[10px] font-bold tracking-[0.2em] text-white transition-all shadow-xl shadow-black/5">
+                {t.auth.login}
+              </Button>
+            </Link>
+
             <button
-              className="md:hidden p-2 text-black"
+              className="md:hidden p-3 bg-black/5 rounded-xl text-black hover:bg-black/10 transition-all"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              <Menu size={24} strokeWidth={1.5} />
+              <Menu size={20} strokeWidth={2.5} />
             </button>
-            <Button className="hidden sm:flex rounded-full bg-black hover:bg-blue-600 px-8 py-6 text-[11px] font-bold tracking-[0.1em] text-white transition-all text-white">
-              {t.nav.start}
-            </Button>
           </div>
         </div>
 
-        <div className={`fixed inset-0 bg-white z-50 flex flex-col items-center justify-center gap-8 transition-all duration-500 lg:hidden ${isMobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'
-          }`}>
-          <div className="flex flex-col items-center gap-6 text-2xl font-bold tracking-tighter text-slate-900 uppercase">
-            <a href="#catalog" onClick={() => setIsMobileMenuOpen(false)}>{t.nav.fleet}</a>
-            <a href="#stats" onClick={() => setIsMobileMenuOpen(false)}>{t.nav.tech}</a>
-            <Link to="/login" onClick={() => setIsMobileMenuOpen(false)}>{t.nav.system}</Link>
+        {/* Mobile Menu Overlay */}
+        <div className={`fixed inset-0 bg-white/98 backdrop-blur-2xl z-50 flex flex-col items-center justify-center gap-12 transition-all duration-700 ease-[cubic-bezier(0.2,0,0,1)] lg:hidden ${
+          isMobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0 pointer-events-none'
+        }`}>
+          <button 
+            className="absolute top-8 right-8 p-4 bg-black/5 rounded-full"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <Plus size={24} className="rotate-45" />
+          </button>
+          
+          <div className="flex flex-col items-center gap-8 text-3xl font-black tracking-tighter text-black uppercase">
+            <a href="#catalog" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-blue-600 transition-colors">{t.nav.fleet}</a>
+            <a href="#stats" onClick={() => setIsMobileMenuOpen(false)} className="hover:text-blue-600 transition-colors">{t.nav.tech}</a>
           </div>
-          <div className="flex gap-4">
-            <button onClick={() => setLang('id')} className={`text-xl font-bold ${lang === 'id' ? 'text-blue-600' : 'text-slate-300'}`}>ID</button>
-            <button onClick={() => setLang('en')} className={`text-xl font-bold ${lang === 'en' ? 'text-blue-600' : 'text-slate-300'}`}>EN</button>
+          
+          <div className="flex gap-8">
+            <button onClick={() => setLang('id')} className={`text-sm font-black tracking-widest ${lang === 'id' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-black/20'}`}>INDONESIA</button>
+            <button onClick={() => setLang('en')} className={`text-sm font-black tracking-widest ${lang === 'en' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-black/20'}`}>ENGLISH</button>
           </div>
-          <Button className="rounded-full bg-blue-600 px-12 py-8 text-xl font-bold shadow-2xl shadow-blue-200 text-white">
-            {t.nav.start}
-          </Button>
+
+          <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="w-full max-w-[280px]">
+            <Button className="w-full rounded-2xl bg-black px-12 py-8 text-xs font-bold tracking-[0.2em] shadow-2xl shadow-black/10 text-white">
+              {t.auth.login}
+            </Button>
+          </Link>
         </div>
       </nav>
 
@@ -354,13 +383,13 @@ export default function LandingPage() {
             <div className="space-y-4">
               <span className="inline-block text-[10px] font-black tracking-[0.4em] text-blue-600 uppercase">{t.hero.sub}</span>
               <h1 className="text-6xl md:text-8xl xl:text-9xl font-medium tracking-tighter leading-[0.9] text-black">
-                {t.hero.title.includes(t.hero.italic) ? (
+                {t.hero.title && t.hero.italic && t.hero.title.includes(t.hero.italic) ? (
                   <>
                     {t.hero.title.split(t.hero.italic)[0]}
                     <span className="italic font-serif opacity-30">{t.hero.italic}</span>
                     {t.hero.title.split(t.hero.italic)[1]}
                   </>
-                ) : t.hero.title}
+                ) : (t.hero.title || 'Zenith Mobility')}
               </h1>
             </div>
             <p className="text-[#666] text-lg md:text-xl max-w-lg leading-relaxed font-light">
