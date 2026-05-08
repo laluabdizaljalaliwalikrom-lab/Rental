@@ -326,9 +326,14 @@ export default function Rentals() {
       {/* Rent Dialog */}
       <Dialog open={rentOpen} onOpenChange={setRentOpen}>
         <DialogContent className="sm:max-w-[550px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
-          <DialogHeader className="p-8 pb-4 flex-shrink-0">
-            <DialogTitle className="text-3xl font-black tracking-tighter">Konfigurasi Rental</DialogTitle>
-            <DialogDescription className="text-muted-foreground font-medium">
+          <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
+            <DialogTitle className="text-3xl font-black tracking-tighter flex items-center gap-3">
+              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                <CreditCard size={24} />
+              </div>
+              Konfigurasi Rental
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground font-medium pt-2">
               Selesaikan rincian data penyewa untuk unit <span className="text-primary font-bold">{selectedBike?.name}</span>.
             </DialogDescription>
           </DialogHeader>
@@ -341,7 +346,7 @@ export default function Rentals() {
                     id="customer" 
                     placeholder="Masukkan nama sesuai identitas resmi" 
                     required 
-                    className="h-14 bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50"
+                    className="h-14 bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                     value={rentalData.customer_name}
                     onChange={(e) => setRentalData({...rentalData, customer_name: e.target.value})}
                   />
@@ -354,7 +359,7 @@ export default function Rentals() {
                       id="phone" 
                       placeholder="0812xxxx" 
                       required 
-                      className="h-14 bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50"
+                      className="h-14 bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                       value={rentalData.customer_phone}
                       onChange={(e) => setRentalData({...rentalData, customer_phone: e.target.value})}
                     />
@@ -385,7 +390,7 @@ export default function Rentals() {
                     id="idNumber" 
                     placeholder={`Masukkan nomor seri ${rentalData.identity_type}`}
                     required 
-                    className="h-14 bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50"
+                    className="h-14 bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                     value={rentalData.identity_number}
                     onChange={(e) => setRentalData({...rentalData, identity_number: e.target.value})}
                   />
@@ -397,7 +402,7 @@ export default function Rentals() {
                     id="address" 
                     placeholder="Alamat lengkap selama masa penyewaan" 
                     required 
-                    className="h-14 bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50"
+                    className="h-14 bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                     value={rentalData.customer_address}
                     onChange={(e) => setRentalData({...rentalData, customer_address: e.target.value})}
                   />
@@ -437,7 +442,7 @@ export default function Rentals() {
                     id="duration" 
                     type="number"
                     min="1"
-                    className="h-14 bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50"
+                    className="h-14 bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                     value={rentalData.duration}
                     onChange={(e) => setRentalData({...rentalData, duration: parseInt(e.target.value) || 1})}
                   />
@@ -459,15 +464,18 @@ export default function Rentals() {
                 </div>
               </div>
             </div>
-            <div className="p-8 bg-muted/50 border-t border-border mt-auto">
+            <div className="p-8 bg-primary/[0.03] border-t border-border mt-auto">
               <div className="flex items-center justify-between mb-6">
-                <div className="text-muted-foreground/60 text-[10px] font-black uppercase tracking-widest italic">Estimasi Total Pembayaran</div>
+                <div>
+                   <p className="text-muted-foreground text-[10px] font-black uppercase tracking-widest opacity-60">Estimasi Pembayaran</p>
+                   <p className="text-xs font-bold text-primary italic">Sudah termasuk pajak & layanan</p>
+                </div>
                 <div className="text-4xl font-black text-foreground tracking-tighter">
                   Rp {(rentalData.rental_type === 'Short' ? (selectedBike?.price_per_hour * rentalData.duration) : (selectedBike?.price_per_day * rentalData.duration))?.toLocaleString()}
                 </div>
               </div>
-              <Button type="submit" className="w-full h-16 rounded-2xl bg-primary text-primary-foreground font-black uppercase tracking-widest shadow-2xl hover:opacity-90 transition-all disabled:opacity-50" disabled={submitting}>
-                {submitting ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Proses Rental"}
+              <Button type="submit" className="w-full h-16 rounded-2xl bg-primary text-primary-foreground font-black uppercase tracking-widest shadow-2xl hover:opacity-90 transition-all disabled:opacity-50 text-xs" disabled={submitting}>
+                {submitting ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Konfirmasi & Proses Rental"}
               </Button>
             </div>
           </form>

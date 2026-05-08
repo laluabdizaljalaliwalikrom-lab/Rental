@@ -51,7 +51,6 @@ export default function Fleet() {
   }
 
   useEffect(() => {
-    // Inline fetch for initial load prevents React Compiler from falsely detecting synchronous state updates
     apiFetch('/api/fleet/')
       .then(data => setBikes(data))
       .catch(error => toast.error(error.message))
@@ -149,24 +148,29 @@ export default function Fleet() {
         
         <Dialog open={open} onOpenChange={(val) => { setOpen(val); if(!val) resetForm(); }}>
           <DialogTrigger asChild>
-            <Button className="h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg shadow-blue-600/20 transition-all uppercase tracking-widest text-[10px] px-6">
+            <Button className="h-12 rounded-xl bg-primary text-primary-foreground font-black shadow-lg shadow-primary/20 transition-all uppercase tracking-widest text-[10px] px-6">
               <Plus size={18} className="mr-2" />
               Tambah Sepeda
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] glass border-border text-foreground p-0 overflow-hidden">
-            <DialogHeader className="p-6 pb-0">
-              <DialogTitle className="text-2xl font-bold">Tambah Sepeda Baru</DialogTitle>
-              <DialogDescription className="text-muted-foreground font-medium">Masukkan detail armada sepeda baru di bawah ini.</DialogDescription>
+          <DialogContent className="sm:max-w-[500px] glass border-border text-foreground p-0 overflow-hidden">
+            <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
+              <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">
+                <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                  <Plus size={24} />
+                </div>
+                Tambah Sepeda Baru
+              </DialogTitle>
+              <DialogDescription className="text-muted-foreground font-medium pt-1">Masukkan detail armada sepeda baru di bawah ini.</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleAddBike}>
-              <div className="px-6 py-4">
+              <div className="px-8 py-6">
                 <BikeForm formData={formData} setFormData={setFormData} />
               </div>
-              <DialogFooter className="p-6 pt-2 bg-muted/50 border-t border-border">
-                <Button type="submit" className="w-full h-12 rounded-xl bg-primary text-primary-foreground hover:opacity-90 font-black uppercase tracking-widest transition-all shadow-xl" disabled={submitting}>
+              <DialogFooter className="p-8 bg-muted/50 border-t border-border">
+                <Button type="submit" className="w-full h-14 rounded-2xl bg-primary text-primary-foreground hover:opacity-90 font-black uppercase tracking-widest transition-all shadow-xl text-xs" disabled={submitting}>
                   {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Simpan Armada
+                  Simpan Armada Baru
                 </Button>
               </DialogFooter>
             </form>
@@ -256,19 +260,24 @@ export default function Fleet() {
 
       {/* Edit Dialog */}
       <Dialog open={editOpen} onOpenChange={(val) => { setEditOpen(val); if(!val) resetForm(); }}>
-        <DialogContent className="sm:max-w-[425px] glass border-border text-foreground p-0 overflow-hidden">
-          <DialogHeader className="p-6 pb-0">
-            <DialogTitle className="text-2xl font-bold">Edit Detail Sepeda</DialogTitle>
-            <DialogDescription className="text-muted-foreground font-medium">Perbarui informasi armada sepeda <span className="text-primary font-bold">{selectedBike?.name}</span>.</DialogDescription>
+        <DialogContent className="sm:max-w-[500px] glass border-border text-foreground p-0 overflow-hidden">
+          <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
+            <DialogTitle className="text-2xl font-black tracking-tight flex items-center gap-3">
+              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                <Bike size={24} />
+              </div>
+              Edit Detail Sepeda
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground font-medium pt-1">Perbarui informasi armada sepeda <span className="text-primary font-bold">{selectedBike?.name}</span>.</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleUpdateBike}>
-            <div className="px-6 py-4">
+            <div className="px-8 py-6">
               <BikeForm formData={formData} setFormData={setFormData} />
             </div>
-            <DialogFooter className="p-6 pt-2 bg-muted/50 border-t border-border">
-              <Button type="submit" className="w-full h-12 rounded-xl bg-primary text-primary-foreground hover:opacity-90 font-black uppercase tracking-widest transition-all shadow-xl" disabled={submitting}>
+            <DialogFooter className="p-8 bg-muted/50 border-t border-border">
+              <Button type="submit" className="w-full h-14 rounded-2xl bg-primary text-primary-foreground hover:opacity-90 font-black uppercase tracking-widest transition-all shadow-xl text-xs" disabled={submitting}>
                 {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Simpan Perubahan
+                Simpan Perubahan Armada
               </Button>
             </DialogFooter>
           </form>
@@ -287,7 +296,7 @@ function BikeForm({ formData, setFormData }) {
           id="name" 
           placeholder="Contoh: Honda Vario 160" 
           required 
-          className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-11 rounded-xl focus:ring-primary/50"
+          className="bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 h-12 rounded-xl focus:ring-primary/50 transition-all"
           value={formData.name} 
           onChange={(e) => setFormData({...formData, name: e.target.value})} 
         />
@@ -298,7 +307,7 @@ function BikeForm({ formData, setFormData }) {
           <Input 
             id="brand" 
             placeholder="Honda" 
-            className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-11 rounded-xl focus:ring-primary/50"
+            className="bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 h-12 rounded-xl focus:ring-primary/50 transition-all"
             value={formData.brand} 
             onChange={(e) => setFormData({...formData, brand: e.target.value})} 
           />
@@ -308,7 +317,7 @@ function BikeForm({ formData, setFormData }) {
           <Input 
             id="type" 
             placeholder="Matic" 
-            className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-11 rounded-xl focus:ring-primary/50"
+            className="bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 h-12 rounded-xl focus:ring-primary/50 transition-all"
             value={formData.type} 
             onChange={(e) => setFormData({...formData, type: e.target.value})} 
           />
@@ -321,7 +330,7 @@ function BikeForm({ formData, setFormData }) {
             id="price_h" 
             type="number" 
             required 
-            className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-11 rounded-xl focus:ring-primary/50"
+            className="bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 h-12 rounded-xl focus:ring-primary/50 transition-all"
             value={formData.price_per_hour} 
             onChange={(e) => setFormData({...formData, price_per_hour: parseInt(e.target.value) || 0})} 
           />
@@ -332,7 +341,7 @@ function BikeForm({ formData, setFormData }) {
             id="price_d" 
             type="number" 
             required 
-            className="bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-11 rounded-xl focus:ring-primary/50"
+            className="bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 h-12 rounded-xl focus:ring-primary/50 transition-all"
             value={formData.price_per_day} 
             onChange={(e) => setFormData({...formData, price_per_day: parseInt(e.target.value) || 0})} 
           />
@@ -341,11 +350,11 @@ function BikeForm({ formData, setFormData }) {
       <div className="grid gap-2">
         <Label htmlFor="image" className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60">URL Gambar (Opsional)</Label>
         <div className="relative">
-          <ImageIcon size={14} className="absolute left-3.5 top-3.5 text-muted-foreground/40" />
+          <ImageIcon size={14} className="absolute left-4 top-4 text-muted-foreground/40" />
           <Input 
             id="image" 
             placeholder="https://..." 
-            className="pl-11 bg-muted border border-border text-foreground placeholder:text-muted-foreground/30 h-11 rounded-xl focus:ring-primary/50"
+            className="pl-12 bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 h-12 rounded-xl focus:ring-primary/50 transition-all"
             value={formData.image_url} 
             onChange={(e) => setFormData({...formData, image_url: e.target.value})} 
           />

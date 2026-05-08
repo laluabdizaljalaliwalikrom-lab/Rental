@@ -42,8 +42,8 @@ const NavLinks = ({ items, activePath, onItemClick = () => {} }) => (
           className={cn(
             "group flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-300 relative overflow-hidden",
             isActive 
-              ? "bg-primary/10 text-primary shadow-[0_0_20px_rgba(var(--primary),0.05)] border border-primary/10" 
-              : "text-muted-foreground hover:text-foreground hover:bg-accent"
+              ? "bg-primary text-primary-foreground shadow-[0_10px_20px_rgba(var(--primary),0.15)]" 
+              : "text-muted-foreground hover:text-foreground hover:bg-muted"
           )}
         >
           {isActive && (
@@ -51,9 +51,9 @@ const NavLinks = ({ items, activePath, onItemClick = () => {} }) => (
           )}
           <Icon className={cn(
             "h-4 w-4 transition-transform duration-300 group-hover:scale-110",
-            isActive ? "text-primary" : "text-muted-foreground"
+            isActive ? "text-primary-foreground" : "text-muted-foreground"
           )} />
-          <span className="flex-1">{item.name}</span>
+          <span className="flex-1 font-semibold">{item.name}</span>
           {isActive && <ChevronRight className="h-3 w-3 opacity-50" />}
         </Link>
       )
@@ -96,14 +96,14 @@ export default function AdminLayout() {
 
       {/* Desktop Sidebar */}
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 flex-col glass border-r-0 sm:flex m-4 rounded-3xl overflow-hidden shadow-2xl">
-        <div className="flex h-20 items-center px-6 border-b border-border/50">
+        <div className="flex h-20 items-center px-6 border-b border-border/10">
           <Link to="/" className="flex items-center gap-3 group">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg transition-transform group-hover:rotate-12">
               <Bike size={22} strokeWidth={2.5} />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold tracking-tight text-foreground">Rental<span className="text-primary">Pro</span></span>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 font-bold">Enterprise</span>
+              <span className="text-xl font-bold tracking-tighter text-foreground">Rental<span className="text-primary">Pro</span></span>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40 font-black">Enterprise Edition</span>
             </div>
           </Link>
         </div>
@@ -116,23 +116,23 @@ export default function AdminLayout() {
         </div>
 
         {/* User Profile in Sidebar */}
-        <div className="p-4 mx-4 mb-4 rounded-2xl bg-muted/30 border border-border">
+        <div className="p-4 mx-4 mb-6 rounded-3xl bg-primary/5 border border-primary/10">
           <div className="flex items-center gap-3 mb-4">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-lg">
+            <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground font-black shadow-lg">
               {profile?.email?.[0].toUpperCase()}
             </div>
             <div className="flex flex-col overflow-hidden">
-              <span className="text-sm font-semibold text-foreground truncate">{profile?.email?.split('@')[0]}</span>
-              <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{profile?.role}</span>
+              <span className="text-xs font-black text-foreground truncate uppercase tracking-tight">{profile?.email?.split('@')[0]}</span>
+              <span className="text-[9px] text-muted-foreground uppercase font-black tracking-widest opacity-50">{profile?.role}</span>
             </div>
           </div>
           <Button 
             variant="ghost" 
-            className="w-full justify-start gap-3 h-10 text-muted-foreground hover:text-foreground hover:bg-accent rounded-xl border border-transparent hover:border-border transition-all" 
+            className="w-full justify-start gap-3 h-10 text-muted-foreground hover:text-red-500 hover:bg-red-500/5 rounded-xl transition-all" 
             onClick={handleLogout}
           >
             <LogOut className="h-4 w-4" />
-            <span className="text-xs font-semibold">Sign Out</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">Sign Out</span>
           </Button>
         </div>
       </aside>
