@@ -10,7 +10,8 @@ import {
   ArrowDownRight,
   PieChart as PieChartIcon,
   DollarSign,
-  RefreshCw
+  RefreshCw,
+  Package
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from "@/components/ui/Badge"
@@ -134,7 +135,7 @@ export default function Reports() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
         <Card className="glass-card relative overflow-hidden group border-border hover:border-primary/20 transition-all duration-500">
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
             <TrendingUp size={80} strokeWidth={1.5} className="text-foreground" />
@@ -185,6 +186,21 @@ export default function Reports() {
           <CardContent>
             <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50">
               Periode {period}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="glass-card relative overflow-hidden group border-border hover:border-primary/20 transition-all duration-500">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <Package size={80} strokeWidth={1.5} className="text-foreground" />
+          </div>
+          <CardHeader className="pb-2">
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Pendapatan Add-on</p>
+            <CardTitle className="text-xl font-bold text-blue-500 tracking-tight">Rp {data?.summary.total_addon_revenue.toLocaleString()}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50">
+              Aksesoris & Layanan
             </div>
           </CardContent>
         </Card>
@@ -349,7 +365,8 @@ export default function Reports() {
               <thead>
                 <tr className="bg-muted/50 border-y border-border">
                   <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Investor</th>
-                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Omzet Kotor</th>
+                   <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Omzet Kotor</th>
+                  <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Add-on</th>
                   <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Biaya Perawatan</th>
                   <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Gaji Staff</th>
                   <th className="px-6 py-4 font-bold text-[10px] uppercase tracking-[0.2em] text-muted-foreground text-right">Dividen Bersih</th>
@@ -361,6 +378,7 @@ export default function Reports() {
                     <tr key={idx} className="group hover:bg-muted/20 transition-all">
                       <td className="px-6 py-5 font-bold text-foreground tracking-tight">{item.name}</td>
                       <td className="px-6 py-5 text-right font-medium text-muted-foreground">Rp {item.revenue.toLocaleString()}</td>
+                      <td className="px-6 py-5 text-right font-medium text-blue-500/60">Rp {item.addon_revenue.toLocaleString()}</td>
                       <td className="px-6 py-5 text-right text-red-500/60 font-medium">- Rp {item.maintenance.toLocaleString()}</td>
                       <td className="px-6 py-5 text-right text-orange-500/60 font-medium">- Rp {item.staff_salary.toLocaleString()}</td>
                       <td className="px-6 py-5 text-right font-black text-green-500 text-base tracking-tighter">
@@ -381,6 +399,7 @@ export default function Reports() {
                   <tr className="font-black text-[10px] uppercase tracking-[0.2em]">
                     <td className="px-6 py-6 text-foreground">TOTAL DISTRIBUSI</td>
                     <td className="px-6 py-6 text-right text-muted-foreground font-bold">Rp {data.summary.total_income.toLocaleString()}</td>
+                    <td className="px-6 py-6 text-right text-blue-500/60 font-bold">Rp {data.summary.total_addon_revenue.toLocaleString()}</td>
                     <td className="px-6 py-6 text-right text-red-500/40 font-bold">- Rp {data.summary.total_maintenance_fee.toLocaleString()}</td>
                     <td className="px-6 py-6 text-right text-orange-500/40 font-bold">- Rp {data.summary.total_staff_salary.toLocaleString()}</td>
                     <td className="px-6 py-6 text-right text-green-500 text-lg tracking-tighter">Rp {data.summary.total_investor_dividend.toLocaleString()}</td>

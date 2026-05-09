@@ -15,6 +15,7 @@ class FinancialSummary(BaseModel):
     total_staff_salary: float
     total_maintenance_fee: float
     total_investor_dividend: float
+    total_addon_revenue: float
 
 class InvestorSplit(BaseModel):
     name: str
@@ -23,6 +24,7 @@ class InvestorSplit(BaseModel):
     net_bike_profit: float
     staff_salary: float
     dividend: float
+    addon_revenue: float
 
 class DailyTrend(BaseModel):
     date: str
@@ -83,6 +85,7 @@ def get_financial_report(
         total_staff_salary = 0
         total_maintenance = 0
         total_dividends = 0
+        total_addon_revenue = 0
 
         for r in rentals_data:
             bike_info = r.get("fleet") or {}
@@ -95,18 +98,25 @@ def get_financial_report(
             s_salary = net_bike * staff_pct
             div = net_bike - s_salary
 
+            # Hitung Pendapatan Add-on
+            addons = r.get("selected_addons") or []
+            duration = r.get("duration") or 1
+            addon_amount = sum(a.get("price", 0) for a in addons) * duration
+            
             total_maintenance += m_fee
             total_staff_salary += s_salary
             total_dividends += div
+            total_addon_revenue += addon_amount
 
             if investor not in investor_map:
-                investor_map[investor] = {"revenue": 0, "maintenance": 0, "net_bike_profit": 0, "staff_salary": 0, "dividend": 0}
+                investor_map[investor] = {"revenue": 0, "maintenance": 0, "net_bike_profit": 0, "staff_salary": 0, "dividend": 0, "addon_revenue": 0}
             
             investor_map[investor]["revenue"] += amount
             investor_map[investor]["maintenance"] += m_fee
             investor_map[investor]["net_bike_profit"] += net_bike
             investor_map[investor]["staff_salary"] += s_salary
             investor_map[investor]["dividend"] += div
+            investor_map[investor]["addon_revenue"] += addon_amount
 
         investor_splits = [
             InvestorSplit(name=k, **v) for k, v in investor_map.items()
@@ -130,7 +140,8 @@ def get_financial_report(
                 cash_on_hand=cash_on_hand,
                 total_staff_salary=total_staff_salary,
                 total_maintenance_fee=total_maintenance,
-                total_investor_dividend=total_dividends
+                total_investor_dividend=total_dividends,
+                total_addon_revenue=total_addon_revenue
             ),
             trends=trends,
             investor_splits=investor_splits,
