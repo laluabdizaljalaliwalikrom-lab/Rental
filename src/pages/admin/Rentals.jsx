@@ -32,6 +32,7 @@ export default function Rentals() {
   const [submitting, setSubmitting] = useState(false)
   const [selectedBike, setSelectedBike] = useState(null)
   const [selectedRental, setSelectedRental] = useState(null)
+  const [availableAddons, setAvailableAddons] = useState([])
   const { profile: currentUser } = useAuth()
   
   const [rentalData, setRentalData] = useState({
@@ -41,20 +42,23 @@ export default function Rentals() {
     identity_type: 'KTP',
     identity_number: '',
     rental_type: 'Short',
-    duration: 1
+    duration: 1,
+    selected_addons: []
   })
   const [identityImage, setIdentityImage] = useState(null)
 
   const loadRentalData = async (showLoading = false) => {
     try {
       if (showLoading) setLoading(true)
-      const [bikesData, rentalsData] = await Promise.all([
+      const [bikesData, rentalsData, addonsData] = await Promise.all([
         apiFetch('/api/fleet/'),
-        apiFetch('/api/rentals/')
+        apiFetch('/api/rentals/'),
+        apiFetch('/api/addons/')
       ])
       
       setBikes(bikesData)
       setRentals(rentalsData)
+      setAvailableAddons(addonsData.filter(a => a.is_active))
     } catch (error) {
       toast.error(error.message)
     } finally {
@@ -63,10 +67,15 @@ export default function Rentals() {
   }
 
   useEffect(() => {
-    Promise.all([apiFetch('/api/fleet/'), apiFetch('/api/rentals/')])
-      .then(([bikesData, rentalsData]) => {
+    Promise.all([
+      apiFetch('/api/fleet/'), 
+      apiFetch('/api/rentals/'),
+      apiFetch('/api/addons/')
+    ])
+      .then(([bikesData, rentalsData, addonsData]) => {
         setBikes(bikesData)
         setRentals(rentalsData)
+        setAvailableAddons(addonsData.filter(a => a.is_active))
       })
       .catch(error => toast.error(error.message))
       .finally(() => setLoading(false))
@@ -91,9 +100,12 @@ export default function Rentals() {
         identity_image_url = uploadRes.url
       }
 
-      const total_price = rentalData.rental_type === 'Short' 
+      const base_price = rentalData.rental_type === 'Short' 
         ? (selectedBike.price_per_hour * rentalData.duration)
         : (selectedBike.price_per_day * rentalData.duration)
+      
+      const addons_total = rentalData.selected_addons.reduce((acc, addon) => acc + addon.price, 0)
+      const total_price = base_price + (addons_total * rentalData.duration)
 
       await apiFetch('/api/rentals/', {
         method: 'POST',
@@ -114,7 +126,8 @@ export default function Rentals() {
         identity_type: 'KTP',
         identity_number: '',
         rental_type: 'Short',
-        duration: 1
+        duration: 1,
+        selected_addons: []
       })
       setIdentityImage(null)
       loadRentalData()
@@ -279,6 +292,15 @@ export default function Rentals() {
                                  {bike ? `${bike.name} (${bike.brand})` : 'Unit Tidak Dikenal'}
                                </span>
                              </div>
+                             {r.selected_addons?.length > 0 && (
+                               <div className="flex flex-wrap gap-2 pt-2">
+                                 {r.selected_addons.map((a, idx) => (
+                                   <Badge key={idx} variant="outline" className="text-[8px] font-bold text-primary/50 uppercase border-primary/20">
+                                     + {a.name}
+                                   </Badge>
+                                 ))}
+                               </div>
+                             )}
                           </div>
                           <div className="pt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">
                             <p className="flex items-center gap-2"><Clock size={12} className="text-primary/40" /> Mulai: <span className="text-muted-foreground/60">{new Date(r.start_time).toLocaleString('id-ID', {day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit'})}</span></p>
@@ -460,6 +482,43 @@ export default function Rentals() {
                 </div>
 
                 <div className="grid gap-2">
+                  <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Aksesoris Tambahan (Add-ons)</Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {availableAddons.map(addon => {
+                      const isSelected = rentalData.selected_addons.find(a => a.id === addon.id)
+                      return (
+                        <button
+                          key={addon.id}
+                          type="button"
+                          className={cn(
+                            "flex items-center gap-3 p-3 rounded-2xl border transition-all text-left",
+                            isSelected ? "bg-primary/5 border-primary/30 ring-1 ring-primary/20" : "bg-muted/30 border-border/50 opacity-60 hover:opacity-100"
+                          )}
+                          onClick={() => {
+                            if (isSelected) {
+                              setRentalData({ ...rentalData, selected_addons: rentalData.selected_addons.filter(a => a.id !== addon.id) })
+                            } else {
+                              setRentalData({ ...rentalData, selected_addons: [...rentalData.selected_addons, addon] })
+                            }
+                          }}
+                        >
+                          <div className={cn(
+                            "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
+                            isSelected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                          )}>
+                            <Plus size={14} className={isSelected ? "rotate-45 transition-transform" : ""} />
+                          </div>
+                          <div>
+                            <p className="text-[10px] font-bold uppercase tracking-tight">{addon.name}</p>
+                            <p className="text-[10px] font-black text-primary">Rp {addon.price.toLocaleString()}</p>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                <div className="grid gap-2">
                     <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Dokumentasi Identitas Resmi *</Label>
                     <div className="flex items-center justify-center w-full">
                       <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-2xl cursor-pointer bg-muted/30 hover:bg-muted/50 transition-all">
@@ -482,7 +541,10 @@ export default function Rentals() {
                    <p className="text-xs font-medium text-primary italic">Sudah termasuk pajak & layanan</p>
                 </div>
                 <div className="text-3xl font-semibold text-foreground tracking-tight">
-                  Rp {(rentalData.rental_type === 'Short' ? (selectedBike?.price_per_hour * rentalData.duration) : (selectedBike?.price_per_day * rentalData.duration))?.toLocaleString()}
+                  Rp {(
+                    (rentalData.rental_type === 'Short' ? (selectedBike?.price_per_hour * rentalData.duration) : (selectedBike?.price_per_day * rentalData.duration)) +
+                    (rentalData.selected_addons.reduce((acc, a) => acc + a.price, 0) * rentalData.duration)
+                  ).toLocaleString()}
                 </div>
               </div>
               <Button type="submit" className="w-full h-16 rounded-2xl bg-primary text-primary-foreground font-semibold uppercase tracking-wider shadow-2xl hover:opacity-90 transition-all disabled:opacity-50 text-xs" disabled={submitting}>

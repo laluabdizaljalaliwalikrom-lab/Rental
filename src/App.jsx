@@ -12,6 +12,7 @@ import Settings from '@/pages/admin/Settings'
 import Cashbook from '@/pages/admin/Cashbook'
 import Reports from '@/pages/admin/Reports'
 import Investors from '@/pages/admin/Investors'
+import Addons from '@/pages/admin/Addons'
 import Profile from '@/pages/admin/Profile'
 import LandingPage from '@/pages/LandingPage'
 
@@ -38,6 +39,7 @@ function App() {
               <Route path="investors" element={<ProtectedRoute roles={['admin']}><Investors /></ProtectedRoute>} />
               <Route path="fleet" element={<ProtectedRoute roles={['admin', 'staff']}><Fleet /></ProtectedRoute>} />
               <Route path="users" element={<ProtectedRoute roles={['admin']}><Users /></ProtectedRoute>} />
+              <Route path="addons" element={<ProtectedRoute roles={['admin']}><Addons /></ProtectedRoute>} />
               <Route path="settings" element={<ProtectedRoute roles={['admin']}><Settings /></ProtectedRoute>} />
               <Route path="profile" element={<Profile />} />
             </Route>

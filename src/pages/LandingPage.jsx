@@ -64,7 +64,8 @@ const defaultTranslations = {
       total: 'Total Investasi',
       btn: 'KONFIRMASI PESANAN',
       processing: 'Memproses...',
-      gateway: 'Menghubungkan ke gerai aman'
+      gateway: 'Menghubungkan ke gerai aman',
+      addons: 'Aksesoris Tambahan'
     },
     auth: {
       login: 'MASUK',
@@ -117,7 +118,8 @@ const defaultTranslations = {
       total: 'Total Investment',
       btn: 'SECURE BOOKING',
       processing: 'Finalizing...',
-      gateway: 'Connecting to secure gateway'
+      gateway: 'Connecting to secure gateway',
+      addons: 'Optional Add-ons'
     },
     auth: {
       login: 'LOGIN',
@@ -140,6 +142,7 @@ export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [availableAddons, setAvailableAddons] = useState([])
 
   // Merge settings into translations
   const t = siteSettings ? {
@@ -175,7 +178,8 @@ export default function LandingPage() {
     identity_type: 'KTP',
     identity_number: '',
     duration: 1,
-    unit: 'hour'
+    unit: 'hour',
+    selected_addons: []
   })
   const [identityImage, setIdentityImage] = useState(null)
 
@@ -203,9 +207,15 @@ export default function LandingPage() {
         if (settingsData) setSiteSettings(settingsData)
       } catch (error) {
         console.error("Gagal memuat pengaturan landing:", error)
-      } finally {
-        setLoading(false)
       }
+
+      // Fetch Addons
+      try {
+        const addonsData = await apiFetch('/api/addons/')
+        setAvailableAddons(addonsData.filter(a => a.is_active))
+      } catch (e) { console.error(e) }
+
+      setLoading(false)
     }
     initPage()
     return () => window.removeEventListener('scroll', handleScroll)
@@ -228,15 +238,17 @@ export default function LandingPage() {
       customer_name: '',
       customer_phone: '',
       customer_address: '',
-      identity_number: ''
+      identity_number: '',
+      selected_addons: []
     })
     setIdentityImage(null)
   }
 
   const totalPrice = selectedBike ? (
-    bookingData.unit === 'hour'
+    (bookingData.unit === 'hour'
       ? selectedBike.price_per_hour * bookingData.duration
-      : selectedBike.price_per_day * bookingData.duration
+      : selectedBike.price_per_day * bookingData.duration) +
+    (bookingData.selected_addons.reduce((acc, a) => acc + a.price, 0) * bookingData.duration)
   ) : 0
 
   const handleProcessPayment = async () => {
@@ -270,7 +282,8 @@ export default function LandingPage() {
           identity_image_url: identity_image_url,
           rental_type: bookingData.unit === 'hour' ? 'Short' : 'Long',
           duration: bookingData.duration,
-          total_price: totalPrice
+          total_price: totalPrice,
+          selected_addons: bookingData.selected_addons
         })
       })
 
@@ -679,6 +692,34 @@ export default function LandingPage() {
                           <option value="hour">{t.modal.hours}</option>
                           <option value="day">{t.modal.days}</option>
                         </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <Label className="text-[9px] uppercase font-bold tracking-widest text-[#999]">{t.modal.addons}</Label>
+                      <div className="grid grid-cols-2 gap-4">
+                        {availableAddons.map(addon => {
+                          const isSelected = bookingData.selected_addons.find(a => a.id === addon.id)
+                          return (
+                            <button
+                              key={addon.id}
+                              type="button"
+                              className={`flex flex-col items-start p-4 rounded-2xl border transition-all text-left ${
+                                isSelected ? 'bg-black text-white border-black shadow-lg shadow-black/10' : 'bg-transparent border-[#eee] text-black hover:border-black'
+                              }`}
+                              onClick={() => {
+                                if (isSelected) {
+                                  setBookingData({ ...bookingData, selected_addons: bookingData.selected_addons.filter(a => a.id !== addon.id) })
+                                } else {
+                                  setBookingData({ ...bookingData, selected_addons: [...bookingData.selected_addons, addon] })
+                                }
+                              }}
+                            >
+                              <span className="text-[10px] font-bold uppercase tracking-tight mb-1">{addon.name}</span>
+                              <span className={`text-[10px] font-black ${isSelected ? 'text-blue-400' : 'text-blue-600'}`}>+ Rp {addon.price.toLocaleString()}</span>
+                            </button>
+                          )
+                        })}
                       </div>
                     </div>
 

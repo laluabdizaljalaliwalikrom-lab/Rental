@@ -20,6 +20,7 @@ class RentalCreate(BaseModel):
     rental_type: str
     duration: int
     total_price: Optional[float] = None
+    selected_addons: Optional[List[dict]] = []
 
 class Rental(BaseModel):
     id: str
@@ -37,6 +38,7 @@ class Rental(BaseModel):
     start_time: datetime
     end_time: Optional[datetime] = None
     processed_by_name: Optional[str] = None
+    selected_addons: Optional[List[dict]] = []
 
 @router.get("/", response_model=List[Rental])
 def get_rentals(
@@ -109,9 +111,14 @@ async def create_rental(
 
         # Hitung total_price
         if effective_rental_type == 'Short':
-            total_price = bike_info['price_per_hour'] * effective_duration
+            base_price = bike_info['price_per_hour'] * effective_duration
         else:
-            total_price = bike_info['price_per_day'] * effective_duration
+            base_price = bike_info['price_per_day'] * effective_duration
+            
+        # Tambah harga add-ons
+        addons_total = sum(addon.get('price', 0) for addon in (rental.selected_addons or []))
+        # Addons biasanya per durasi juga (misal sewa helm 5rb/hari)
+        total_price = base_price + (addons_total * effective_duration)
 
         rental_data = rental.model_dump()
         rental_data['rental_type'] = effective_rental_type

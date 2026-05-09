@@ -16,7 +16,8 @@ import {
   Bell,
   Search,
   ChevronRight,
-  ChevronLeft
+  ChevronLeft,
+  Plus
 } from 'lucide-react'
 import { 
   Popover,
@@ -133,6 +134,7 @@ export default function AdminLayout() {
     { name: 'Laporan Kas', path: '/admin/reports', icon: BarChart3, roles: ['admin'] },
     { name: 'Investor', path: '/admin/investors', icon: Users, roles: ['admin'] },
     { name: 'Armada Sepeda', path: '/admin/fleet', icon: Bike, roles: ['admin', 'staff'] },
+    { name: 'Add-on & Aksesoris', path: '/admin/addons', icon: Plus, roles: ['admin'] },
     { name: 'Pengguna', path: '/admin/users', icon: Users, roles: ['admin'] },
     { name: 'Pengaturan', path: '/admin/settings', icon: Settings, roles: ['admin'] },
     { name: 'Profil', path: '/admin/profile', icon: User, roles: ['admin', 'staff', 'viewer'] },

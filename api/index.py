@@ -10,7 +10,7 @@ load_dotenv()
 # Ensure the 'api' directory is in the system path for module discovery
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
-from routes import financial, fleet, rentals, profiles, cashbook, settings, investors
+from routes import financial, fleet, rentals, profiles, cashbook, settings, investors, addons
 
 app = FastAPI(title="Rental Sepeda API", version="1.0.0")
 
@@ -31,6 +31,7 @@ app.include_router(rentals.router, prefix="/api/rentals", tags=["Rentals"])
 app.include_router(cashbook.router, prefix="/api/cashbook", tags=["Cashbook"])
 app.include_router(settings.router, prefix="/api/settings", tags=["Settings"])
 app.include_router(investors.router, prefix="/api/investors", tags=["Investors"])
+app.include_router(addons.router, prefix="/api/addons", tags=["Addons"])
 
 @app.get("/api/health")
 def health_check():
