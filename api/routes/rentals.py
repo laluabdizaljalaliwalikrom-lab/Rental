@@ -96,16 +96,26 @@ async def create_rental(
         
         bike_info = bike_res.data[0]
         
-        # Hitung total_price jika tidak dikirim dari frontend
-        if rental.total_price is None:
-            if rental.rental_type == 'Short':
-                total_price = bike_info['price_per_hour'] * rental.duration
-            else:
-                total_price = bike_info['price_per_day'] * rental.duration
+        # Aturan: Short-term maksimal 3 jam, lebih dari itu otomatis Daily
+        effective_rental_type = rental.rental_type
+        effective_duration = rental.duration
+        
+        if effective_rental_type == 'Short' and effective_duration > 3:
+            effective_rental_type = 'Long'
+            # Jika lebih dari 3 jam, dianggap 1 hari (atau sesuai logika bisnis Anda)
+            # Untuk simplifikasi, kita jadikan 1 hari
+            effective_duration = 1 
+            print(f"Rental switched to Long due to duration {rental.duration}h")
+
+        # Hitung total_price
+        if effective_rental_type == 'Short':
+            total_price = bike_info['price_per_hour'] * effective_duration
         else:
-            total_price = rental.total_price
+            total_price = bike_info['price_per_day'] * effective_duration
 
         rental_data = rental.model_dump()
+        rental_data['rental_type'] = effective_rental_type
+        rental_data['duration'] = effective_duration
         rental_data['total_price'] = total_price
         rental_data['status'] = 'Active'
         rental_data['start_time'] = datetime.now(timezone.utc).isoformat()

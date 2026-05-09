@@ -85,9 +85,9 @@ def get_financial_report(
         total_dividends = 0
 
         for r in rentals_data:
-            bike_info = r.get("fleet", {})
-            investor = bike_info.get("investor_name", "Pusat")
-            amount = r.get("total_price", 0)
+            bike_info = r.get("fleet") or {}
+            investor = bike_info.get("investor_name") or "Pusat"
+            amount = r.get("total_price") or 0
 
             # Hitung Potongan
             m_fee = (amount * maint_pct) + maint_nom

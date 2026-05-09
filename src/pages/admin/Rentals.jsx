@@ -447,7 +447,15 @@ export default function Rentals() {
                     min="1"
                     className="h-14 bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                     value={rentalData.duration}
-                    onChange={(e) => setRentalData({...rentalData, duration: parseInt(e.target.value) || 1})}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value) || 1;
+                      if (rentalData.rental_type === 'Short' && val > 3) {
+                        setRentalData({ ...rentalData, rental_type: 'Long', duration: 1 });
+                        toast.info("Durasi > 3 jam otomatis dialihkan ke paket harian (Daily)");
+                      } else {
+                        setRentalData({ ...rentalData, duration: val });
+                      }
+                    }}
                   />
                 </div>
 

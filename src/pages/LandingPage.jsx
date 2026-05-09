@@ -658,7 +658,15 @@ export default function LandingPage() {
                           type="number"
                           className="w-full bg-transparent border-b border-[#eee] focus:border-black py-3 outline-none text-sm font-medium transition-all"
                           value={bookingData.duration}
-                          onChange={e => setBookingData({ ...bookingData, duration: parseInt(e.target.value) || 1 })}
+                          onChange={(e) => {
+                            const val = parseInt(e.target.value) || 1;
+                            if (bookingData.unit === 'hour' && val > 3) {
+                              setBookingData({ ...bookingData, unit: 'day', duration: 1 });
+                              toast.info(lang === 'id' ? "Durasi > 3 jam otomatis dialihkan ke paket harian (Daily)" : "Duration > 3 hours automatically switched to Daily package");
+                            } else {
+                              setBookingData({ ...bookingData, duration: val });
+                            }
+                          }}
                         />
                       </div>
                       <div className="space-y-2">
