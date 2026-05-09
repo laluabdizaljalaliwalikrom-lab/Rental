@@ -34,6 +34,8 @@ import {
 } from '@/components/ui/sheet'
 import { useState, useEffect } from 'react'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { Badge } from '@/components/ui/Badge'
+import { apiFetch } from '@/lib/api'
 
 const NavLinks = ({ items, activePath, isCollapsed, onItemClick = () => {} }) => (
   <nav className={cn("grid items-start px-2 text-sm font-medium gap-1", !isCollapsed && "lg:px-4")}>
