@@ -74,7 +74,6 @@ export default function Addons() {
         investor_id: '',
         investor_name: 'Pusat'
       })
-      })
     }
     setIsModalOpen(true)
   }
