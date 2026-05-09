@@ -134,7 +134,7 @@ export default function Investors() {
       setClaiming(true)
       const url = type === 'bike' ? `/api/fleet/${item.id}` : `/api/addons/${item.id}`
       await apiFetch(url, {
-        method: 'PUT',
+        method: type === 'bike' ? 'PUT' : 'PATCH',
         body: JSON.stringify({
           investor_id: selectedInvestor.id,
           investor_name: selectedInvestor.name
@@ -164,7 +164,7 @@ export default function Investors() {
       setClaiming(true)
       const url = type === 'bike' ? `/api/fleet/${item.id}` : `/api/addons/${item.id}`
       await apiFetch(url, {
-        method: 'PUT',
+        method: type === 'bike' ? 'PUT' : 'PATCH',
         body: JSON.stringify({
           investor_id: null,
           investor_name: 'Pusat'

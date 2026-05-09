@@ -15,6 +15,14 @@ class AddonBase(BaseModel):
     investor_id: Optional[str] = None
     investor_name: Optional[str] = "Pusat"
 
+class AddonUpdate(BaseModel):
+    name: Optional[str] = None
+    price: Optional[float] = None
+    description: Optional[str] = None
+    is_active: Optional[bool] = None
+    investor_id: Optional[str] = None
+    investor_name: Optional[str] = None
+
 class AddonCreate(AddonBase):
     pass
 
@@ -56,6 +64,22 @@ def update_addon(
 ):
     try:
         data = addon.model_dump()
+        res = db.table("addons").update(data).eq("id", id).execute()
+        if not res.data:
+            raise HTTPException(status_code=404, detail="Addon not found")
+        return res.data[0]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.patch("/{id}", response_model=Addon)
+def patch_addon(
+    id: str,
+    addon: AddonUpdate,
+    db: Client = Depends(get_supabase),
+    user: dict = Depends(require_role(["admin"]))
+):
+    try:
+        data = addon.model_dump(exclude_unset=True)
         res = db.table("addons").update(data).eq("id", id).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="Addon not found")
