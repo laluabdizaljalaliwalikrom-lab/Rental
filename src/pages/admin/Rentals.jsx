@@ -352,203 +352,198 @@ export default function Rentals() {
 
       {/* Rent Dialog */}
       <Dialog open={rentOpen} onOpenChange={setRentOpen}>
-        <DialogContent className="sm:max-w-[600px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col">
-          <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
-            <DialogTitle className="text-2xl font-semibold tracking-tight flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <Bike size={24} />
+        <DialogContent className="sm:max-w-[550px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col shadow-2xl">
+          <DialogHeader className="p-6 pb-4 bg-muted/30 border-b border-border/50">
+            <DialogTitle className="text-xl font-bold tracking-tight flex items-center gap-2">
+              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                <Bike size={18} />
               </div>
-              Proses Penyewaan: {selectedBike?.name}
+              Penyewaan: {selectedBike?.name}
             </DialogTitle>
-            <DialogDescription className="text-muted-foreground font-medium pt-1">Lengkapi data pelanggan di bawah untuk melakukan pendaftaran rental.</DialogDescription>
+            <DialogDescription className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/50 pt-1">Konfigurasi reservasi pelanggan</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleRentBike} className="flex-1 flex flex-col overflow-hidden">
-            <div className="px-8 py-6 flex-1 overflow-y-auto custom-scrollbar">
-              <div className="space-y-6">
-                <div className="grid gap-2">
-                  <Label htmlFor="customer" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Nama Lengkap Penyewa *</Label>
+            <div className="px-6 py-4 flex-1 overflow-y-auto custom-scrollbar space-y-5">
+              <div className="grid gap-1.5">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Nama Penyewa</Label>
+                <Input 
+                  placeholder="Nama lengkap..." 
+                  required 
+                  className="h-11 bg-muted/20 border-border/50 rounded-xl text-sm focus:ring-primary/30 transition-all"
+                  value={rentalData.customer_name}
+                  onChange={(e) => setRentalData({...rentalData, customer_name: e.target.value})}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-1.5">
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">WhatsApp</Label>
                   <Input 
-                    id="customer" 
-                    placeholder="Masukkan nama sesuai identitas resmi" 
+                    placeholder="0812..." 
                     required 
-                    className="h-14 bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
-                    value={rentalData.customer_name}
-                    onChange={(e) => setRentalData({...rentalData, customer_name: e.target.value})}
+                    className="h-11 bg-muted/20 border-border/50 rounded-xl text-sm focus:ring-primary/30 transition-all"
+                    value={rentalData.customer_phone}
+                    onChange={(e) => setRentalData({...rentalData, customer_phone: e.target.value})}
                   />
                 </div>
-
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="grid gap-2">
-                    <Label htmlFor="phone" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Nomor WhatsApp *</Label>
-                    <Input 
-                      id="phone" 
-                      placeholder="0812xxxx" 
-                      required 
-                      className="h-14 bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
-                      value={rentalData.customer_phone}
-                      onChange={(e) => setRentalData({...rentalData, customer_phone: e.target.value})}
-                    />
-                  </div>
-                  <div className="grid gap-2">
-                    <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Metode Identitas *</Label>
-                    <div className="flex gap-2 p-1 bg-muted border border-border rounded-2xl h-14">
-                      {['KTP', 'SIM', 'Paspor'].map(type => (
-                        <button
-                          key={type}
-                          type="button"
-                          className={cn(
-                            "flex-1 rounded-xl text-[10px] font-semibold uppercase tracking-wider transition-all",
-                            rentalData.identity_type === type ? 'bg-primary text-primary-foreground shadow-lg' : 'text-muted-foreground/60 hover:text-foreground'
-                          )}
-                          onClick={() => setRentalData({...rentalData, identity_type: type})}
-                        >
-                          {type}
-                        </button>
-                      ))}
-                    </div>
+                <div className="grid gap-1.5">
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Identitas</Label>
+                  <div className="flex gap-1 p-1 bg-muted/40 border border-border/50 rounded-xl h-11">
+                    {['KTP', 'SIM', 'Paspor'].map(type => (
+                      <button
+                        key={type}
+                        type="button"
+                        className={cn(
+                          "flex-1 rounded-lg text-[9px] font-bold uppercase tracking-tighter transition-all",
+                          rentalData.identity_type === type ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground/40 hover:text-foreground'
+                        )}
+                        onClick={() => setRentalData({...rentalData, identity_type: type})}
+                      >
+                        {type}
+                      </button>
+                    ))}
                   </div>
                 </div>
+              </div>
 
-                <div className="grid gap-2">
-                  <Label htmlFor="idNumber" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Nomor Registrasi {rentalData.identity_type} *</Label>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-1.5">
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Nomor {rentalData.identity_type}</Label>
                   <Input 
-                    id="idNumber" 
-                    placeholder={`Masukkan nomor seri ${rentalData.identity_type}`}
+                    placeholder="Nomor seri..."
                     required 
-                    className="h-14 bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
+                    className="h-11 bg-muted/20 border-border/50 rounded-xl text-sm focus:ring-primary/30 transition-all"
                     value={rentalData.identity_number}
                     onChange={(e) => setRentalData({...rentalData, identity_number: e.target.value})}
                   />
                 </div>
-
-                <div className="grid gap-2">
-                  <Label htmlFor="address" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Lokasi Domisili / Hotel / Menginap *</Label>
+                <div className="grid gap-1.5">
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Domisili / Hotel</Label>
                   <Input 
-                    id="address" 
-                    placeholder="Alamat lengkap selama masa penyewaan" 
+                    placeholder="Lokasi..." 
                     required 
-                    className="h-14 bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
+                    className="h-11 bg-muted/20 border-border/50 rounded-xl text-sm focus:ring-primary/30 transition-all"
                     value={rentalData.customer_address}
                     onChange={(e) => setRentalData({...rentalData, customer_address: e.target.value})}
                   />
                 </div>
+              </div>
 
-                <div className="grid gap-2">
-                  <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Paket Durasi *</Label>
-                  <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-5 gap-4 items-end">
+                <div className="col-span-3 grid gap-1.5">
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Paket Rental</Label>
+                  <div className="flex gap-1 p-1 bg-muted/40 border border-border/50 rounded-xl h-11">
                     <button 
                       type="button" 
                       className={cn(
-                        "h-16 rounded-2xl flex items-center justify-center gap-3 font-semibold uppercase text-[10px] tracking-wider border transition-all",
-                        rentalData.rental_type === 'Short' ? 'bg-primary border-primary/20 text-primary-foreground shadow-lg' : 'bg-muted border-border text-muted-foreground/60 hover:bg-muted/80'
+                        "flex-1 rounded-lg flex items-center justify-center gap-2 text-[9px] font-bold uppercase tracking-tighter transition-all",
+                        rentalData.rental_type === 'Short' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground/40 hover:text-foreground'
                       )}
                       onClick={() => setRentalData({...rentalData, rental_type: 'Short'})}
                     >
-                      <Clock size={18} /> Short-Term
+                      <Clock size={12} /> Short
                     </button>
                     <button 
                       type="button" 
                       className={cn(
-                        "h-16 rounded-2xl flex items-center justify-center gap-3 font-semibold uppercase text-[10px] tracking-wider border transition-all",
-                        rentalData.rental_type === 'Long' ? 'bg-primary border-primary/20 text-primary-foreground shadow-lg' : 'bg-muted border-border text-muted-foreground/60 hover:bg-muted/80'
+                        "flex-1 rounded-lg flex items-center justify-center gap-2 text-[9px] font-bold uppercase tracking-tighter transition-all",
+                        rentalData.rental_type === 'Long' ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground/40 hover:text-foreground'
                       )}
                       onClick={() => setRentalData({...rentalData, rental_type: 'Long'})}
                     >
-                      <Calendar size={18} /> Daily Rental
+                      <Calendar size={12} /> Daily
                     </button>
                   </div>
                 </div>
-
-                <div className="grid gap-2">
-                  <Label htmlFor="duration" className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">
-                    Kuantitas ({rentalData.rental_type === 'Short' ? 'Jam' : 'Hari'})
-                  </Label>
+                <div className="col-span-2 grid gap-1.5">
+                  <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Durasi ({rentalData.rental_type === 'Short' ? 'Jam' : 'Hari'})</Label>
                   <Input 
-                    id="duration" 
                     type="number"
                     min="1"
-                    className="h-14 bg-muted/40 border border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
+                    className="h-11 bg-muted/20 border-border/50 rounded-xl text-sm focus:ring-primary/30 transition-all text-center font-bold"
                     value={rentalData.duration}
                     onChange={(e) => {
                       const val = parseInt(e.target.value) || 1;
                       if (rentalData.rental_type === 'Short' && val > 3) {
                         setRentalData({ ...rentalData, rental_type: 'Long', duration: 1 });
-                        toast.info("Durasi > 3 jam otomatis dialihkan ke paket harian (Daily)");
+                        toast.info("Durasi > 3 jam otomatis ke paket Daily");
                       } else {
                         setRentalData({ ...rentalData, duration: val });
                       }
                     }}
                   />
                 </div>
+              </div>
 
-                <div className="grid gap-2">
-                  <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Aksesoris Tambahan (Add-ons)</Label>
-                  <div className="grid grid-cols-2 gap-3">
-                    {availableAddons.map(addon => {
-                      const isSelected = rentalData.selected_addons.find(a => a.id === addon.id)
-                      return (
-                        <button
-                          key={addon.id}
-                          type="button"
-                          className={cn(
-                            "flex items-center gap-3 p-3 rounded-2xl border transition-all text-left",
-                            isSelected ? "bg-primary/5 border-primary/30 ring-1 ring-primary/20" : "bg-muted/30 border-border/50 opacity-60 hover:opacity-100"
-                          )}
-                          onClick={() => {
-                            if (isSelected) {
-                              setRentalData({ ...rentalData, selected_addons: rentalData.selected_addons.filter(a => a.id !== addon.id) })
-                            } else {
-                              setRentalData({ ...rentalData, selected_addons: [...rentalData.selected_addons, addon] })
-                            }
-                          }}
-                        >
-                          <div className={cn(
-                            "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
-                            isSelected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-                          )}>
-                            <Plus size={14} className={isSelected ? "rotate-45 transition-transform" : ""} />
-                          </div>
-                          <div>
-                            <p className="text-[10px] font-bold uppercase tracking-tight">{addon.name}</p>
-                            <p className="text-[10px] font-black text-primary">Rp {addon.price.toLocaleString()}</p>
-                          </div>
-                        </button>
-                      )
-                    })}
-                  </div>
+              <div className="grid gap-3 p-4 rounded-2xl bg-muted/10 border border-border/30">
+                <div className="flex items-center justify-between">
+                  <Label className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">Aksesoris Opsional</Label>
+                  <div className="h-[1px] flex-1 bg-border/20 mx-4" />
                 </div>
-
-                <div className="grid gap-2">
-                    <Label className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground/60">Dokumentasi Identitas Resmi *</Label>
-                    <div className="flex items-center justify-center w-full">
-                      <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-2xl cursor-pointer bg-muted/30 hover:bg-muted/50 transition-all">
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          <Camera className="w-8 h-8 mb-3 text-muted-foreground/40" />
-                          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
-                            {identityImage ? 'Identitas Siap' : 'Klik untuk Ambil / Unggah Foto'}
-                          </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {availableAddons.map(addon => {
+                    const isSelected = rentalData.selected_addons.find(a => a.id === addon.id)
+                    return (
+                      <button
+                        key={addon.id}
+                        type="button"
+                        className={cn(
+                          "flex items-center gap-3 p-2.5 rounded-xl border transition-all duration-300 text-left relative group",
+                          isSelected 
+                            ? "bg-primary/10 border-primary/40 ring-1 ring-primary/10" 
+                            : "bg-background/50 border-border/30 hover:border-primary/20"
+                        )}
+                        onClick={() => {
+                          if (isSelected) {
+                            setRentalData({ ...rentalData, selected_addons: rentalData.selected_addons.filter(a => a.id !== addon.id) })
+                          } else {
+                            setRentalData({ ...rentalData, selected_addons: [...rentalData.selected_addons, addon] })
+                          }
+                        }}
+                      >
+                        <div className={cn(
+                          "w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors",
+                          isSelected ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                        )}>
+                          <Plus size={12} className={cn("transition-transform duration-300", isSelected && "rotate-45")} />
                         </div>
-                        <input type="file" className="hidden" accept="image/*" onChange={(e) => setIdentityImage(e.target.files[0])} />
-                      </label>
-                    </div>
+                        <div className="min-w-0">
+                          <p className="text-[10px] font-bold text-foreground truncate uppercase tracking-tight">{addon.name}</p>
+                          <p className="text-[9px] font-black text-primary leading-none mt-0.5">Rp {addon.price.toLocaleString()}</p>
+                        </div>
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
+
+              <div className="grid gap-1.5">
+                <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 ml-1">Dokumentasi Identitas</Label>
+                <label className="flex items-center gap-4 p-3 border border-dashed border-border/60 rounded-xl cursor-pointer bg-muted/10 hover:bg-muted/20 transition-all">
+                  <div className="h-9 w-9 rounded-lg bg-background flex items-center justify-center text-muted-foreground/40">
+                    <Camera size={18} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-tight">{identityImage ? identityImage.name : 'Ambil atau unggah foto'}</p>
+                    <p className="text-[9px] text-muted-foreground/40 italic">Format JPG, PNG max 2MB</p>
+                  </div>
+                  <input type="file" className="hidden" accept="image/*" onChange={(e) => setIdentityImage(e.target.files[0])} />
+                </label>
+              </div>
             </div>
-            <div className="p-8 bg-primary/[0.03] border-t border-border mt-auto">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                   <p className="text-muted-foreground text-[10px] font-semibold uppercase tracking-wider opacity-60">Estimasi Pembayaran</p>
-                   <p className="text-xs font-medium text-primary italic">Sudah termasuk pajak & layanan</p>
-                </div>
-                <div className="text-3xl font-semibold text-foreground tracking-tight">
+
+            <div className="p-6 bg-muted/40 border-t border-border flex items-center justify-between gap-6">
+              <div className="flex flex-col">
+                <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-[0.2em]">Estimasi Total</span>
+                <span className="text-xl font-black tracking-tighter text-foreground">
                   Rp {(
                     (rentalData.rental_type === 'Short' ? (selectedBike?.price_per_hour * rentalData.duration) : (selectedBike?.price_per_day * rentalData.duration)) +
                     (rentalData.selected_addons.reduce((acc, a) => acc + a.price, 0) * rentalData.duration)
                   ).toLocaleString()}
-                </div>
+                </span>
               </div>
-              <Button type="submit" className="w-full h-16 rounded-2xl bg-primary text-primary-foreground font-semibold uppercase tracking-wider shadow-2xl hover:opacity-90 transition-all disabled:opacity-50 text-xs" disabled={submitting}>
-                {submitting ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Konfirmasi & Proses Rental"}
+              <Button type="submit" className="h-12 px-8 rounded-xl bg-primary text-primary-foreground font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-primary/20 hover:opacity-90 transition-all flex-1" disabled={submitting}>
+                {submitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Konfirmasi Rental"}
               </Button>
             </div>
           </form>

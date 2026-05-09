@@ -157,23 +157,26 @@ export default function Addons() {
       </div>
 
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-[480px] glass border-none rounded-[40px] p-0 overflow-hidden shadow-2xl">
-          <div className="p-8 md:p-10">
-            <DialogHeader className="mb-8">
-              <DialogTitle className="text-2xl font-bold tracking-tight">
-                {editingAddon ? "Edit Add-on" : "Add-on Baru"}
-              </DialogTitle>
-              <DialogDescription className="text-xs uppercase font-bold tracking-widest text-primary/60">
-                Informasi Aksesoris Tambahan
-              </DialogDescription>
-            </DialogHeader>
+        <DialogContent className="sm:max-w-[500px] max-h-[90vh] glass border-border text-foreground p-0 overflow-hidden flex flex-col shadow-2xl">
+          <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
+            <DialogTitle className="text-2xl font-bold tracking-tight flex items-center gap-3">
+              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                <Box size={24} />
+              </div>
+              {editingAddon ? "Perbarui Aksesoris" : "Tambah Aksesoris Baru"}
+            </DialogTitle>
+            <DialogDescription className="text-muted-foreground font-medium pt-1">
+              {editingAddon ? "Sesuaikan detail item tambahan di bawah ini." : "Daftarkan aksesoris baru untuk meningkatkan pendapatan rental."}
+            </DialogDescription>
+          </DialogHeader>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
+            <div className="p-8 space-y-6 overflow-y-auto">
               <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Nama Aksesoris</Label>
+                <Label className="text-[10px] uppercase font-bold tracking-[0.2em] text-muted-foreground/60 ml-1">Nama Aksesoris *</Label>
                 <Input 
                   placeholder="Contoh: Helm Premium, Lampu Depan"
-                  className="h-12 bg-muted/40 border-border/50 rounded-2xl focus:ring-primary/20"
+                  className="h-14 bg-muted/40 border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all"
                   value={formData.name}
                   onChange={e => setFormData({...formData, name: e.target.value})}
                   required
@@ -181,44 +184,53 @@ export default function Addons() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Harga (Rp)</Label>
-                <Input 
-                  type="number"
-                  placeholder="0"
-                  className="h-12 bg-muted/40 border-border/50 rounded-2xl focus:ring-primary/20 font-mono"
-                  value={formData.price}
-                  onChange={e => setFormData({...formData, price: e.target.value})}
-                  required
-                />
+                <Label className="text-[10px] uppercase font-bold tracking-[0.2em] text-muted-foreground/60 ml-1">Harga Tambahan (Rp) *</Label>
+                <div className="relative">
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-xs">Rp</div>
+                  <Input 
+                    type="number"
+                    placeholder="0"
+                    className="h-14 pl-12 bg-muted/40 border-border text-foreground placeholder:text-muted-foreground/30 rounded-2xl focus:ring-primary/50 transition-all font-mono font-bold"
+                    value={formData.price}
+                    onChange={e => setFormData({...formData, price: e.target.value})}
+                    required
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Deskripsi (Opsional)</Label>
+                <Label className="text-[10px] uppercase font-bold tracking-[0.2em] text-muted-foreground/60 ml-1">Deskripsi Item</Label>
                 <textarea 
-                  className="w-full min-h-[100px] bg-muted/40 border border-border/50 rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground/30"
-                  placeholder="Berikan deskripsi singkat mengenai aksesoris ini..."
+                  className="w-full min-h-[120px] bg-muted/40 border border-border rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-muted-foreground/30 text-foreground"
+                  placeholder="Jelaskan spesifikasi atau kondisi aksesoris ini..."
                   value={formData.description}
                   onChange={e => setFormData({...formData, description: e.target.value})}
                 />
               </div>
 
-              <div className="flex items-center gap-3 p-4 bg-muted/20 rounded-2xl border border-border/10">
-                 <input 
-                   type="checkbox" 
-                   id="is_active"
-                   className="w-5 h-5 rounded-lg border-primary text-primary focus:ring-primary/20"
-                   checked={formData.is_active}
-                   onChange={e => setFormData({...formData, is_active: e.target.checked})}
-                 />
-                 <Label htmlFor="is_active" className="text-sm font-semibold cursor-pointer">Add-on ini aktif dan dapat disewa</Label>
+              <div className="flex items-center gap-4 p-5 bg-primary/[0.03] rounded-2xl border border-primary/10 group cursor-pointer hover:bg-primary/[0.05] transition-colors" onClick={() => setFormData({...formData, is_active: !formData.is_active})}>
+                 <div className={cn(
+                   "w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all",
+                   formData.is_active ? "bg-primary border-primary text-white" : "border-muted-foreground/20"
+                 )}>
+                   {formData.is_active && <ShieldCheck size={14} strokeWidth={3} />}
+                 </div>
+                 <div className="flex-1">
+                    <Label className="text-sm font-bold cursor-pointer block">Status Aktif</Label>
+                    <p className="text-[10px] text-muted-foreground font-medium italic">Item ini akan muncul sebagai opsi pada formulir sewa.</p>
+                 </div>
               </div>
+            </div>
 
-              <div className="flex gap-3 pt-4">
-                <Button type="button" variant="ghost" onClick={() => setIsModalOpen(false)} className="flex-1 h-12 rounded-2xl">Batal</Button>
-                <Button type="submit" className="flex-1 h-12 rounded-2xl shadow-lg shadow-primary/20">Simpan Add-on</Button>
-              </div>
-            </form>
-          </div>
+            <div className="p-8 bg-muted/20 border-t border-border mt-auto flex gap-4">
+              <Button type="button" variant="ghost" onClick={() => setIsModalOpen(false)} className="flex-1 h-14 rounded-2xl font-bold uppercase tracking-widest text-[10px]">
+                Batal
+              </Button>
+              <Button type="submit" className="flex-1 h-14 rounded-2xl bg-primary text-primary-foreground font-bold uppercase tracking-widest text-[10px] shadow-xl shadow-primary/20 hover:opacity-90">
+                {editingAddon ? "Simpan Perubahan" : "Daftarkan Item"}
+              </Button>
+            </div>
+          </form>
         </DialogContent>
       </Dialog>
     </div>
