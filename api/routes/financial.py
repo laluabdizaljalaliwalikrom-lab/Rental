@@ -89,34 +89,54 @@ def get_financial_report(
 
         for r in rentals_data:
             bike_info = r.get("fleet") or {}
-            investor = bike_info.get("investor_name") or "Pusat"
-            amount = r.get("total_price") or 0
-
-            # Hitung Potongan
-            m_fee = (amount * maint_pct) + maint_nom
-            net_bike = amount - m_fee
-            s_salary = net_bike * staff_pct
-            div = net_bike - s_salary
-
-            # Hitung Pendapatan Add-on
+            bike_investor = bike_info.get("investor_name") or "Pusat"
+            
             addons = r.get("selected_addons") or []
             duration = r.get("duration") or 1
-            addon_amount = sum(a.get("price", 0) for a in addons) * duration
             
-            total_maintenance += m_fee
-            total_staff_salary += s_salary
-            total_dividends += div
-            total_addon_revenue += addon_amount
+            # 1. Hitung Omzet Sepeda Saja
+            if r.get("rental_type") == 'Short':
+                bike_base_revenue = (bike_info.get('price_per_hour') or 0) * duration
+            else:
+                bike_base_revenue = (bike_info.get('price_per_day') or 0) * duration
+            
+            # Keamanan: Jika bike_base_revenue 0 atau aneh, gunakan total_price - addons
+            # (Tapi lebih akurat hitung manual jika data tersedia)
+            
+            # 2. Distribusi Omzet Sepeda ke Pemilik Sepeda
+            def add_revenue(inv_name, rev_amount, is_addon=False):
+                nonlocal total_maintenance, total_staff_salary, total_dividends, total_addon_revenue
+                
+                # Potongan
+                m_fee = (rev_amount * maint_pct) + (maint_nom if not is_addon else 0)
+                net = rev_amount - m_fee
+                s_salary = net * staff_pct
+                div = net - s_salary
 
-            if investor not in investor_map:
-                investor_map[investor] = {"revenue": 0, "maintenance": 0, "net_bike_profit": 0, "staff_salary": 0, "dividend": 0, "addon_revenue": 0}
-            
-            investor_map[investor]["revenue"] += amount
-            investor_map[investor]["maintenance"] += m_fee
-            investor_map[investor]["net_bike_profit"] += net_bike
-            investor_map[investor]["staff_salary"] += s_salary
-            investor_map[investor]["dividend"] += div
-            investor_map[investor]["addon_revenue"] += addon_amount
+                total_maintenance += m_fee
+                total_staff_salary += s_salary
+                total_dividends += div
+                if is_addon: total_addon_revenue += rev_amount
+
+                if inv_name not in investor_map:
+                    investor_map[inv_name] = {"revenue": 0, "maintenance": 0, "net_bike_profit": 0, "staff_salary": 0, "dividend": 0, "addon_revenue": 0}
+                
+                investor_map[inv_name]["revenue"] += rev_amount
+                investor_map[inv_name]["maintenance"] += m_fee
+                investor_map[inv_name]["net_bike_profit"] += net
+                investor_map[inv_name]["staff_salary"] += s_salary
+                investor_map[inv_name]["dividend"] += div
+                if is_addon: investor_map[inv_name]["addon_revenue"] += rev_amount
+
+            # Tambahkan omzet sepeda
+            add_revenue(bike_investor, bike_base_revenue)
+
+            # 3. Distribusi Omzet Add-ons ke masing-masing Pemilik Add-on
+            for addon in addons:
+                addon_owner = addon.get("investor_name") or "Pusat"
+                addon_price = addon.get("price") or 0
+                addon_rev = addon_price * duration
+                add_revenue(addon_owner, addon_rev, is_addon=True)
 
         investor_splits = [
             InvestorSplit(name=k, **v) for k, v in investor_map.items()

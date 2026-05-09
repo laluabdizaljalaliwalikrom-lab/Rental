@@ -11,7 +11,9 @@ import {
   Mail,
   MapPin,
   ChevronRight,
-  Loader2
+  Loader2,
+  Box,
+  Package
 
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -41,7 +43,9 @@ export default function Investors() {
   const [isClaimOpen, setIsClaimOpen] = useState(false)
   const [selectedInvestor, setSelectedInvestor] = useState(null)
   const [investorFleet, setInvestorFleet] = useState([])
+  const [investorAddons, setInvestorAddons] = useState([])
   const [availableFleet, setAvailableFleet] = useState([])
+  const [availableAddons, setAvailableAddons] = useState([])
   const [claiming, setClaiming] = useState(false)
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', address: '' })
   const { profile: currentUser } = useAuth()
@@ -102,63 +106,81 @@ export default function Investors() {
     setSelectedInvestor(investor)
     setIsFleetOpen(true)
     try {
-      const data = await apiFetch(`/api/investors/${investor.id}/fleet/`)
-      setInvestorFleet(data)
+      const fleet = await apiFetch(`/api/investors/${investor.id}/fleet/`)
+      setInvestorFleet(fleet)
+      const allAddons = await apiFetch('/api/addons/')
+      setInvestorAddons(allAddons.filter(a => a.investor_id === investor.id))
     } catch (error) {
-      toast.error("Gagal memuat armada investor: " + error.message)
+      toast.error("Gagal memuat aset investor: " + error.message)
     }
   }
 
   const openClaimModal = async () => {
     try {
-      const allFleet = await apiFetch('/api/fleet/')
-      const available = allFleet.filter(bike => !bike.investor_id || bike.investor_name === 'Pusat')
-      setAvailableFleet(available)
+      const [allFleet, allAddons] = await Promise.all([
+        apiFetch('/api/fleet/'),
+        apiFetch('/api/addons/')
+      ])
+      setAvailableFleet(allFleet.filter(bike => !bike.investor_id || bike.investor_name === 'Pusat'))
+      setAvailableAddons(allAddons.filter(addon => !addon.investor_id || addon.investor_name === 'Pusat'))
       setIsClaimOpen(true)
     } catch (error) {
-      toast.error("Gagal memuat armada tersedia: " + error.message)
+      toast.error("Gagal memuat aset tersedia: " + error.message)
     }
   }
 
-  const handleClaim = async (bike) => {
+  const handleClaim = async (item, type = 'bike') => {
     try {
       setClaiming(true)
-      await apiFetch(`/api/fleet/${bike.id}`, {
+      const url = type === 'bike' ? `/api/fleet/${item.id}` : `/api/addons/${item.id}`
+      await apiFetch(url, {
         method: 'PUT',
         body: JSON.stringify({
           investor_id: selectedInvestor.id,
           investor_name: selectedInvestor.name
         })
       })
-      toast.success(`${bike.name} berhasil diklaim`)
+      toast.success(`${item.name} berhasil diklaim`)
 
-      const updatedFleet = await apiFetch(`/api/investors/${selectedInvestor.id}/fleet/`)
-      setInvestorFleet(updatedFleet)
-      setAvailableFleet(prev => prev.filter(b => b.id !== bike.id))
+      if (type === 'bike') {
+        const updated = await apiFetch(`/api/investors/${selectedInvestor.id}/fleet/`)
+        setInvestorFleet(updated)
+        setAvailableFleet(prev => prev.filter(b => b.id !== item.id))
+      } else {
+        const all = await apiFetch('/api/addons/')
+        setInvestorAddons(all.filter(a => a.investor_id === selectedInvestor.id))
+        setAvailableAddons(prev => prev.filter(a => a.id !== item.id))
+      }
     } catch (error) {
-      toast.error("Gagal mengklaim armada: " + error.message)
+      toast.error("Gagal mengklaim aset: " + error.message)
     } finally {
       setClaiming(false)
     }
   }
 
-  const handleUnclaim = async (bike) => {
-    if (!confirm(`Apakah Anda yakin ingin melepaskan ${bike.name} dari investor ini?`)) return
+  const handleUnclaim = async (item, type = 'bike') => {
+    if (!confirm(`Lepaskan ${item.name} dari investor ini?`)) return
     try {
       setClaiming(true)
-      await apiFetch(`/api/fleet/${bike.id}`, {
+      const url = type === 'bike' ? `/api/fleet/${item.id}` : `/api/addons/${item.id}`
+      await apiFetch(url, {
         method: 'PUT',
         body: JSON.stringify({
           investor_id: null,
           investor_name: 'Pusat'
         })
       })
-      toast.success(`${bike.name} berhasil dilepaskan ke Pusat`)
+      toast.success(`${item.name} dilepaskan ke Pusat`)
 
-      const updatedFleet = await apiFetch(`/api/investors/${selectedInvestor.id}/fleet/`)
-      setInvestorFleet(updatedFleet)
+      if (type === 'bike') {
+        const updated = await apiFetch(`/api/investors/${selectedInvestor.id}/fleet/`)
+        setInvestorFleet(updated)
+      } else {
+        const all = await apiFetch('/api/addons/')
+        setInvestorAddons(all.filter(a => a.investor_id === selectedInvestor.id))
+      }
     } catch (error) {
-      toast.error("Gagal melepaskan armada: " + error.message)
+      toast.error("Gagal melepaskan aset: " + error.message)
     } finally {
       setClaiming(false)
     }
@@ -176,9 +198,9 @@ export default function Investors() {
           <div className="rounded-2xl bg-primary/10 p-3 text-primary border border-primary/20">
             <Users size={28} strokeWidth={2.5} />
           </div>
-          <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Manajemen Investor</h2>
-            <p className="text-sm text-muted-foreground">Kelola mitra investor dan kepemilikan armada mereka.</p>
+            <div>
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground">Kepemilikan Aset</h2>
+            <p className="text-sm text-muted-foreground">Kelola kepemilikan armada dan aksesoris investor.</p>
           </div>
         </div>
         <Button onClick={() => { setFormData({ name: '', email: '', phone: '', address: '' }); setIsAddOpen(true) }} className="h-12 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-600/20 transition-all uppercase tracking-wider text-[10px] px-6">
@@ -234,8 +256,8 @@ export default function Investors() {
                   onClick={() => openFleetModal(investor)}
                 >
                   <div className="flex items-center gap-2 uppercase tracking-wider text-[9px]">
-                    <Bike size={16} className="text-primary" />
-                    <span>Lihat Koleksi Armada</span>
+                    <Package size={16} className="text-primary" />
+                    <span>Manajemen Kepemilikan Aset</span>
                   </div>
                   <ChevronRight size={16} className="text-muted-foreground/30 group-hover/btn:translate-x-1 transition-transform" />
                 </Button>
@@ -317,70 +339,71 @@ export default function Investors() {
           <DialogHeader className="p-8 pb-6 bg-primary/[0.02] border-b border-border/50">
             <DialogTitle className="flex items-center gap-3 text-2xl font-semibold">
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <Bike size={24} />
+                <Package size={24} />
               </div>
-              Armada: {selectedInvestor?.name}
+              Aset Investor: {selectedInvestor?.name}
             </DialogTitle>
             <DialogDescription className="text-muted-foreground font-medium pt-1">
-              Daftar koleksi armada sepeda yang diinvestasikan oleh mitra ini.
+              Daftar kepemilikan aset armada dan aksesoris mitra ini.
             </DialogDescription>
           </DialogHeader>
-          <div className="px-6 py-4 flex-1 overflow-y-auto custom-scrollbar space-y-4">
-            <div className="flex justify-between items-center pb-2">
-              <h4 className="text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-wider">Koleksi Saat Ini</h4>
-              {currentUser?.role === 'admin' && (
-                <Button size="sm" variant="ghost" className="h-9 px-4 rounded-xl bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white font-semibold text-[10px] uppercase tracking-wider transition-all" onClick={openClaimModal}>
-                  <Plus size={12} className="mr-1.5" /> Klaim Baru
-                </Button>
-              )}
-            </div>
-
-            <div className="space-y-3">
-              {investorFleet.length > 0 ? investorFleet.map((bike) => (
-                <div key={bike.id} className="flex items-center justify-between p-4 rounded-2xl border border-border bg-muted/30 group hover:bg-muted/50 transition-all">
-                  <div className="flex items-center gap-4">
-                    <div className="h-12 w-12 rounded-xl bg-muted flex items-center justify-center text-muted-foreground/40 group-hover:text-primary transition-colors">
-                      <Bike size={24} strokeWidth={1.5} />
+          <div className="px-6 py-4 flex-1 overflow-y-auto custom-scrollbar space-y-6">
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h4 className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.2em]">Armada Sepeda</h4>
+                {currentUser?.role === 'admin' && (
+                  <Button size="sm" variant="ghost" className="h-8 px-3 rounded-xl bg-primary/5 text-primary hover:bg-primary/10 font-bold text-[9px] uppercase tracking-wider transition-all" onClick={openClaimModal}>
+                    Klaim Aset
+                  </Button>
+                )}
+              </div>
+              
+              <div className="grid gap-2">
+                {investorFleet.map((bike) => (
+                  <div key={bike.id} className="flex items-center justify-between p-3 rounded-xl border border-border/50 bg-muted/20">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-lg bg-background flex items-center justify-center text-muted-foreground/30">
+                        <Bike size={18} />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-foreground">{bike.name}</p>
+                        <p className="text-[9px] text-muted-foreground uppercase font-medium">{bike.type}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-foreground tracking-tight">{bike.name}</h4>
-                      <p className="text-[10px] text-muted-foreground/60 font-semibold uppercase tracking-wider">{bike.brand} &bull; {bike.type}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Badge className={cn(
-                      "text-[9px] font-semibold px-3 py-1 rounded-full uppercase border-none",
-                      bike.status === 'Available' ? 'bg-green-500/20 text-green-400' : 'bg-orange-500/20 text-orange-400'
-                    )}>
-                      {bike.status}
-                    </Badge>
                     {currentUser?.role === 'admin' && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-9 w-9 rounded-lg text-muted-foreground/40 hover:text-red-500 hover:bg-red-500/10 transition-all"
-                        onClick={() => handleUnclaim(bike)}
-                      >
+                      <button onClick={() => handleUnclaim(bike, 'bike')} className="p-2 text-muted-foreground/30 hover:text-red-500 transition-colors">
                         <Trash2 size={14} />
-                      </Button>
+                      </button>
                     )}
                   </div>
-                </div>
-              )) : (
-                <div className="flex flex-col items-center justify-center py-16 text-center border-2 border-dashed border-border rounded-3xl bg-muted/20">
-                  <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-muted-foreground/30 mb-4">
-                    <Bike size={32} strokeWidth={1} />
+                ))}
+                {investorFleet.length === 0 && <p className="text-[10px] text-muted-foreground italic p-4 border border-dashed rounded-xl text-center">Belum ada sepeda.</p>}
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h4 className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.2em]">Aksesoris & Add-on</h4>
+              <div className="grid gap-2">
+                {investorAddons.map((addon) => (
+                  <div key={addon.id} className="flex items-center justify-between p-3 rounded-xl border border-border/50 bg-muted/20">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-lg bg-background flex items-center justify-center text-muted-foreground/30">
+                        <Box size={18} />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-foreground">{addon.name}</p>
+                        <p className="text-[9px] text-primary font-black">Rp {addon.price.toLocaleString()}</p>
+                      </div>
+                    </div>
+                    {currentUser?.role === 'admin' && (
+                      <button onClick={() => handleUnclaim(addon, 'addon')} className="p-2 text-muted-foreground/30 hover:text-red-500 transition-colors">
+                        <Trash2 size={14} />
+                      </button>
+                    )}
                   </div>
-                  <p className="text-muted-foreground/60 text-sm font-medium italic px-10 leading-relaxed">
-                    Investor ini belum memiliki armada yang terdaftar secara resmi.
-                  </p>
-                  {currentUser?.role === 'admin' && (
-                    <Button variant="link" className="text-blue-400 text-[10px] font-semibold uppercase tracking-wider mt-4 hover:no-underline hover:text-foreground" onClick={openClaimModal}>
-                      + Klik untuk Tambahkan Armada
-                    </Button>
-                  )}
-                </div>
-              )}
+                ))}
+                {investorAddons.length === 0 && <p className="text-[10px] text-muted-foreground italic p-4 border border-dashed rounded-xl text-center">Belum ada aksesoris.</p>}
+              </div>
             </div>
           </div>
           <DialogFooter className="p-8 bg-muted/50 border-t border-border">
@@ -396,38 +419,37 @@ export default function Investors() {
               <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 <Plus size={24} />
               </div>
-              Klaim Armada Baru
+              Klaim Aset Baru
             </DialogTitle>
             <DialogDescription className="text-muted-foreground font-medium pt-1">
-              Daftar armada milik <strong className="text-primary font-semibold">Pusat</strong> yang tersedia untuk dialihkan.
+              Daftar aset milik <strong className="text-primary font-semibold">Pusat</strong> yang dapat dialihkan ke mitra.
             </DialogDescription>
           </DialogHeader>
-          <div className="px-6 py-4 flex-1 overflow-y-auto custom-scrollbar space-y-3">
-            {availableFleet.length > 0 ? availableFleet.map((bike) => (
-              <div key={bike.id} className="flex items-center justify-between p-4 rounded-2xl border border-border bg-muted/30 hover:bg-muted/50 transition-all">
-                <div>
-                  <h5 className="font-semibold text-foreground tracking-tight">{bike.name}</h5>
-                  <p className="text-[10px] text-muted-foreground/60 font-semibold uppercase tracking-wider">{bike.brand} &bull; {bike.type}</p>
-                </div>
-                <Button
-                  size="sm"
-                  disabled={claiming}
-                  onClick={() => handleClaim(bike)}
-                  className="h-10 px-5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 font-semibold text-[10px] uppercase tracking-wider shadow-lg shadow-blue-600/20 transition-all"
-                >
-                  {claiming ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Klaim'}
-                </Button>
-              </div>
-            )) : (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-muted-foreground/30 text-[10px] font-semibold uppercase tracking-wider italic">
-                  Tidak ada armada Pusat yang tersedia
-                </p>
-              </div>
-            )}
+          <div className="px-6 py-4 flex-1 overflow-y-auto custom-scrollbar space-y-6">
+            <div className="space-y-3">
+               <h5 className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">Armada Tersedia</h5>
+               {availableFleet.map(bike => (
+                  <div key={bike.id} className="flex items-center justify-between p-3 rounded-xl border bg-muted/10">
+                    <p className="text-xs font-bold">{bike.name}</p>
+                    <Button size="sm" className="h-8 rounded-lg text-[9px] uppercase font-bold" onClick={() => handleClaim(bike, 'bike')} disabled={claiming}>Klaim</Button>
+                  </div>
+               ))}
+               {availableFleet.length === 0 && <p className="text-[9px] text-muted-foreground italic text-center py-2">Semua armada sudah memiliki pemilik.</p>}
+            </div>
+
+            <div className="space-y-3">
+               <h5 className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">Aksesoris Tersedia</h5>
+               {availableAddons.map(addon => (
+                  <div key={addon.id} className="flex items-center justify-between p-3 rounded-xl border bg-muted/10">
+                    <p className="text-xs font-bold">{addon.name}</p>
+                    <Button size="sm" className="h-8 rounded-lg text-[9px] uppercase font-bold" onClick={() => handleClaim(addon, 'addon')} disabled={claiming}>Klaim</Button>
+                  </div>
+               ))}
+               {availableAddons.length === 0 && <p className="text-[9px] text-muted-foreground italic text-center py-2">Semua aksesoris sudah memiliki pemilik.</p>}
+            </div>
           </div>
           <DialogFooter className="p-8 bg-muted/50 border-t border-border">
-            <Button variant="ghost" className="w-full h-12 rounded-xl border border-border text-muted-foreground hover:bg-muted hover:text-foreground font-semibold uppercase tracking-wider text-[10px]" onClick={() => setIsClaimOpen(false)}>Batal Klaim</Button>
+            <Button variant="ghost" className="w-full h-12 rounded-xl border border-border text-muted-foreground hover:bg-muted hover:text-foreground font-semibold uppercase tracking-wider text-[10px]" onClick={() => setIsClaimOpen(false)}>Batal</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

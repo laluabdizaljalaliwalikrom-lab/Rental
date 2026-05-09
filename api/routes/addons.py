@@ -12,6 +12,8 @@ class AddonBase(BaseModel):
     price: float
     description: Optional[str] = None
     is_active: bool = True
+    investor_id: Optional[str] = None
+    investor_name: Optional[str] = "Pusat"
 
 class AddonCreate(AddonBase):
     pass
@@ -37,7 +39,8 @@ def create_addon(
     user: dict = Depends(require_role(["admin"]))
 ):
     try:
-        res = db.table("addons").insert(addon.model_dump()).execute()
+        data = addon.model_dump()
+        res = db.table("addons").insert(data).execute()
         if not res.data:
             raise HTTPException(status_code=400, detail="Failed to create addon")
         return res.data[0]
@@ -52,7 +55,8 @@ def update_addon(
     user: dict = Depends(require_role(["admin"]))
 ):
     try:
-        res = db.table("addons").update(addon.model_dump()).eq("id", id).execute()
+        data = addon.model_dump()
+        res = db.table("addons").update(data).eq("id", id).execute()
         if not res.data:
             raise HTTPException(status_code=404, detail="Addon not found")
         return res.data[0]

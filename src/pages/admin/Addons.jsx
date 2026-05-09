@@ -20,16 +20,27 @@ export default function Addons() {
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingAddon, setEditingAddon] = useState(null)
+  const [investors, setInvestors] = useState([])
   const [formData, setFormData] = useState({
     name: '',
     price: '',
     description: '',
-    is_active: true
+    is_active: true,
+    investor_id: '',
+    investor_name: 'Pusat'
   })
 
   useEffect(() => {
     fetchAddons()
+    fetchInvestors()
   }, [])
+
+  const fetchInvestors = async () => {
+    try {
+      const data = await apiFetch('/api/investors/')
+      setInvestors(data)
+    } catch (e) { console.error(e) }
+  }
 
   const fetchAddons = async () => {
     try {
@@ -49,7 +60,9 @@ export default function Addons() {
         name: addon.name,
         price: addon.price,
         description: addon.description || '',
-        is_active: addon.is_active
+        is_active: addon.is_active,
+        investor_id: addon.investor_id || '',
+        investor_name: addon.investor_name || 'Pusat'
       })
     } else {
       setEditingAddon(null)
@@ -57,7 +70,10 @@ export default function Addons() {
         name: '',
         price: '',
         description: '',
-        is_active: true
+        is_active: true,
+        investor_id: '',
+        investor_name: 'Pusat'
+      })
       })
     }
     setIsModalOpen(true)
@@ -136,10 +152,15 @@ export default function Addons() {
                     <Box size={24} />
                  </div>
                  <div>
-                    <h3 className="font-bold text-lg leading-tight">{addon.name}</h3>
-                    <Badge variant={addon.is_active ? "default" : "secondary"} className="mt-1 text-[10px] uppercase font-bold tracking-tighter">
-                      {addon.is_active ? "Aktif" : "Nonaktif"}
-                    </Badge>
+                     <h3 className="font-bold text-lg leading-tight">{addon.name}</h3>
+                     <div className="flex gap-2 mt-1">
+                        <Badge variant={addon.is_active ? "default" : "secondary"} className="text-[10px] uppercase font-bold tracking-tighter">
+                          {addon.is_active ? "Aktif" : "Nonaktif"}
+                        </Badge>
+                        <Badge variant="outline" className="text-[10px] uppercase font-bold tracking-tighter border-primary/20 text-primary/60">
+                          {addon.investor_name || "Pusat"}
+                        </Badge>
+                     </div>
                  </div>
                </div>
 
@@ -207,6 +228,27 @@ export default function Addons() {
                   value={formData.description}
                   onChange={e => setFormData({...formData, description: e.target.value})}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-[10px] uppercase font-bold tracking-[0.2em] text-muted-foreground/60 ml-1">Pemilik Aset (Investor)</Label>
+                <select
+                  className="w-full h-14 bg-muted/40 border border-border rounded-2xl px-4 text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all text-foreground appearance-none"
+                  value={formData.investor_id}
+                  onChange={e => {
+                    const inv = investors.find(i => i.id === e.target.value)
+                    setFormData({
+                      ...formData, 
+                      investor_id: e.target.value,
+                      investor_name: inv ? inv.name : 'Pusat'
+                    })
+                  }}
+                >
+                  <option value="">Pusat (Internal)</option>
+                  {investors.map(inv => (
+                    <option key={inv.id} value={inv.id}>{inv.name}</option>
+                  ))}
+                </select>
               </div>
 
               <div className="flex items-center gap-4 p-5 bg-primary/[0.03] rounded-2xl border border-primary/10 group cursor-pointer hover:bg-primary/[0.05] transition-colors" onClick={() => setFormData({...formData, is_active: !formData.is_active})}>
